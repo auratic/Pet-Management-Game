@@ -1,0 +1,133 @@
+@font-face {
+    font-family: MachineGunk;
+    src: url("Assets/Fonts/Machine Gunk.otf");
+}
+
+@media screen and (max-width: 60em) {}
+
+/*iPAD SUPPORT=====================================--*/
+@media (max-width: 56.250em) {}
+
+/*NEXUS SUPPORT=====================================--*/
+@media (max-width: 44.063em) {}
+
+/*iPhone SUPPORT=====================================--*/
+@media screen and (max-width: 22.500em) {}
+
+html, body {
+    font-family: MachineGunk;
+    background-color: black;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    overflow: hidden;
+}
+
+#game-container {
+    /*background-color: pink;*/
+    background-image: url("Assets/Images/UI/png/BG.png");
+    height: 100vmin;
+    width: 100vmin;
+}
+
+#minigame-container {
+    z-index: 1000;
+    visibility: hidden;
+    background-color: violet;
+    height: 100vmin;
+    width: 80vmin;
+    position: absolute;
+}
+#minigame-close {
+    height: 100px;
+    width: 100px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+#minigame-title {
+    height: 10%;
+    text-align: center;
+}
+
+#minigame-list2 {
+    height: 30%
+}
+
+#minigame-list3 {
+    height: 30%
+}
+
+#minigame-list4 {
+    height: 30%
+}
+
+.minigame {
+    border: solid white 3px;
+}
+
+#navigation-container {
+    background-color: hotpink;
+    height: 10%;
+    font-size: 4vmin
+}
+
+#model-container {
+    height: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#footer-container {
+    background-color: hotpink;
+    height: 10%;
+}
+
+#model {
+    width: 50%;
+}
+
+.button-shop {
+    background: url("Assets/Images/UI/png/shop_red.png") no-repeat;
+    background-size: contain;
+    background-position: center;
+    height:100%;
+    width:100%
+}
+
+.button-list {
+    background: url("Assets/Images/UI/png/list_red.png") no-repeat;
+    background-size: contain;
+    background-position: center;
+    height:100%;
+    width:100%
+}
+
+.button-setting {
+    background: url("Assets/Images/UI/png/setting_red.png") no-repeat;
+    background-size: contain;
+    background-position: center;
+    height:100%;
+    width:100%
+}
+
+.button-nav {
+    background: url("Assets/Images/UI/png/nav_red.png") no-repeat;
+    background-size: contain;
+    background-position: center;
+    height:100%;
+    width:100%
+}
+
+
+.button-game {
+    background: url("Assets/Images/UI/png/game_red.png") no-repeat;
+    background-size: contain;
+    background-position: center;
+    height:100%;
+    width:100%
+}
