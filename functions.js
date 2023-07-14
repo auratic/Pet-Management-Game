@@ -24,3 +24,9 @@ function screenDetect () {
 
 window.onload = screenDetect;
 window.onresize = screenDetect;
+
+document.getElementById("model").onclick = () => {
+    //pet audio
+    //display gif
+    console.log("hi");
+}

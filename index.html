@@ -17,7 +17,63 @@
     </head>
     <body>
         <div id="game-container" class="container-fluid">
-            <div id="header-container" class="row" style="margin:0">
+            <nav id="header-container" class="navbar" style="margin:0">
+                
+                <div class="container-fluid">
+                    <!--<a class="navbar-brand" href="#">Virtual Pet</a>-->
+                    <a>Virtual Pet</a>
+                    <a>Gold: 123</a>
+                    <button 
+                        class="navbar-toggler" type="button" style="padding:0"
+                        data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation"
+                    >
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="offcanvas offcanvas-end " tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
+                        <div class="offcanvas-header">
+                            <h2 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Virtual Pet</h2>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                                <li class="nav-item">
+                                    <a class="nav-link active" aria-current="page" href="#">Augmented Reality (AR)</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Friends</a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Share
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-dark">
+                                        <li><a class="dropdown-item" href="#">Facebook</a></li>
+                                        <li><a class="dropdown-item" href="#">Instagram</a></li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                    </ul>
+                                </li>
+                                    
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Setting
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-dark">
+                                        <li><a class="dropdown-item" href="#">Audio</a></li>
+                                        <li><a class="dropdown-item" href="#">Camera Sensitivity Threshold</a></li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!--
                 <div class="col-2">
                     <img class="button-nav">
                 </div>
@@ -26,22 +82,24 @@
                 <div class="col-2">
                     <button class="button-setting btn" data-bs-target="#setting-container" data-bs-toggle="modal">Setting</button>
                 </div>
-            </div>
+
+                -->
+            </nav>
             <div id="model-container" class="container">
                 <img id="model" src="Assets/Images/Models/dog.png">
                 <!-- https://www.jamiesale-cartoonist.com/wp-content/uploads/dog-12.png -->
             </div>
             <div id="footer-container" class="row" style="margin:0">
                 <div class="col-2 text-center">
-                    <button class="button-list btn" data-bs-target="#inv-container" data-bs-toggle="modal">Inventory</button>
+                    <button class="button-list btn" data-bs-target="#inv-container" data-bs-toggle="modal"><!--Inventory--></button>
                 </div>
                 <div class="col-2 text-center">
-                    <button class="button-shop btn" data-bs-target="#shop-container" data-bs-toggle="modal">Shop</button>
+                    <button class="button-shop btn" data-bs-target="#shop-container" data-bs-toggle="modal"><!--Shop--></button>
                 </div>
                 
                 <div class="col-6"></div>
                 <div class="col-2 text-center"  id="minigame-open">
-                    <button class="button-game btn" data-bs-target="#minigame-container" data-bs-toggle="modal">Play</button>
+                    <button class="button-game btn" data-bs-target="#minigame-container" data-bs-toggle="modal"><!--Play--></button>
                 </div>
             </div>
         </div>
@@ -93,69 +151,56 @@
                                 <div class="col-sm-2">Item 2
                                     <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
                                 </div>
-                                <div class="col-sm-2">Item 3
-                                    <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
                                 </div>
-                                <div class="col-sm-2">Item 4
-                                    <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
+                                <div class="row">
+                                    <div class="col-2 col-sm-2">
+                                        Item 1 <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
+                                    </div>
                                 </div>
-                                <div class="col-sm-2">Item 5
-                                    <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
-                                </div>
-                                <div class="col-sm-2">Item 6
-                                    <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
-                                </div> -->
+                                -->
                             </div>
-                            <!--
-                            <div class="row">
-                                <div class="col-2 col-sm-2">
-                                    Item 1 <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
-                                </div>
-                                <div class="col-sm-2">Item 2
-                                    <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
-                                </div>
-                                <div class="col-sm-2">Item 3
-                                    <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
-                                </div>
-                                <div class="col-sm-2">Item 4
-                                    <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
-                                </div>
-                                <div class="col-sm-2">Item 5
-                                    <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
-                                </div>
-                                <div class="col-sm-2">Item 6
-                                    <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-2 col-sm-2">
-                                    Item 1 <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
-                                </div>
-                                <div class="col-sm-2">Item 2
-                                    <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
-                                </div>
-                                <div class="col-sm-2">Item 3
-                                    <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
-                                </div>
-                                <div class="col-sm-2">Item 4
-                                    <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
-                                </div>
-                                <div class="col-sm-2">Item 5
-                                    <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
-                                </div>
-                                <div class="col-sm-2">Item 6
-                                    <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
-                                </div>
-                            </div> -->
                         </div>
-                    </div>
-                    <div class="modal-footer">
+                        <div class="modal-footer">
 
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <div id="inv-container" class="modal fade">
+            <div class="modal-dialog modal-fullscreen">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Inventory</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    Item 1 <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
+                                </div>
+                                <!--
+                                <div class="col-sm-2">Item 2
+                                    <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
+                                </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-2 col-sm-2">
+                                        Item 1 <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
+                                    </div>
+                                </div>
+                                -->
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         
         <div id="minigame-container" class="modal fade">
             <div class="modal-dialog modal-fullscreen">
@@ -237,7 +282,7 @@
                 </div>
             </div>
         </div>
-
+        <!--
         <nav class="navbar navbar-dark bg-dark fixed-top">
             <div class="container-fluid">
               <a class="navbar-brand" href="#">Virtual Pet</a>
@@ -285,15 +330,15 @@
                         </ul>
                       </li>
                   </ul>
-                  <!--
                   <form class="d-flex mt-3" role="search">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-success" type="submit">Search</button>
-                  </form> -->
+                  </form> 
                 </div>
               </div>
             </div>
           </nav>
+        -->
 
         <script src="functions.js"></script>
     </body>
