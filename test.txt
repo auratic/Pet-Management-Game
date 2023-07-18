@@ -1,0 +1,34 @@
+How to process POST data in Node.js?
+https://stackoverflow.com/questions/4295782/how-to-process-post-data-in-node-js/4310087#4310087
+https://nodejs.org/en/docs/guides/anatomy-of-an-http-transaction
+
+Stop form refreshing page on submit
+https://stackoverflow.com/questions/19454310/stop-form-refreshing-page-on-submit#:~:text=One%20great%20way%20to%20prevent,false%20with%20your%20onsubmit%20attribute.&text=You%20can%20use%20this%20code%20for%20form%20submission%20without%20a%20page%20refresh.
+
+Nodejs - Redirect url
+https://stackoverflow.com/questions/4062260/nodejs-redirect-url
+
+On success get data from server
+https://stackoverflow.com/questions/24207507/get-data-from-server-with-node-js
+
+
+JSON.stringify if console.log cannot read the variable
+
+$.ajax({
+        url: "http://api.mydomain.com/test/index.php",
+        method: "POST",        
+        data: jsondata,
+        contentType: false,
+        cache: false,
+        processData: false,
+        dataType: 'json',
+        success: function(data){alert(JSON.stringify(data));},
+        error: function(errMsg) {
+            alert(JSON.stringify(errMsg));
+        }
+    });
+
+
+
+
+
