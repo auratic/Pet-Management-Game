@@ -22,7 +22,34 @@ function screenDetect () {
     }
 }
 
-window.onload = screenDetect;
+function checkLogin() {
+    
+}
+
+function loadShop() {
+    $.ajax({
+        type: 'post',
+        //url: 'db.js',
+        data: {
+            message: "helo",
+            action: "loadshop"
+            /*$('#myFormName').serialize()*/
+        },
+        success: function (result) {
+            alert(result);
+        },
+        error: function(errMsg) {
+            alert(JSON.stringify(errMsg));
+        }
+    });
+}
+
+window.onload =()=> {
+    screenDetect();
+    loadShop();
+    checkLogin();
+} 
+    
 window.onresize = screenDetect;
 
 document.getElementById("model").onclick = () => {

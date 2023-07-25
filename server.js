@@ -3,7 +3,7 @@ var http = require('http');
 var url = require('url');
 var fs = require('fs');
 var qs = require('querystring')
-var db = require('./db.js');
+//var db = require('./db.js');
 
 const host = 'localhost';
 const port = 8080;
@@ -22,35 +22,52 @@ const requestListener = function (req, res) {
     });
 
     req.on('end', function () {
-        var post = qs.parse(body);
-        // console.log(JSON.stringify(post));
-        // use post['blah'], etc.
-        res.end(JSON.stringify(post));
+        var POST = qs.parse(body);
+        // console.log(JSON.stringify(POST));
+        // use POST['blah'], etc.
+        // res.end(JSON.stringify(post));
+        if(POST["action"] == "login") {
+          login(POST)
+          .then((result) => {
+            console.log("login returned" + JSON.stringify(result));
+            res.end("con 9 firm");
+          });
+
+        } else if(POST["action"] == "loadshop") {
+
+          loadShop()
+          .then((result) => {
+            console.log("loadShop returned" + JSON.stringify(result));
+            res.end(JSON.stringify(result));
+          });
+        }
     });
-  }
+  } else {
 
-  var filename = "." + url.parse(req.url, true).pathname;
-  //console.log(req.url);
-  console.log(filename);
-  //fs.readFile(__dirname + "/index.html", (err, contents)=> {
-  fs.readFile(filename, (err, contents)=> {
-
-    if(filename == './') {
-      res.writeHead(302, {'Location': '/index.html'}); //status code 302 = redirect
-      res.end();
-    } else if(err) {
-      res.writeHead(404, {'Content-Type': 'text/html'});
-      res.end(`404 Not Found \n ${err}`);
-    } else {
-      //res.setHeader("Content-Type", "text/html");
-      res.writeHead(200, {"Content-Type": "text/html"});  //status code, 200 = ok
-      res.end(contents);
-    }
-  });
+    var filename = "." + url.parse(req.url, true).pathname;
+    //console.log(req.url);
+    console.log(filename);
+    //fs.readFile(__dirname + "/index.html", (err, contents)=> {
+    fs.readFile(filename, (err, contents)=> {
   
-  //res.setHeader("Content-Type", "application/json");
-  //res.setHeader("Content-Type", "text/csv");
-  //res.setHeader("Content-Disposition", "attachment;filename=oceanpals.csv"); how to display the data
+      if(filename == './') {
+        res.writeHead(302, {'Location': '/index.html'}); //status code 302 = redirect
+        res.end();
+      } else if(err) {
+        res.writeHead(404, {'Content-Type': 'text/html'});
+        res.end(`404 Not Found \n ${err}`);
+      } else {
+        //res.setHeader("Content-Type", "text/html");
+        res.writeHead(200, {"Content-Type": "text/html"});  //status code, 200 = ok
+        res.end(contents);
+      }
+    });
+    
+    //res.setHeader("Content-Type", "application/json");
+    //res.setHeader("Content-Type", "text/csv");
+    //res.setHeader("Content-Disposition", "attachment;filename=oceanpals.csv"); how to display the data
+
+  }
 };
 
 const server = http.createServer(requestListener);
@@ -61,6 +78,67 @@ server.listen(port, host, () => {
 server.on('connection', (stream) => {
   console.log('someone connected!');
 });
+
+/*
+ *
+ *
+ * 
+ * DATABASE ******************************************************************
+ * 
+ * 
+ * 
+ */
+
+
+var con = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "pm_game"
+});
+
+//Connect to db
+con.connect(function(err) {
+  if (err) throw err;
+  console.log("Connected to db!");
+});
+
+function login(POST) {
+    console.log("Login Connected!");
+    var sql_get_user = "SELECT * FROM user_profile";
+
+    let item = new Promise(function (resolve, reject) {
+      con.query(sql_get_user, function (err, result, fields) {
+        if (err) reject(err);
+        else resolve(result);
+        console.log("result1" + result);
+      });
+    });
+
+    if(true) {
+
+    }
+
+    console.log("result2" + item);
+    return item;
+
+}
+
+function loadShop () {
+  
+  console.log("loadShop Connected!");
+  var sql_get_item = "SELECT * FROM item";
+  let item = new Promise(function (resolve, reject) {
+    con.query(sql_get_item, function (err, result, fields) {
+      // if (err) throw (err);
+      if (err) reject(err);
+      else resolve(result);
+    });
+  });
+  console.log("result2" + item);
+  return item;
+}
+
 
 /*
 http.createServer(function (req, res) {

@@ -1,3 +1,4 @@
+
 How to process POST data in Node.js?
 https://stackoverflow.com/questions/4295782/how-to-process-post-data-in-node-js/4310087#4310087
 https://nodejs.org/en/docs/guides/anatomy-of-an-http-transaction
@@ -11,6 +12,8 @@ https://stackoverflow.com/questions/4062260/nodejs-redirect-url
 On success get data from server
 https://stackoverflow.com/questions/24207507/get-data-from-server-with-node-js
 
+Synchronous querying on NodeJS
+https://stackoverflow.com/questions/32850045/node-js-synchronous-queries-with-mysql
 
 JSON.stringify if console.log cannot read the variable
 
