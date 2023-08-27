@@ -5,7 +5,7 @@ var fs = require('fs');
 var qs = require('querystring')
 //var db = require('./db.js');
 
-const host = 'localhost';
+const host = 'localhost'; // The ip of your device hosting server, else localhost
 const port = 8080;
 const requestListener = function (req, res) {
   
@@ -38,8 +38,17 @@ const requestListener = function (req, res) {
           loadShop()
           .then((result) => {
             console.log("loadShop returned" + JSON.stringify(result));
-            res.end(JSON.stringify(result));
+            res.end(JSON.stringify(result)); //Stringify and send response
           });
+        } else if(POST["action"] == "minigame") {
+          console.log("minigamehello")
+          if(POST["minigame"] == "1"){
+            //res.writeHead(302, {'Location': '/Minigames/minigame1.html'}); //status code 302 = redirect
+            console.log("minigamehello2")
+
+
+            res.end('<script>window.location.href="/Minigames/minigame1.html";</script>');
+          }
         }
     });
   } else {
@@ -135,7 +144,7 @@ function loadShop () {
       else resolve(result);
     });
   });
-  console.log("result2" + item);
+  //console.log("result2" + item);
   return item;
 }
 

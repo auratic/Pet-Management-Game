@@ -37,6 +37,33 @@ function loadShop() {
         },
         success: function (result) {
             alert(result);
+            var items = JSON.parse(result); //Turn result into object
+            //console.log(result);
+            //console.log(JSON.parse(result));
+            //console.log(result.length);
+
+            //List shop items
+            //https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_node_appendchild
+            var shoplist = document.getElementById("shoplist");
+            //if(items < 3)
+            // var row_i = result.length ;
+            // var item_i = items.length
+            
+            var listItem =  "<div class='row'>";
+            for (let i = 0 ; i < items.length ; i++ ) {
+                listItem +=     "   <div class='col-sm-2'>";
+                listItem +=     `       ${items[i].item_name} <img class='shop-image' src='/Assets/Images/Shop/${items[i].file}'>`;
+                listItem +=     "   </div>";
+            }
+            listItem +=     "</div>";
+        
+
+            $("#shoplist").append(listItem);
+
+            //var row_node = document.createElement("div");
+            //var row_node = 
+            //for()
+
         },
         error: function(errMsg) {
             alert(JSON.stringify(errMsg));
@@ -57,3 +84,28 @@ document.getElementById("model").onclick = () => {
     //display gif
     console.log("hi");
 }
+
+$('#minigame-1').on('click',function (e) {
+    window.location.href="/Minigames/minigame1.html";
+    if(false) {
+        $.ajax({
+            type: 'post',
+            //url: 'db.js',
+            data: {
+                message: "helo",
+                action: "minigame",      
+                minigame: "1"
+                /*$('#myFormName').serialize()*/
+            },
+            success: function (result) {
+                alert(JSON.stringify(result));
+            },
+            error: function(errMsg) {
+                alert(JSON.stringify(errMsg));
+            }
+        });
+        e.preventDefault();
+
+    }
+    
+});
