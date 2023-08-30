@@ -1,8 +1,11 @@
 {
   "dependencies": {
+    "connect": "^3.7.0",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
+    "handtrackjs": "^0.1.5",
     "mysql": "^2.18.1",
-    "nodemailer": "^6.9.3"
+    "nodemailer": "^6.9.3",
+    "type": "module"
   }
 }
