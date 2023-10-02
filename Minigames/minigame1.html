@@ -19,44 +19,90 @@
         <style>
             @font-face {
                 font-family: MachineGunk;
-                src: url("Assets/Fonts/MachineGunk.otf");
+                src: url("../Assets/Fonts/MachineGunk.otf");
+            }
+            html, body {
+                font-family: MachineGunk;
+                margin: 0; 
+                height: 100%; 
+                overflow: hidden
+            }
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: blanchedalmond;
+                /*flex-direction: column;*/
+            }
+
+            #videoid {
+                height: 100%;
+                object-fit: contain;
+                display: none;
+                -webkit-transform: scaleX(-1);
+                transform: scaleX(-1);
+            }
+
+            #vcanvas {
+                height: 100%;
+                object-fit: contain;
+            }
+            #handsign-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 0;
+                height:20%;
+            }
+
+            #handsign-img, #handsign-img2 {
+                border: solid green medium;
             }
         </style>
     </head>
     <body>
-        
         <div class="container" 
             style='
-                display: flex;
-                justify-content: center;
-                align-items: center;'
+                background-color: brown'
             >
-            <div class="container" style="width:280px;height:190px">
-                <canvas id="vcanvas" style="width:280px;height:190px"></canvas> <!-- video canvas -->
+            <div class="row" style="height:40%">
+                <canvas id="vcanvas"></canvas> <!-- video canvas -->
                 <video id="videoid"></video>
             </div>
+            <div class="row" style="height:10%"></div>
+            <div class="row" style="height:40%; background-color: brown">
+                <div class="col-4" id="handsign-container">
+                    You
+                    <img id="handsign-img" class="handsign-img" src="Assets/blank.jpg">
+                </div>
+
+                <div class="col-4" style="text-align:center">
+                    VS
+                    <span id="counter" style="display:none">5</span>
+                </div>
+
+                <div class="col-4" id="handsign-container">
+                    Computer
+                    <img id="handsign-img2" class="handsign-img" src="Assets/blank.jpg">
+                </div>
+                <script>
+                        if(window.innerWidth > window.innerHeight) {
+                            $('.handsign-img').css({
+                                'height': 'auto',
+                                'width': '50%'
+                            });
+                        } else {
+                            $('.handsign-img').css({
+                                'height': '100%',
+                                'width': 'auto'
+                            });
+                        }
+                </script>
+            </div>
+            <div class="row" style="height:10%">
+                <button class="btn btn-light">restart?</button>
+            </div>
         </div>
-        
-        <div class="container" 
-            style='
-                display: flex;
-                justify-content: center;
-                align-items: center;'
-            >
-            <img id="handsign-img">
-        </div>
-        <div class="container" 
-            style='
-                display: flex;
-                justify-content: center;
-                align-items: center;'
-            >
-            <i class="fa-solid fa-hand"></i>
-            <button onclick="result('stone')" style="width:280px;height:190px">Stone<i class="fa-regular fa-hand-back-fist"></i></button>
-            <button onclick="result('paper')" style="width:280px;height:190px">Paper<i class="fa-regular fa-hand"></i></button>
-            <button onclick="result('scissor')" style="width:280px;height:190px">Scissor<i class="fa-regular fa-hand-scissors"></i></button>
-        </div>
-        
         <!--Handtrack.js-->
         <script src="./minigame1.js"></script>
     </body>
