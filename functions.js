@@ -86,26 +86,9 @@ document.getElementById("model").onclick = () => {
 }
 
 $('#minigame-1').on('click',function (e) {
-    window.location.href="/Minigames/minigame1.html";
-    if(false) {
-        $.ajax({
-            type: 'post',
-            //url: 'db.js',
-            data: {
-                message: "helo",
-                action: "minigame",      
-                minigame: "1"
-                /*$('#myFormName').serialize()*/
-            },
-            success: function (result) {
-                alert(JSON.stringify(result));
-            },
-            error: function(errMsg) {
-                alert(JSON.stringify(errMsg));
-            }
-        });
-        e.preventDefault();
+    window.location.href="/Minigames/minigame1.html";    
+});
 
-    }
-    
+$('#minigame-2').on('click',function (e) {
+    window.location.href="/Minigames/minigame2.html";    
 });
