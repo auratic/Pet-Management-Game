@@ -15,14 +15,35 @@ https://stackoverflow.com/questions/24207507/get-data-from-server-with-node-js
 Synchronous querying on NodeJS
 https://stackoverflow.com/questions/32850045/node-js-synchronous-queries-with-mysql
 
+disable scrolling
 https://stackoverflow.com/questions/28411499/disable-scrolling-on-body
+
+offsetHeight vs clientHeight vs scrollHeight
+https://stackoverflow.com/questions/22675126/what-is-offsetheight-clientheight-scrollheight
+
+Sometime AJAX automatically turns into object so dont need to json.parse()
+https://stackoverflow.com/questions/74985608/unexpected-token-o-object-obj-is-not-a-valid-json
+
+Aspect ratio = width / height
+
+requestAnimationFrame has a number of advantages. 
+Perhaps the most important one is that it pauses when the user navigates to another browser tab, 
+hence not wasting their precious processing power and battery life.
+
+********************************************************************************
+
+(JQuery) Serializing form values
+https://www.w3schools.com/jquery/ajax_serialize.asp
 
 JSON.stringify if console.log cannot read the variable
 
 $.ajax({
         url: "http://api.mydomain.com/test/index.php",
         method: "POST",        
-        data: jsondata,
+        data: {
+            jsondata, 
+            jsondata2,
+            $(this).serialize()},
         contentType: false,
         cache: false,
         processData: false,
@@ -32,6 +53,50 @@ $.ajax({
             alert(JSON.stringify(errMsg));
         }
     });
+
+********************************************************************************
+
+Phaser 3
+
+Moving phaser into html container
+https://stackoverflow.com/questions/20526933/html-moving-phaser-into-container-div
+
+
+const logo = this.physics.add.image(400, 100, 'logo'); //will add physics to gameObject
+
+logo.setVelocity(100, 200);
+logo.setBounce(1, 1);
+logo.setCollideWorldBounds(true);
+
+
+/*
+//Async version of data fetching 
+let item = new Promise(function (resolve, reject) {
+
+  con.query(sql_get_item, function (err, result, fields) {
+    //console.log(result)
+    // if (err) throw (err);
+    if (err) reject(err);
+    else resolve(result);
+
+  });
+});
+
+res.json(item);
+*/
+
+
+  /*
+  //async version of login function
+  let loginStatus = new Promise(function (resolve, reject) {
+    con.query(query, function (err, result, fields) {
+      if (err) reject(err);
+      else resolve(result);
+      console.log("result1" + result);
+    });
+  });
+  */
+ 
 
 
 

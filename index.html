@@ -29,7 +29,7 @@
                 <div class="container-fluid">
                     <!--<a class="navbar-brand" href="#">Virtual Pet</a>-->
                     <a>Virtual Pet</a>
-                    <a>Gold: 123</a>
+                    <label id="coin">Gold: N/A</label>
                     <button 
                         class="navbar-toggler" type="button" style="padding:0"
                         data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation"
@@ -38,7 +38,7 @@
                     </button>
                     <div class="offcanvas offcanvas-end " tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
                         <div class="offcanvas-header">
-                            <h2 class="offcanvas-title" id="offcanvasDarkNavbarLabel">User: 123</h2>
+                            <h2 class="offcanvas-title" id="username">User: N/A</h2>
                             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                         </div>
                         <div class="offcanvas-body">
@@ -79,8 +79,12 @@
                                     </ul>
                                 </li>
                                 
-                                <li class="nav-item">
+                                <li class="nav-item" id="loginNav">
                                     <a class="nav-link" href="#" data-bs-target="#loginModal" data-bs-toggle="modal">Login</a>
+                                </li>
+                                
+                                <li class="nav-item" id="logoutNav" style="display: none">
+                                    <a class="nav-link" href="#">Logout</a>
                                 </li>
                             </ul>
                         </div>
@@ -191,10 +195,11 @@
                     <div class="modal-body">
                         <div class="container-fluid">
                             <div class="row">
+                                <div id="inv-msg" style="display:none; text-align:center"></div>
+                                <!--
                                 <div class="col-sm-2">
                                     Item 1 <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
                                 </div>
-                                <!--
                                 <div class="col-sm-2">Item 2
                                     <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
                                 </div>
@@ -306,45 +311,27 @@
                         <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Login</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+
+                    <!-- LOGIN FORM -->
                     <div class="modal-body">
-                        <form id="myForm">
+                        <form id="loginForm">
                             <div class="mb-3">
                               <label for="exampleInputEmail1" class="form-label">Email address</label>
-                              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                              <input type="email" class="form-control" aria-describedby="emailHelp" name="email" >
                               <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
                             </div>
                             <div class="mb-3">
                               <label for="exampleInputPassword1" class="form-label">Password</label>
-                              <input type="password" class="form-control" id="exampleInputPassword1">
+                              <input type="password" class="form-control" name="password" >
                             </div>
                             <div class="mb-3 form-check">
                               <input type="checkbox" class="form-check-input" id="exampleCheck1">
                               <label class="form-check-label" for="exampleCheck1">Check me out</label>
                             </div>
                             <input type="submit"  class="btn btn-primary">Login</button>
-                            <script>
-                                $('#myForm').on('submit',function (e) {
-
-                                    $.ajax({
-                                        type: 'post',
-                                        //url: 'db.js',
-                                        data: {
-                                            message: "helo",
-                                            action: "login"
-                                            /*$('#myFormName').serialize()*/
-                                        },
-                                        success: function (result) {
-                                            alert(JSON.stringify(result));
-                                        },
-                                        error: function(errMsg) {
-                                            alert(JSON.stringify(errMsg));
-                                        }
-                                    });
-                                    e.preventDefault();
-                                });
-                            </script>
                         </form>
                     </div>
+
                     <div class="modal-footer">
                         Dont have an account yet?
                         <button class="btn btn-primary btn-light" data-bs-target="#registerModal" data-bs-toggle="modal">Register here</button>

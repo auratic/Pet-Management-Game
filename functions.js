@@ -1,3 +1,10 @@
+
+/*
+ *
+ * User Interface
+ * 
+ */
+
 function screenDetect () {
     /*
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
@@ -26,44 +33,31 @@ function checkLogin() {
     
 }
 
-function loadShop() {
+function loadProfile() {
     $.ajax({
         type: 'post',
-        //url: 'db.js',
-        data: {
-            message: "helo",
-            action: "loadshop"
-            /*$('#myFormName').serialize()*/
-        },
+        url: '/profile',
+        /*dataType: 'json', */
         success: function (result) {
-            alert(result);
-            var items = JSON.parse(result); //Turn result into object
-            //console.log(result);
-            //console.log(JSON.parse(result));
-            //console.log(result.length);
-
-            //List shop items
-            //https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_node_appendchild
-            var shoplist = document.getElementById("shoplist");
-            //if(items < 3)
-            // var row_i = result.length ;
-            // var item_i = items.length
             
-            var listItem =  "<div class='row'>";
-            for (let i = 0 ; i < items.length ; i++ ) {
-                listItem +=     "   <div class='col-sm-2'>";
-                listItem +=     `       ${items[i].item_name} <img class='shop-image' src='/Assets/Images/Shop/${items[i].file}'>`;
-                listItem +=     "   </div>";
+            if (
+                typeof result !== 'object' &&
+                !Array.isArray(result) &&
+                result !== null
+            ) {
+
+                $("#coin").html("Gold: N/A");
+
+            } else {
+                
+                alert(`Login successful! Welcome back! ${result.user}`);
+                $('#username').html(`${result.user}`);
+                $("#loginModal").modal("hide");
+                $('#loginNav').css({'display': 'none'});
+                $('#logoutNav').css({'display': 'block'});
+                $('#coin').html(`Gold: ${result.coin}`);
+            
             }
-            listItem +=     "</div>";
-        
-
-            $("#shoplist").append(listItem);
-
-            //var row_node = document.createElement("div");
-            //var row_node = 
-            //for()
-
         },
         error: function(errMsg) {
             alert(JSON.stringify(errMsg));
@@ -71,9 +65,81 @@ function loadShop() {
     });
 }
 
+function loadShop() {
+    $.ajax({
+        type: 'GET',
+        url: '/loadShop',
+        /*dataType: 'json', */
+        success: function (result) {
+            // alert(result[0].item_id);
+            // var items = JSON.parse(result); //Turn result into object
+
+            //List shop items
+            //https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_node_appendchild
+            var listItem =  "<div class='row'>";
+            result.forEach(item => {
+                listItem +=     "   <div class='col-sm-2'>";
+                listItem +=     `       ${item.item_name} <img class='shop-image' src='/Assets/Images/Shop/${item.file}'>`;
+                listItem +=     "   </div>";
+
+            })
+            listItem +=     "</div>";
+            $("#shoplist").append(listItem);
+        },
+        error: function(errMsg) {
+            alert(JSON.stringify(errMsg));
+        }
+    });
+}
+function loadInv() {
+    $.ajax({
+        type: 'POST',
+        url: '/loadInv',
+        /*dataType: 'json',*/
+        success: function (result) {
+            // alert(result[0].item_id);
+            // var items = JSON.parse(result); //Turn result into object
+
+            //List shop items
+            //https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_node_appendchild
+            
+            if (
+                typeof result !== 'object' &&
+                !Array.isArray(result) &&
+                result !== null
+            ) {
+
+                $("#inv-msg").css({'display':'block'});
+                $("#inv-msg").html(result);
+
+            } else {
+
+                let listItem =  "<div class='row'>";
+                result.forEach(item => {
+                    listItem +=     "   <div class='col-sm-2'>";
+                    listItem +=     `       ${item.item_name} <img class='shop-image' src='/Assets/Images/Shop/${item.file}'>`;
+                    listItem +=     "   </div>";
+    
+                })
+                listItem +=     "</div>";
+                $("#shoplist").append(listItem);
+
+            }
+        },
+        error: function(errMsg) {
+            console.log('entered error')
+            $("#inv-msg").css({'display':'block'});
+            $("#inv-msg").html(errMsg);
+
+        }
+    });
+}
+
 window.onload =()=> {
     screenDetect();
     loadShop();
+    loadInv();
+    loadProfile();
     checkLogin();
 } 
     
@@ -85,6 +151,14 @@ document.getElementById("model").onclick = () => {
     console.log("hi");
 }
 
+
+/*
+ *
+ * Navigation
+ * 
+ */
+
+
 $('#minigame-1').on('click',function (e) {
     window.location.href="/Minigames/minigame1.html";    
 });
@@ -92,3 +166,53 @@ $('#minigame-1').on('click',function (e) {
 $('#minigame-2').on('click',function (e) {
     window.location.href="/Minigames/minigame2.html";    
 });
+
+/*
+ *
+ * Login
+ * 
+ */
+
+
+//$('#myFormName').serialize()
+ 
+$('#loginForm').on('submit',function (e) {
+    console.log($(this).serialize());
+    $.ajax({
+        type: 'post',
+        url: '/login',
+        data: $(this).serialize(),
+        /*
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8', // Set the content type
+        dataType: 'json', 
+        */
+        success: function (result) {
+            
+            //alert(JSON.stringify(result));
+            if (
+                typeof result !== 'object' &&
+                !Array.isArray(result) &&
+                result !== null
+            ) {
+                alert(result);
+            } else {
+                alert(`Login successful! Welcome back! ${result.user}`);
+
+                // TO-DO add inventory
+
+                $('#username').html(`${result.user}`);
+                $("#loginModal").modal("hide");
+                $('#loginNav').css({'display': 'none'});
+                $('#logoutNav').css({'display': 'block'});
+                $('#coin').html(`Gold: ${result.coin}`)
+                loadInv();
+            }
+
+        },
+        error: function(errMsg) {
+            alert(JSON.stringify(errMsg));
+        }
+    });
+    e.preventDefault();
+});
+
