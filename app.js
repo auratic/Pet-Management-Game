@@ -90,7 +90,7 @@ con.connect(function(err) {
 
 /*
  *
- * Login, Logout
+ * Login, Logout, Register
  * 
  */
 
@@ -134,9 +134,18 @@ app.post('/login', (req, res) => {
   
 });
 
-app.get('/logout',(req,res) => {
-  req.session.destroy();
-  res.redirect('/');
+app.post('/logout',(req,res) => {
+  console.log('logout Connected')
+  if (req.session.user) {
+    req.session.destroy();
+    //console.log(req.session);
+    res.send('Logged out');
+  } else {
+    
+    res.send('Not logged in');
+
+  }
+
 });
 
 app.post('/profile', (req, res) => {
@@ -149,6 +158,47 @@ app.post('/profile', (req, res) => {
   } else {
     console.log('Cannot load profile')
     res.send('User not logged in');
+  }
+});
+
+
+app.post('/register', (req, res) => {
+  console.log("loadRegister Connected");
+  console.log(req.body);
+  const { username, email, password } = req.body;
+
+  if(
+      username !== null && password !== null && email !== null &&
+      username !== '' && password !== '' && email !== '' 
+    ) {
+
+    // Check if the username or email already exists in the database
+    const checkQuery = `SELECT * FROM user_profile WHERE username = '${username}' OR email = '${email}'`;
+    con.query(checkQuery, [username, email], (err, results) => {
+        if (err) {
+            console.error(err);
+            res.send(`Registration failed: ${err}`);
+        } else if (results.length > 0) {
+            res.send('Username or email already exists. Please choose a different one.');
+        } else {
+            // Insert user data into the database
+            const user = { username, password, email };
+            const insertQuery = `INSERT INTO user_profile (username, email, password, coin)
+                                 VALUES ('${username}', '${email}', '${password}', 1000)
+                                `;
+            con.query(insertQuery, user, (err, result) => {
+                if (err) {
+                    console.error(err);
+                    res.send(`Registration failed: ${err}`);
+                } else {
+                    console.log('Registration successful');
+                    res.send('Registration successful');
+                }
+            });
+        }
+    });
+  } else {
+    res.send('Please fill in all the blanks');
   }
 });
 
@@ -223,7 +273,7 @@ app.post('/loadInv', (req, res) => {
       con.query(sql_get_item, function (err, result, fields) {
         console.log(result);
         if (err) throw(err);
-        else res.send("inventory have item");
+        else res.send(result);
       });
 
     } else {

@@ -23,6 +23,13 @@
 
     </head>
     <body>
+        
+        <div id="overlay">
+            <div class="text-primary" role="status">
+                <span class="sr-only">Loading</span>
+            </div>
+        </div>
+
         <div id="game-container" class="container-fluid">
             <nav id="header-container" class="navbar" style="margin:0">
                 
@@ -84,7 +91,7 @@
                                 </li>
                                 
                                 <li class="nav-item" id="logoutNav" style="display: none">
-                                    <a class="nav-link" href="#">Logout</a>
+                                    <a class="nav-link" href="#" id="logout">Logout</a>
                                 </li>
                             </ul>
                         </div>
@@ -160,26 +167,13 @@
                     </div>
                     <div class="modal-body">
                         <div class="container-fluid" id="shoplist">
-                            <!--
-                            <div class="row">
-                                <div class="col-sm-2">
-                                    Item 1 <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
-                                </div>
-                                <div class="col-sm-2">Item 2
-                                    <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
-                                </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-2 col-sm-2">
-                                        Item 1 <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
-                                    </div>
-                                </div>
-                            </div>
-                            -->
+                            <!--CHILD GOES HERE-->
                         </div>
+                        <!--
                         <div class="modal-footer">
 
                         </div>
+                        -->
                     </div>
                 </div>
             </div>
@@ -193,28 +187,15 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div id="inv-msg" style="display:none; text-align:center"></div>
-                                <!--
-                                <div class="col-sm-2">
-                                    Item 1 <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
-                                </div>
-                                <div class="col-sm-2">Item 2
-                                    <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
-                                </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-2 col-sm-2">
-                                        Item 1 <img class="shop-image" src="https://i.pinimg.com/736x/1a/f0/49/1af049c5a09863dfca60b628495eb56a.jpg">
-                                    </div>
-                                </div>
-                                -->
-                            </div>
+                        <div class="container-fluid" id="invlist">
+                            <div id="inv-msg" style="display:none; text-align:center"></div>
+                            <!--CHILD GOES HERE-->
                         </div>
+                        <!--
                         <div class="modal-footer">
 
                         </div>
+                        -->
                     </div>
                 </div>
             </div>
@@ -328,7 +309,7 @@
                               <input type="checkbox" class="form-check-input" id="exampleCheck1">
                               <label class="form-check-label" for="exampleCheck1">Check me out</label>
                             </div>
-                            <input type="submit"  class="btn btn-primary">Login</button>
+                            <input type="submit"  class="btn btn-primary" value="Login"/></button>
                         </form>
                     </div>
 
@@ -348,11 +329,27 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        Show a second modal and hide this one with the button below.
+                        <form id="registerForm">
+                            <div class="mb-3">
+                              <label for="exampleInputEmail1" class="form-label">Username</label>
+                              <input type="text" class="form-control" name="username" >
+                            </div>
+                            <div class="mb-3">
+                              <label for="exampleInputEmail1" class="form-label">Email address</label>
+                              <input type="email" class="form-control" name="email" >
+                            </div>
+                            <div class="mb-3">
+                              <label for="exampleInputPassword1" class="form-label">Password</label>
+                              <input type="password" class="form-control" name="password" >
+                            </div>
+                            <input type="submit"  class="btn btn-primary" value="Register"/></button>
+                        </form>
                     </div>
+                    <!--
                     <div class="modal-footer">
                         <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Confirm</button>
                     </div>
+                    -->
                 </div>
             </div>
         </div>

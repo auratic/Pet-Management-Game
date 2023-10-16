@@ -91,17 +91,13 @@ function loadShop() {
         }
     });
 }
+
 function loadInv() {
     $.ajax({
         type: 'POST',
         url: '/loadInv',
         /*dataType: 'json',*/
         success: function (result) {
-            // alert(result[0].item_id);
-            // var items = JSON.parse(result); //Turn result into object
-
-            //List shop items
-            //https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_node_appendchild
             
             if (
                 typeof result !== 'object' &&
@@ -122,7 +118,7 @@ function loadInv() {
     
                 })
                 listItem +=     "</div>";
-                $("#shoplist").append(listItem);
+                $("#invlist").append(listItem);
 
             }
         },
@@ -169,7 +165,7 @@ $('#minigame-2').on('click',function (e) {
 
 /*
  *
- * Login
+ * Account
  * 
  */
 
@@ -177,7 +173,9 @@ $('#minigame-2').on('click',function (e) {
 //$('#myFormName').serialize()
  
 $('#loginForm').on('submit',function (e) {
-    console.log($(this).serialize());
+
+    onLoading();
+    //console.log($(this).serialize());
     $.ajax({
         type: 'post',
         url: '/login',
@@ -194,17 +192,19 @@ $('#loginForm').on('submit',function (e) {
                 !Array.isArray(result) &&
                 result !== null
             ) {
+                offLoading();
                 alert(result);
             } else {
+                
+                offLoading();
                 alert(`Login successful! Welcome back! ${result.user}`);
-
-                // TO-DO add inventory
 
                 $('#username').html(`${result.user}`);
                 $("#loginModal").modal("hide");
                 $('#loginNav').css({'display': 'none'});
                 $('#logoutNav').css({'display': 'block'});
                 $('#coin').html(`Gold: ${result.coin}`)
+                $("#inv-msg").css({'display':'none'});
                 loadInv();
             }
 
@@ -216,3 +216,99 @@ $('#loginForm').on('submit',function (e) {
     e.preventDefault();
 });
 
+
+$('#registerForm').on('submit',function (e) {
+    
+    onLoading();
+    //console.log($(this).serialize());
+    $.ajax({
+        type: 'post',
+        url: '/register',
+        data: $(this).serialize(),
+        /*
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8', // Set the content type
+        dataType: 'json', 
+        */
+        success: function (result) {
+            
+            offLoading();
+            alert(`${result}`);
+            if(result == 'Registration successful') {
+                $("#registerModal").modal("hide");
+                $("#loginModal").modal("show");
+            }
+            
+        },
+        error: function(errMsg) {
+            alert(JSON.stringify(errMsg));
+        }
+    });
+    e.preventDefault();
+});
+
+
+$('#logout').on('click',function (e) {
+    onLoading();
+    $.ajax({
+        type: 'post',
+        url: '/logout',
+        data: $(this).serialize(),
+        /*
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8', // Set the content type
+        dataType: 'json', 
+        */
+        success: function (result) {
+            
+            offLoading();
+
+            alert(`${result}`);
+            window.location.reload(true);
+            
+        },
+        error: function(errMsg) {
+            alert(JSON.stringify(errMsg));
+        }
+    });
+    e.preventDefault();
+
+});
+
+
+/*
+ *
+ * Loading screen
+ * 
+ */
+
+
+var loading = null;
+function onLoading() {
+    let counter = 0;
+    let loading_text = 'loading';
+    $('#overlay').css({'display':'flex'});
+
+    loading = setInterval(()=> {
+        console.log(loading_text)
+        if(counter > 2) {
+            counter = 0;
+            loading_text = 'loading';
+        } else {
+            counter++
+            console.log('entered dot')
+            loading_text += '.';
+        }
+        
+        $('#overlay span').text(loading_text);
+        console.log(counter);
+
+    }, 1000);
+
+}
+
+
+function offLoading() {
+
+    clearInterval(loading);
+    $('#overlay').css({'display':'none'});
+
+}
