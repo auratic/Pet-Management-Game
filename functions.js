@@ -1,7 +1,20 @@
+/*
+ *
+ * User
+ * 
+ */
+
+var userProfile = {
+    user_id: null,
+    username: null,
+    coin: null,
+    inv: null,
+    login: false
+}
 
 /*
  *
- * User Interface
+ * User Interface Initialization
  * 
  */
 
@@ -50,41 +63,23 @@ function loadProfile() {
 
             } else {
                 
-                alert(`Login successful! Welcome back! ${result.user}`);
+                //alert(`Login successful! Welcome back! ${result.user}`);
                 $('#username').html(`${result.user}`);
                 $("#loginModal").modal("hide");
                 $('#loginNav').css({'display': 'none'});
                 $('#logoutNav').css({'display': 'block'});
                 $('#coin').html(`Gold: ${result.coin}`);
-            
+                
+                userProfile = {
+                    user_id: result.id,
+                    username: result.user,
+                    coin: result.coin,
+                    inv: result.inv,
+                    login: true
+                }
+
+                console.log(userProfile);
             }
-        },
-        error: function(errMsg) {
-            alert(JSON.stringify(errMsg));
-        }
-    });
-}
-
-function loadShop() {
-    $.ajax({
-        type: 'GET',
-        url: '/loadShop',
-        /*dataType: 'json', */
-        success: function (result) {
-            // alert(result[0].item_id);
-            // var items = JSON.parse(result); //Turn result into object
-
-            //List shop items
-            //https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_node_appendchild
-            var listItem =  "<div class='row'>";
-            result.forEach(item => {
-                listItem +=     "   <div class='col-sm-2'>";
-                listItem +=     `       ${item.item_name} <img class='shop-image' src='/Assets/Images/Shop/${item.file}'>`;
-                listItem +=     "   </div>";
-
-            })
-            listItem +=     "</div>";
-            $("#shoplist").append(listItem);
         },
         error: function(errMsg) {
             alert(JSON.stringify(errMsg));
@@ -109,7 +104,8 @@ function loadInv() {
                 $("#inv-msg").html(result);
 
             } else {
-
+                $("#invlist").empty();
+                
                 let listItem =  "<div class='row'>";
                 result.forEach(item => {
                     listItem +=     "   <div class='col-sm-2'>";
@@ -206,6 +202,15 @@ $('#loginForm').on('submit',function (e) {
                 $('#coin').html(`Gold: ${result.coin}`)
                 $("#inv-msg").css({'display':'none'});
                 loadInv();
+
+                userProfile = {
+                    user_id: result.id,
+                    username: result.user,
+                    coin: result.coin,
+                    inv: result.inv,
+                    login: true
+                }
+                console.log(userProfile);
             }
 
         },
@@ -310,5 +315,100 @@ function offLoading() {
 
     clearInterval(loading);
     $('#overlay').css({'display':'none'});
+
+}
+
+
+/*
+ *
+ * Shop
+ * 
+ */
+
+var shopItems = [];
+
+function loadShop() {
+    $.ajax({
+        type: 'GET',
+        url: '/loadShop',
+        /*dataType: 'json', */
+        success: function (result) {
+            // alert(result[0].item_id);
+            // var items = JSON.parse(result); //Turn result into object
+
+            //List shop items
+            //https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_node_appendchild
+            var listItem =  "<div class='row'>";
+            var counter = 0;
+            result.forEach(item => {
+                listItem +=     `   <div class='col-sm-2' onclick='buyItem(${counter})'>`;
+                listItem +=     `       ${item.item_name} (${item.cost} coins)<img class='shop-image' src='/Assets/Images/Shop/${item.file}'>`;
+                listItem +=     "   </div>";
+
+                shopItems[counter] = {
+                    item_id: item.item_id,
+                    item_name: item.item_name,
+                    item_cost: item.cost
+                }
+                console.log(shopItems[counter]);
+                counter++;
+            });
+            listItem +=     "</div>";
+            $("#shoplist").append(listItem);
+        },
+        error: function(errMsg) {
+            alert(JSON.stringify(errMsg));
+        }
+    });
+}
+
+function buyItem(i) {
+    console.log('hola amigo' + i);
+    onLoading();
+    if(userProfile.login) {
+
+        if(shopItems[i].item_cost > userProfile.coin) {
+            alert('Do not have enough coins !');
+            offLoading();
+        } else {
+            $.ajax({
+                type: 'post',
+                url: '/buyItem',
+                data: {
+                    item_id: shopItems[i].item_id,
+                    cost: shopItems[i].item_cost
+                },
+                /*
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8', // Set the content type
+                dataType: 'json', 
+                */
+                success: function (result) {
+                    if(result == 'Already owned this item') {
+                        console.log('already owned item')
+                        alert(JSON.stringify(result))
+                        offLoading();
+                    } else {
+                        console.log('bought item')
+                        $('#inv-msg').css({'display':'none'});
+                        alert(JSON.stringify(result));
+                        loadProfile();
+                        loadInv();
+                        //loadProfile();
+                        offLoading();
+                    }
+                    
+                },
+                error: function(errMsg) {
+                    alert(JSON.stringify(errMsg));
+                    offLoading();
+                }
+            });
+            //e.preventDefault();
+        }
+        
+    } else {
+        alert('Not logged in !');
+        offLoading();
+    }
 
 }

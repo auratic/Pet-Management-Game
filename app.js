@@ -76,8 +76,8 @@ app.listen(port, () => {
 
 var con = mysql.createConnection({
   host: "localhost",
-  user: "root",
-  password: "",
+  user: "mw",
+  password: "chanmingwai",
   database: "pm_game"
 });
 
@@ -111,7 +111,7 @@ app.post('/login', (req, res) => {
           //console.log(c);
           console.log('Login success');
           var inv_array = null;
-          if(results[0].inventory !== null) {
+          if(results[0].inventory !== null && results[0].inventory !== '') {
 
             inv_array = results[0].inventory.split(',');
             console.log(inv_array);         
@@ -222,9 +222,77 @@ app.get('/loadShop', (req, res) => {
 });
 
 
-app.get('/buyItem', (req, res) => {
+app.post('/buyItem', (req, res) => {
  
+  const { item_id, cost } = req.body;
   
+  //TO DO: Check if user have enough coins
+
+  if (req.session.user) {
+    
+    let invArray = req.session.user.inv;
+    let duplicate = new Promise ((res, rej) => {
+      if(invArray !== null && invArray !== '') {
+        console.log("check duplicate");
+        invArray.forEach(owned => {
+          if(owned == item_id) rej('Already owned this item')
+        });
+        res();
+      } else {
+        res();
+      }
+    })
+    .then(()=>{
+      updateCoin(req, -cost)
+      .then((result)=> {
+        console.log('updating inventory');
+
+        let newInv;
+        if(invArray !== null && invArray !== '') {
+          newInv = invArray.join(',');
+          newInv += `,${item_id}`;
+        } else {
+          newInv = `${item_id}`;
+        }
+        
+        const updateInv = `UPDATE user_profile
+                          SET inventory = '${newInv}'
+                          WHERE user_id = ${req.session.user.id}`;
+        con.query(updateInv, function (err, result, fields) {
+          //console.log(result);
+          if (err) throw(err);
+          else console.log('Updated DB Inventory');
+        });
+        return(newInv)
+      })
+      .then((result)=> {
+        req.session.user.inv = result.split(',');
+        req.session.save((err) => {
+          if (err) {
+            res.status(500).send('Error updating session');
+          } else {
+            console.log('Session update inv successfully')
+            return
+          }
+        });
+        console.log(req.session.user);
+      })
+      .then((result)=> {
+        console.log('Successful purchase!'); 
+        res.send('Successful purchase!');
+      });
+
+    })
+    .catch((result)=> {
+      console.log('item owned');
+      res.send(result);
+    });
+    
+
+  } else {
+    res.send('User not logged in');
+  }
+
 });
 
 
@@ -242,8 +310,10 @@ app.post('/loadInv', (req, res) => {
   if (req.session.user) {
 
     let inv_array = req.session.user.inv;
+    //console.log(inv_array)
+    //console.log(inv_array.length)
 
-    if(inv_array !== null) {
+    if(inv_array !== null && inv_array !== '') {
 
       var sql_get_item = `SELECT * FROM item WHERE item_id = `;
 
@@ -297,6 +367,44 @@ app.post('/loadInv', (req, res) => {
  * 
  */
 
+
+function updateCoin (req, cost) {
+  console.log('updateCoin connected')
+  
+  let curCoin = req.session.user.coin;
+  let newCoin = curCoin + cost;
+  req.session.user.coin = newCoin;
+
+  const updateCoin = `UPDATE user_profile
+                      SET coin = ${newCoin}
+                      WHERE user_id = ${req.session.user.id}`;
+
+  let updateDB = new Promise ((res, rej) => {
+    con.query(updateCoin, function (err, result, fields) {
+      //console.log(result);
+      if (err) rej(err);
+      else res(console.log('DB update coin successfully'))
+    })
+  })
+  .then(()=> {
+    req.session.save((err) => {
+      if (err) {
+        res.status(500).send('Error updating session');
+      } else {
+        console.log('Session update coin successfully')
+        return
+      }
+    });
+  })
+  .then(()=> {
+    console.log(newCoin)      
+    return(newCoin); 
+  })
+  .catch((err)=> {
+    throw(err);
+  });
+  return(updateDB)        
+}
 
 app.post('/updateCoin', (req, res) => {
 
