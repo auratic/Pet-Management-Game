@@ -331,7 +331,7 @@ app.post('/loadInv', (req, res) => {
 
           } else {
 
-            sql_get_item += `${inv_array[i]} OR `;
+            sql_get_item += `${inv_array[i]} OR item_id = `;
 
           }
 

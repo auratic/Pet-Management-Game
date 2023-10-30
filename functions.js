@@ -17,6 +17,12 @@ var items = [
         cost: 100,
         cat: 'torso',
         src: 'tshirt1.png'
+    }, {
+        item_id: 2003,
+        name: 'beanie',
+        cost: 100,
+        cat: 'head',
+        src: 'beanie.png'
     }
 ];
 
