@@ -58,6 +58,9 @@ $.ajax({
 
 Phaser 3
 
+Enable pixel art
+https://www.html5gamedevs.com/topic/36607-scaling-the-canvas-for-pixel-art/
+
 Moving phaser into html container
 https://stackoverflow.com/questions/20526933/html-moving-phaser-into-container-div
 
