@@ -1,5 +1,28 @@
 /*
  *
+ * Item lists
+ * 
+ */
+
+var items = [
+    {
+        item_id: 2001,
+        name: 'fedora',
+        cost: 2000,
+        cat: 'head',
+        src: 'fedora.png'
+    }, {
+        item_id: 2002,
+        name: 'tshirt1',
+        cost: 100,
+        cat: 'torso',
+        src: 'tshirt1.png'
+    }
+];
+
+
+/*
+ *
  * User
  * 
  */
@@ -34,11 +57,31 @@ function screenDetect () {
     //Model adjust
 
     if (window.innerHeight > window.innerWidth) {
-        document.getElementById("model").style.height = "auto";
-        document.getElementById("model").style.width = "85%";
+        
+        $('#model').css({
+            'height':'auto',
+            'width': "85%"})
+
+        $('#model-head').css({
+            'height':'auto',
+            'width': "70%"})
+            
+        $('#model-torso').css({
+            'height':'auto',
+            'width': "70%"})
     } else {
-        document.getElementById("model").style.height = "85%";
-        document.getElementById("model").style.width = "auto";
+        
+        $('#model').css({
+            'height':'85%',
+            'width': "auto"})
+
+        $('#model-head').css({
+            'height':'70%',
+            'width': "auto"})
+            
+        $('#model-torso').css({
+            'height':'70%',
+            'width': "auto"})
     }
 }
 
@@ -108,7 +151,7 @@ function loadInv() {
                 
                 let listItem =  "<div class='row'>";
                 result.forEach(item => {
-                    listItem +=     "   <div class='col-sm-2'>";
+                    listItem +=     `   <div class='col-sm-2' onclick='equipItem(${item.item_id})'>`;
                     listItem +=     `       ${item.item_name} <img class='shop-image' src='/Assets/Images/Shop/${item.file}'>`;
                     listItem +=     "   </div>";
     
@@ -411,4 +454,38 @@ function buyItem(i) {
         offLoading();
     }
 
+}
+
+function equipItem(i) {
+    //console.log('equipItem ' + i);
+    onLoading();
+    if(userProfile.login) {
+
+        offLoading();
+        var index = items.findIndex(item => item.item_id === i)
+        //console.log('item is ' + items[index].name);
+
+        if (items[index].cat == 'torso') {
+            if($('#model-torso').attr('src') == `Assets/Images/Shop/${items[index].src}`) {
+                $("#model-torso").css({'display':'none'});
+                $("#model-torso").attr("src", ``);
+            } else {
+                $("#model-torso").css({'display':'block'});
+                $("#model-torso").attr("src", `Assets/Images/Shop/${items[index].src}`);
+            }
+
+        } else if (items[index].cat == 'head') {
+            if($('#model-head').attr('src') == `Assets/Images/Shop/${items[index].src}`) {
+                $("#model-head").css({'display':'none'});
+                $("#model-head").attr("src", ``);
+            } else {
+                $("#model-head").css({'display':'block'});
+                $("#model-head").attr("src", `Assets/Images/Shop/${items[index].src}`);
+            }
+        } 
+        
+    } else {
+        alert('Not logged in !');
+        offLoading();
+    }
 }
