@@ -23,22 +23,32 @@
 
     </head>
     <body>
-        
+        <audio loop muted autoplay id="bgm" style="display:none"> 
+            <source src="Assets/Audio/Lobby-Time.mp3" type="audio/mp3"> 
+        </audio> 
+
+        <div id="bg-container">        
+        </div>
+
         <div id="overlay">
             <div class="text-primary" role="status">
                 <span class="sr-only">Loading</span>
             </div>
         </div>
 
-        <div id="game-container" class="container-fluid">
+        <div id="game-container" class="container">
             <nav id="header-container" class="navbar" style="margin:0">
                 
                 <div class="container-fluid">
                     <!--<a class="navbar-brand" href="#">Virtual Pet</a>-->
-                    <a>Virtual Pet</a>
-                    <label id="coin">Gold: N/A</label>
+                    <div style="display: flex; align-items: center;">
+                        <span id="coin">N/A</span>
+                        <img src="Assets/Images/coin.gif" 
+                            style='image-rendering:pixelated;'>
+                    </div>
+                    <span>kitty kitty</span>
                     <button 
-                        class="navbar-toggler" type="button" style="padding:0"
+                        class="navbar-toggler" type="button"
                         data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation"
                     >
                         <span class="navbar-toggler-icon"></span>
@@ -50,13 +60,6 @@
                         </div>
                         <div class="offcanvas-body">
                             <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                                <li class="nav-item">
-                                    <a class="nav-link active" aria-current="page" href="#">Augmented Reality (AR)</a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Friends</a>
-                                </li>
 
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -72,18 +75,9 @@
                                     </ul>
                                 </li>
                                     
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Setting
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-dark">
-                                        <li><a class="dropdown-item" href="#">Audio</a></li>
-                                        <li><a class="dropdown-item" href="#">Camera Sensitivity Threshold</a></li>
-                                        <li>
-                                            <hr class="dropdown-divider">
-                                        </li>
-                                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                    </ul>
+                                
+                                <li class="nav-item" id="settingNav">
+                                    <a class="nav-link" href="#" data-bs-target="#settingModal" data-bs-toggle="modal">Setting</a>
                                 </li>
                                 
                                 <li class="nav-item" id="loginNav">
@@ -97,26 +91,21 @@
                         </div>
                     </div>
                 </div>
-                <!--
-                <div class="col-2">
-                    <img class="button-nav">
-                </div>
-                <div class="col-4 text-center">Relationship</div>
-                <div class="col-4 text-center">Gold:666</div>
-                <div class="col-2">
-                    <button class="button-setting btn" data-bs-target="#setting-container" data-bs-toggle="modal">Setting</button>
-                </div>
-
-                -->
             </nav>
             <div id="model-container" class="container">
+                <div id="textbubble" >
+                    <span>cuddle me!</span>
+                </div>
+                
+                <img id="heart" src="Assets/Images/bubble(heart).png" style="image-rendering: pixelated; position:absolute; display:none">
                 <img id="model" src="Assets/Images/Models/cat-idle.gif" style="image-rendering: pixelated;">
                 <img id="model-head"  style="image-rendering: pixelated; position:absolute"> 
                 <img id="model-torso"  style="image-rendering: pixelated; position:absolute"> 
                 <!--<img id="model" src="Assets/Images/Models/dog.png"">-->
                 <!-- https://www.jamiesale-cartoonist.com/wp-content/uploads/dog-12.png -->
             </div>
-            <div id="footer-container" class="row" style="margin:0">
+            <nav id="footer-container" class="navbar">
+            <!--<div id="footer-container" class="row" style="margin:0">-->
                 <div class="col-2 text-center">
                     <button class="button-list btn" data-bs-target="#inv-container" data-bs-toggle="modal"><!--Inventory--></button>
                 </div>
@@ -128,10 +117,11 @@
                 <div class="col-2 text-center"  id="minigame-open">
                     <button class="button-game btn" data-bs-target="#minigame-container" data-bs-toggle="modal"><!--Play--></button>
                 </div>
-            </div>
+            <!--</div>-->
+            </nav>
         </div>
 
-        <div id="setting-container" class="modal">
+        <div id="settingModal" class="modal fade">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -141,21 +131,40 @@
                     <div class="modal-body">
                         <div class="container-fluid">
                             <div class="row">
-                                <button class="btn">Account</button>
+                                <label>Volume</label><p id="vol-val"></p><br>
+                                <input type="range" min="1" max="100" value="50" id="volume"><script>
+                                    $(document).ready(function() {
+                                        $('#volume').on('input', function() {
+                                            $('#vol-val').text(`(${$(this).val()})`);
+                                        });
+                                    });
+                                </script>
                             </div>
                             <div class="row">
-                                <button class="btn">Audio</button>
+                                <label>Camera sensitivity</label><p id="sens-val"></p><br>
+                                <input type="range" min="0" max="1" step="0.01" value="0.5" id="sensitivity">
+                                <script>
+                                    $(document).ready(function() {
+                                        $('#sensitivity').on('input', function() {
+                                            $('#sens-val').text(`(${$(this).val()})`);
+                                        });
+                                    });
+                                </script>
                             </div>
+                            <hr>
                             <div class="row">
-                                <button class="btn">Help</button>
-                            </div>
-                            <div class="row">
-                                <button class="btn">Share</button>
+                                <form>
+                                    <label>Gamemode</label><br>
+                                    <input type="radio" id="interactive" name="gamemode" value="HTML">
+                                    <label for="interactive">interactive</label>
+                                    <input type="radio" id="keyboard" name="gamemode" value="CSS">
+                                    <label for="keyboard">keyboard</label>
+                                </form> 
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-
+                        <button class="btn btn-primary btn-light" data-bs-target="#registerModal" data-bs-toggle="modal">Save</button>
                     </div>
                 </div>
             </div>
@@ -220,23 +229,9 @@
                                 <div class="col-sm-2" id="minigame-2">Minigame 2
                                     <img class="shop-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Mario_Series_Logo.svg/2560px-Mario_Series_Logo.svg.png">
                                 </div>
-                                <!--
-                                <div class="col-sm-2">Item 2
+                                <div class="col-sm-2" id="minigame-3">Bathing
                                     <img class="shop-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Mario_Series_Logo.svg/2560px-Mario_Series_Logo.svg.png">
                                 </div>
-                                <div class="col-sm-2">Item 3
-                                    <img class="shop-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Mario_Series_Logo.svg/2560px-Mario_Series_Logo.svg.png">
-                                </div>
-                                <div class="col-sm-2">Item 4
-                                    <img class="shop-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Mario_Series_Logo.svg/2560px-Mario_Series_Logo.svg.png">
-                                </div>
-                                <div class="col-sm-2">Item 5
-                                    <img class="shop-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Mario_Series_Logo.svg/2560px-Mario_Series_Logo.svg.png">
-                                </div>
-                                <div class="col-sm-2">Item 6
-                                    <img class="shop-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Mario_Series_Logo.svg/2560px-Mario_Series_Logo.svg.png">
-                                </div>
-                              -->
                             </div>
                             <!--
                             <div class="row">

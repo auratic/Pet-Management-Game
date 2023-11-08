@@ -23,6 +23,12 @@ var items = [
         cost: 100,
         cat: 'head',
         src: 'beanie.png'
+    }, {
+        item_id: 2004,
+        name: 'wizard hat',
+        cost: 100,
+        cat: 'head',
+        src: 'wizardHat.png'
     }
 ];
 
@@ -75,8 +81,18 @@ function screenDetect () {
         $('#model-torso').css({
             'height':'auto',
             'width': "70%"})
+
+
+        $('#textbubble').css({
+            'top': `${ ($('#model-container').height() - $('#model').height()) / 2 }`
+        });
+            
     } else {
         
+        $('#textbubble').css({
+            'top': `10`
+        });
+    
         $('#model').css({
             'height':'85%',
             'width': "auto"})
@@ -108,7 +124,7 @@ function loadProfile() {
                 result !== null
             ) {
 
-                $("#coin").html("Gold: N/A");
+                $("#coin").html("999");
 
             } else {
                 
@@ -117,7 +133,7 @@ function loadProfile() {
                 $("#loginModal").modal("hide");
                 $('#loginNav').css({'display': 'none'});
                 $('#logoutNav').css({'display': 'block'});
-                $('#coin').html(`Gold: ${result.coin}`);
+                $('#coin').html(`${result.coin}`);
                 
                 userProfile = {
                     user_id: result.id,
@@ -158,7 +174,7 @@ function loadInv() {
                 let listItem =  "<div class='row'>";
                 result.forEach(item => {
                     listItem +=     `   <div class='col-sm-2' onclick='equipItem(${item.item_id})'>`;
-                    listItem +=     `       ${item.item_name} <img class='shop-image' src='/Assets/Images/Shop/${item.file}'>`;
+                    listItem +=     `       ${item.item_name} <img class='shop-image' src='/Assets/Images/Shop/${item.file}' style="image-rendering: pixelated;">`;
                     listItem +=     "   </div>";
     
                 })
@@ -177,11 +193,25 @@ function loadInv() {
 }
 
 window.onload =()=> {
+    
     screenDetect();
     loadShop();
     loadInv();
     loadProfile();
     checkLogin();
+
+    const BGM = document.getElementById('bgm');
+    if(!BGM) return;
+    const promise = BGM.play();
+    if(promise !== undefined){
+        promise.then(() => {
+            // Autoplay started
+        }).catch(error => {
+            // Autoplay was prevented.
+            BGM.muted = true;
+            BGM.play();
+        });
+    }
 } 
     
 window.onresize = screenDetect;
@@ -208,6 +238,9 @@ $('#minigame-2').on('click',function (e) {
     window.location.href="/Minigames/minigame2.html";    
 });
 
+$('#minigame-3').on('click',function (e) {
+    window.location.href="/Minigames/minigame3.html";    
+});
 /*
  *
  * Account
@@ -248,7 +281,7 @@ $('#loginForm').on('submit',function (e) {
                 $("#loginModal").modal("hide");
                 $('#loginNav').css({'display': 'none'});
                 $('#logoutNav').css({'display': 'block'});
-                $('#coin').html(`Gold: ${result.coin}`)
+                $('#coin').html(`${result.coin}`)
                 $("#inv-msg").css({'display':'none'});
                 loadInv();
 
@@ -391,7 +424,7 @@ function loadShop() {
             var counter = 0;
             result.forEach(item => {
                 listItem +=     `   <div class='col-sm-2' onclick='buyItem(${counter})'>`;
-                listItem +=     `       ${item.item_name} (${item.cost} coins)<img class='shop-image' src='/Assets/Images/Shop/${item.file}'>`;
+                listItem +=     `       ${item.item_name} (${item.cost} coins)<img class='shop-image' src='/Assets/Images/Shop/${item.file}' style='image-rendering: pixelated;'>`;
                 listItem +=     "   </div>";
 
                 shopItems[counter] = {
@@ -495,3 +528,59 @@ function equipItem(i) {
         offLoading();
     }
 }
+
+
+//===== Pet interaction : Cuddle =====//
+
+var patting = 0;
+$('#heart').css({
+    'top': `10`,
+    'height': '30%',
+});
+
+setInterval(() => {
+    
+    $('#textbubble').css({
+        'display': `flex`
+    });
+
+    setTimeout(() => {
+
+        $('#textbubble').css({
+            'display': `none`
+        });
+
+    },4000);
+}, 10000);
+
+$('#game-container').on('mousemove', (e) =>{
+    var mouseX = e.pageX;
+    var mouseY = e.pageY;
+    console.log('mouse moving')
+
+    $('#model').on('mousedown', () => {
+        if(
+            mouseX > $('#model').offset().left && 
+            mouseX < $('#model').offset().left + $('#model').width() && 
+            mouseY > $('#model').offset().top &&
+            mouseY < $('#model').offset().top + $('#model').height()
+        ) {
+            
+            $('#textbubble').css({
+                'display': `none`
+            });
+
+            console.log(patting);
+            if(patting > 5000) {
+                patting = 0;
+                $('#heart').css({'display':'block'});
+                setTimeout(() => {
+                    $('#heart').css({'display':'none'});
+                }, 3000);
+            }
+            patting++;
+        } else {
+            console.log('detect1')
+        }
+    })
+})
