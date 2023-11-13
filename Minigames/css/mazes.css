@@ -1,31 +1,113 @@
-.row .maze {
-  padding: 0 0 20px 20px;
-  display: inline-block;
+@font-face {
+  font-family: MachineGunk;
+  src: url("../../Assets/Fonts/MachineGunk.otf");
 }
 
+* { font-family: MachineGunk; }
+
+html, body {
+
+background-color: black;
+height: 100vh;
+width: 100vw;
+display: flex;
+justify-content: center;
+align-items: center;
+flex-direction: column;
+margin: 0;
+overflow: hidden;
+user-select: none;
+
+}
+
+#bg-container {
+height: 100%;
+width: 100%;
+z-index:0;
+background-image: url("../../Assets/Images/UI/png/BG.png");
+filter: brightness(80%) hue-rotate(300deg) blur(6px);;
+position: absolute;
+}
+#game-container {
+  z-index:1;
+  border: 1vw solid hotpink;
+  border-radius: 1vw;
+  background-image: url("../../Assets/Images/UI/png/BG.png");
+  padding: 0;
+  height: 100vh;
+  width: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#header-container {
+height:15%;
+}
+
+#maze-container {
+height:70%;
+width:100%
+}
+
+#footer-container {
+height:15%;
+}
 /*
+.row .maze {
+padding: 0 0 20px 20px;
+display: inline-block;
+}
+
 .maze .grid { width: 210px; height: 210px; }
 .maze .grid .row { width: 210px; }
 */
-.maze .grid { width: 30vw; height: 30vw }
-.maze .grid .row { width: 30vw; }
 
-/*.small .grid .row > div { width: 40px; height: 40px; }*/
-/*.medium .grid .row > div { width: 12px; height: 12px; }*/
-.large .grid .row > div { width: 5px; height: 5px; }
+/* .small .grid .box > div { width: 40px; height: 40px; } */
+/* .medium .grid .row > div { width: 12px; height: 12px; }*/
+/* .large .grid .row > div { width: 5px; height: 5px; }*/
 
-.maze .grid { border: 1px solid black; }
+/* .maze .grid { border: 1px solid black; } */
 
-.maze .grid .row > div { display: inline-block; border: 1px solid black; background: #ccc; }
+/* .maze .grid .box > div { display: inline-block; border: 1px solid black; background: #ccc; } */
+
+
+.maze .grid { width: 90%; height: 90% }
+.maze .grid .box { width: 100%; height: 100% }
+
+.box { display: flex; justify-content: center; }
+
+.maze .grid .box > div { display: inline-block; }
 
 .maze .grid div.in { background: #fff; }
 .maze .grid div.f { background: #faa; }
 .maze .grid div.cursor { background: #7f7; }
 
-.maze .grid div.e { border-right: none; padding-right: 1px; }
-.maze .grid div.w { border-left: none; padding-left: 1px; }
-.maze .grid div.n { border-top: none; padding-top: 1px; }
-.maze .grid div.s { border-bottom: none; padding-bottom: 1px; }
+.maze .grid div.e { border-right: none; /*padding-right: 1px;*/ }
+.maze .grid div.w { border-left: none; /*padding-left: 1px;*/ }
+.maze .grid div.n { border-top: none; /*padding-top: 1px;*/ }
+.maze .grid div.s { border-bottom: none; /*padding-bottom: 1px;*/ }
+
+.maze .grid div.e { background-image: url("../Assets/Tile/E.png"); background-repeat: no-repeat; background-size: contain; }
+.maze .grid div.e.s { background-image: url("../Assets/Tile/ES.png"); background-repeat: no-repeat; background-size: contain; image-rendering: pixelated; }
+.maze .grid div.e.s.w { background-image: url("../Assets/Tile/ESW.png"); background-repeat: no-repeat; background-size: contain; image-rendering: pixelated; }
+.maze .grid div.e.s.n { background-image: url("../Assets/Tile/ESN.png"); background-repeat: no-repeat; background-size: contain; image-rendering: pixelated; }
+.maze .grid div.e.s.n.w { background-image: url("../Assets/Tile/ESWN.png"); background-repeat: no-repeat; background-size: contain; image-rendering: pixelated; }
+.maze .grid div.e.w { background-image: url("../Assets/Tile/EW.png"); background-repeat: no-repeat; background-size: contain; image-rendering: pixelated; }
+.maze .grid div.e.w.n { background-image: url("../Assets/Tile/EWN.png"); background-repeat: no-repeat; background-size: contain; image-rendering: pixelated; }
+.maze .grid div.e.n { background-image: url("../Assets/Tile/EN.png"); background-repeat: no-repeat; background-size: contain; image-rendering: pixelated; }
+
+.maze .grid div.s { background-image: url("../Assets/Tile/S.png"); background-repeat: no-repeat; background-size: contain; image-rendering: pixelated; }
+.maze .grid div.s.n { background-image: url("../Assets/Tile/SN.png"); background-repeat: no-repeat; background-size: contain; image-rendering: pixelated; }
+.maze .grid div.s.w { background-image: url("../Assets/Tile/SW.png"); background-repeat: no-repeat; background-size: contain; image-rendering: pixelated; }
+.maze .grid div.s.w.n { background-image: url("../Assets/Tile/SWN.png"); background-repeat: no-repeat; background-size: contain; image-rendering: pixelated; }
+
+.maze .grid div.w { background-image: url("../Assets/Tile/W.png"); background-repeat: no-repeat; background-size: contain; image-rendering: pixelated; }
+.maze .grid div.w.n { background-image: url("../Assets/Tile/WN.png"); background-repeat: no-repeat; background-size: contain; image-rendering: pixelated; }
+
+.maze .grid div.n { background-image: url("../Assets/Tile/N.png"); background-repeat: no-repeat; background-size: contain; image-rendering: pixelated;}
 
 .maze .grid.invert { border: 2px solid black; }
 .maze .grid.invert .row div { background: #fff; border: none; padding: 1px; }

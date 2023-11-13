@@ -573,7 +573,18 @@ Maze.createWidget = function(algorithm, width, height, options) {
   } else {
     watch = "";
   }
-  html = "<div id=\"" + id + "\" class=\"" + mazeClass + "\">\n  <div id=\"" + id + "_grid\" class=\"" + gridClass + "\"></div>\n  <div class=\"operations\">\n    <a id=\"" + id + "_reset\" href=\"#\" onclick=\"document.getElementById('" + id + "').mazeReset(); return false;\">Reset</a>\n    <a id=\"" + id + "_step\" href=\"#\" onclick=\"document.getElementById('" + id + "').mazeStep(); return false;\">Step</a>\n    " + watch + "\n    <a id=\"" + id + "_run\" href=\"#\" onclick=\"document.getElementById('" + id + "').mazeRun(); return false;\">Run</a>\n  </div>\n</div>";
+  html = `
+  <div id="${id}" class="${mazeClass}" style="display: flex;align-items: center;flex-direction: column;">\n  
+    <div id="${id}_grid" class="${gridClass}"></div>\n  
+      <!--
+      <div class="operations">\n    
+        <a id="${id}_reset" href="#" onclick="document.getElementById("${id}").mazeReset(); return false;">Reset</a>\n    
+        <a id="${id}_step" href="#" onclick="document.getElementById("${id}").mazeStep(); return false;">Step</a>\n    
+        ${watch}\n    
+        <a id="${id}_run" href="#" onclick="document.getElementById("${id}").mazeRun(); return false;">Run</a>\n  
+      </div>\n
+      -->
+  </div>`;
   document.write(html);
   element = document.getElementById(id);
   element.addClassName = function(el, name) {
@@ -661,7 +672,7 @@ Maze.createWidget = function(algorithm, width, height, options) {
     grid = "";
     for (y = i = 0, ref1 = this.maze.height; 0 <= ref1 ? i < ref1 : i > ref1; y = 0 <= ref1 ? ++i : --i) {
       row_id = this.id + "_y" + y;
-      grid += "<div class='row' id='" + row_id + "'>";
+      grid += "<div class='box' id='" + row_id + "'>";
       for (x = j = 0, ref2 = this.maze.width; 0 <= ref2 ? j < ref2 : j > ref2; x = 0 <= ref2 ? ++j : --j) {
         grid += "<div id='" + row_id + "x" + x + "'>";
         if (options.padded) {
