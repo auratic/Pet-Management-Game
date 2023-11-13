@@ -54,6 +54,7 @@ html, body {
 #game-container {
     z-index:1;
     border: 1vw solid hotpink;
+    border-radius: 1vw;
     background-image: url("Assets/Images/UI/png/BG.png");
     padding: 0;
     /*
@@ -139,6 +140,7 @@ html, body {
 }
 
 #textbubble{
+    z-index: 10;
     position: absolute;
     /*display: flex;*/
     display:none;

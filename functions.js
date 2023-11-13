@@ -44,7 +44,12 @@ var userProfile = {
     username: null,
     coin: null,
     inv: null,
-    login: false
+    login: false,
+    setting: {
+        volume: 0.5,
+        gameMode: 'keyboard',
+        sensitivity: 0.5
+    }
 }
 
 /*
@@ -199,20 +204,68 @@ window.onload =()=> {
     loadInv();
     loadProfile();
     checkLogin();
-
-    const BGM = document.getElementById('bgm');
-    if(!BGM) return;
-    const promise = BGM.play();
-    if(promise !== undefined){
-        promise.then(() => {
-            // Autoplay started
-        }).catch(error => {
-            // Autoplay was prevented.
-            BGM.muted = true;
-            BGM.play();
-        });
-    }
+    userSetting();
 } 
+
+// Setting
+
+function userSetting() {
+
+    let init = false;
+    
+    (function () {
+        if (!init) {
+            init = true;
+            console.log("Function Called one time");
+            console.log(userProfile.setting.volume);
+            BGM.volume = userProfile.setting.volume;
+        }
+    })();
+ 
+
+    $('#volume').on('input', function() {
+
+        $('#vol-val').text(`(${$(this).val() * 10})`);
+
+        userProfile.setting.volume = $(this).val() * 0.1;
+        BGM.volume = $(this).val() * 0.1;
+
+    });
+    
+    $('#sensitivity').on('input', function() {
+
+        $('#sens-val').text(`(${$(this).val()})`);
+
+    });
+}
+
+var playBGM = false;
+var BGM = new Audio('Assets/Audio/Lobby-Time.mp3');
+BGM.volume= 0.8;
+BGM.loop= true;
+
+window.onclick = () => {
+
+    if(!playBGM) {
+        BGM.play();
+        playBGM = true;
+        /*
+        const BGM = document.getElementById('bgm');
+        if(!BGM) return;
+        const promise = BGM.play();
+        if(promise !== undefined){
+            promise.then(() => {
+                // Autoplay started
+            }).catch(error => {
+                // Autoplay was prevented.
+                BGM.muted = true;
+                BGM.play();
+            });
+        }
+        */
+    }
+}
+
     
 window.onresize = screenDetect;
 
@@ -532,12 +585,20 @@ function equipItem(i) {
 
 //===== Pet interaction : Cuddle =====//
 
-var patting = 0;
+var cuddle = 0;
+var isCuddling; // To check if player is still cuddling
+
 $('#heart').css({
     'top': `10`,
     'height': '30%',
 });
 
+var heartParticle = document.createElement('img');
+heartParticle.setAttribute('src', 'Assets/Images/heart-particle-nobg.gif');
+heartParticle.setAttribute('id', 'heart-particle');
+heartParticle.style.position = 'absolute';
+heartParticle.style.height = '15%';
+heartParticle.style.imageRendering = 'pixelated';
 setInterval(() => {
     
     $('#textbubble').css({
@@ -553,6 +614,7 @@ setInterval(() => {
     },4000);
 }, 10000);
 
+
 $('#game-container').on('mousemove', (e) =>{
     var mouseX = e.pageX;
     var mouseY = e.pageY;
@@ -565,20 +627,30 @@ $('#game-container').on('mousemove', (e) =>{
             mouseY > $('#model').offset().top &&
             mouseY < $('#model').offset().top + $('#model').height()
         ) {
+            clearTimeout(isCuddling);
+
+            heartParticle.style.display = 'block';
+            heartParticle.style.top = e.pageY - (heartParticle.clientHeight / 2);
+            heartParticle.style.left = e.pageX - (heartParticle.clientWidth / 2);
+            document.getElementById('game-container').appendChild(heartParticle);
+            
+            isCuddling = setTimeout(() => {
+                $('#heart-particle').css({'display':'none'});
+            },1000);
             
             $('#textbubble').css({
                 'display': `none`
             });
 
-            console.log(patting);
-            if(patting > 5000) {
-                patting = 0;
+            console.log(cuddle);
+            if(cuddle > 5000) {
+                cuddle = 0;
                 $('#heart').css({'display':'block'});
                 setTimeout(() => {
                     $('#heart').css({'display':'none'});
                 }, 3000);
             }
-            patting++;
+            cuddle++;
         } else {
             console.log('detect1')
         }

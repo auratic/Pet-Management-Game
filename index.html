@@ -94,7 +94,8 @@
             </nav>
             <div id="model-container" class="container">
                 <div id="textbubble" >
-                    <span>cuddle me!</span>
+                    <span>cuddle me! <br> (spam click me)
+                    </span>
                 </div>
                 
                 <img id="heart" src="Assets/Images/bubble(heart).png" style="image-rendering: pixelated; position:absolute; display:none">
@@ -132,23 +133,13 @@
                         <div class="container-fluid">
                             <div class="row">
                                 <label>Volume</label><p id="vol-val"></p><br>
-                                <input type="range" min="1" max="100" value="50" id="volume"><script>
-                                    $(document).ready(function() {
-                                        $('#volume').on('input', function() {
-                                            $('#vol-val').text(`(${$(this).val()})`);
-                                        });
-                                    });
+                                <input type="range" min="1" max="10" step="0.1" id="volume"><script>
                                 </script>
                             </div>
                             <div class="row">
                                 <label>Camera sensitivity</label><p id="sens-val"></p><br>
                                 <input type="range" min="0" max="1" step="0.01" value="0.5" id="sensitivity">
                                 <script>
-                                    $(document).ready(function() {
-                                        $('#sensitivity').on('input', function() {
-                                            $('#sens-val').text(`(${$(this).val()})`);
-                                        });
-                                    });
                                 </script>
                             </div>
                             <hr>
