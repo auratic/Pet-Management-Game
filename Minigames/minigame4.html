@@ -31,12 +31,6 @@
       vertical-align:unset;
     }
 
-    h1 {
-      font-size: 24px;
-      margin: 20px;
-      margin-bottom: 10px;
-    }
-
     p {
       margin: 10px 20px;
     }
@@ -52,9 +46,79 @@
 <body>
   <div id="bg-container">        
   </div>
+
+  <div id="start-overlay" class="container-fluid">
+    <div class="container">
+      <div class="row">
+        <h1>Choose your playstyle</h1>
+      </div>
+      
+      <div class="row">
+        <div class="btn-group-vertical" id="gamemode">
+          <input type="radio" class="btn-check" name="btnradio" id="keyboard" autocomplete="off" value='1' checked>
+          <label class="btn btn-outline-primary" for="keyboard">Keyboard</label>
+        
+          <input type="radio" class="btn-check" name="btnradio" id="voice" value='2' autocomplete="off">
+          <label class="btn btn-outline-primary" for="voice">Voice control</label>
+        </div>
+      </div>
+      <script> 
+        $('#keyboard').on('click', () => {
+          $('#keyboard-tutorial').css({'display':'block'});
+          $('#voice-tutorial').css({'display':'none'});
+        });
+        
+        $('#voice').on('click', () => {
+          $('#keyboard-tutorial').css({'display':'none'});
+          $('#voice-tutorial').css({'display':'block'});
+        }) 
+      </script>
+      <div class="row" style="margin-top:1em">
+          <div id="keyboard-tutorial">
+            <h2>Tutorial: </h2>
+            <h4>Use WASD to control your character through maze</h4>
+          </div>
+          <div id="voice-tutorial" style="display:none">
+            <h2>Tutorial: </h2>
+            <h4>Control your character by saying 'up', 'down', 'left', 'right' while pressing 
+              <img src="Assets/Microphone.png" style="image-rendering: pixelated; border: 1px black solid">
+              button </h4>
+          </div>
+      </div>
+  
+  
+      <div class="row">
+        <button type="button" id='start' class="btn btn-outline-primary btn-lg">Enter the maze !</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="countdown-overlay" class="container-fluid">
+    <h1>3</h1>
+  </div>
+
+  <div id="end-overlay" class="container-fluid">
+    <h1>Game over !</h1> <br>
+    <h2> You have earned <span id="point"></span> coins</h2>
+
+    <div id="scoreboard">
+
+    </div>
+
+    <div class="row">
+      <button type="button" id="retry" class="btn btn-outline-primary btn-lg" >Retry !</button>
+    </div>
+
+    <div class="row">
+      <button type="button" id="menu" class="btn btn-outline-primary btn-lg" >Main Menu</button>
+    </div>
+  </div>
+
+
   <div id='game-container' class="container">
     <div id="header-container">
-      <h1>Escape the maze!</h1>
+      <h1 style="font-size: 2em;">Escape the maze!</h1>
+      <h1 style="font-size: 2em;" id="time">60 seconds</h1>
     </div>
     
     <div id="maze-container">
@@ -74,8 +138,46 @@
 <script>
     var currentX = 0;
     var currentY = 0;
+    var time = 10;
 
     var coin = 0;
+
+    $('#retry').on('click', () => {
+      window.location.reload(true);
+    });
+    $('#menu').on('click', () => {
+      window.location.replace("/");
+    });
+    $('#start').on('click', () => {
+      let gamemode = $('#gamemode input:radio:checked').val();
+
+      $('#start-overlay').css({'display':'none'});
+      $('#countdown-overlay').css({'display':'flex'});
+      let count = 2
+      let countdown = setInterval(() => {
+        if(count <= 0) {
+          clearInterval(countdown);
+          $('#countdown-overlay').css({'display':'none'});
+
+          let gameTime = setInterval(() => {
+            (time <= 0) 
+            ? $('#end-overlay').css({'display': 'flex'})
+            : $('#time').html(`${time} seconds`); time--;
+
+          }, 1000);
+        } else {
+          $('#countdown-overlay > h1').html(count);
+          count--
+        }
+      }, 1000);
+
+      switch (gamemode) {
+        case '1':
+          break;
+        case '2':
+          break;
+      }
+    });
 
     $(document).ready(function(){
         document.getElementById('kruskal').mazeRun(); 
