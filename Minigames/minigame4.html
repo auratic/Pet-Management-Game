@@ -1,0 +1,139 @@
+<html>
+<head>
+  <!--https://github.com/jamis/csmazes/tree/master
+  https://stackoverflow.com/questions/38502/whats-a-good-algorithm-to-generate-a-maze-->
+  <title>Maze Game</title>
+  <link rel="stylesheet" type="text/css" href="css/mazes.css" />
+
+  <script src="maze.js" type="text/javascript"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script type="text/javascript">
+    function resetMazes() {
+      for(var i = 0; i < arguments.length; i++) {
+        var id = arguments[i];
+        var element = document.getElementById(id);
+        element.mazeReset();
+      }
+    }
+  </script>
+
+  <style type="text/css">
+    * { font-family: sans-serif; }
+
+    h1 {
+      font-size: 24px;
+      margin: 20px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin: 10px 20px;
+    }
+
+    small {
+      color: #777;
+      font-size: 11px;
+    }
+
+    input { width: 50%; }
+  </style>
+</head>
+<body>
+  <hr /> 
+  <h1>Escape the maze!</h1>
+  <label id="coin">0</label>
+  <div class="row">
+    <script type="text/javascript">
+      var mazeSize = 8;
+      Maze.createWidget("Kruskal", mazeSize, mazeSize, { "class": "small", "watch": false });
+    </script>
+  </div>
+  <hr />
+
+</body>
+<script>
+    var currentX = 0;
+    var currentY = 0;
+
+    var coin = 0;
+
+    $(document).ready(function(){
+        document.getElementById('kruskal').mazeRun(); 
+
+        for (let i = 0; i < mazeSize ; i ++) {
+          for (let j = 0; j < mazeSize ; j ++) {
+            if(i != 0 || j != 0) $(`#kruskal_y${i}x${j}`).append('<img src="coin-nobg.gif" style="height:100%; image-rendering: pixelated; padding-top:1px">')
+          }
+        }
+
+        $('#kruskal_y0x0').append('<img src="cat-idle-nobg.gif" style="height:100%; image-rendering: pixelated; padding-top:1px">')
+        $('.small .grid .row > div').css({'width': `${$('.grid').width() / mazeSize - 10}px`, 'height': `${$('.grid').width() / mazeSize - 10}px`})
+
+        $(document).keydown(function(event){
+            // event.which is deprecated, event.key is the modern approach
+            var keyPressed = event.key; // Get the key that was pressed
+            var element = document.getElementById(`kruskal_y${currentY}x${currentX}`);
+
+            if (event.key == 'w' || event.key == 'W') {
+
+              if(element.classList.contains('n')) {
+                $(`#kruskal_y${currentY}x${currentX}`).empty()
+                currentY -= 1;
+                updateMaze();
+              
+              } else {
+                console.log('blocked');
+              }
+
+            } else if (event.key == 'a' || event.key == 'A') {
+
+              if(element.classList.contains('w')) {
+                $(`#kruskal_y${currentY}x${currentX}`).empty()
+                currentX -= 1;
+                updateMaze();
+
+              } else {
+                console.log('blocked');
+              }
+
+            } else if (event.key == 's' || event.key == 'S') {
+
+              if(element.classList.contains('s')) {
+                $(`#kruskal_y${currentY}x${currentX}`).empty()
+                currentY += 1;
+                updateMaze();
+              
+              } else {
+                console.log('blocked');
+              }
+
+            } else if (event.key == 'd' || event.key == 'D') {
+
+              if(element.classList.contains('e')) {
+                $(`#kruskal_y${currentY}x${currentX}`).empty()
+                currentX += 1;
+                updateMaze();
+
+               } else {
+                console.log('blocked');
+              }
+
+            } 
+
+            console.log("Key pressed: " + keyPressed);
+        });
+    });
+    
+    function updateMaze() {
+      var divChildren = $(`#kruskal_y${currentY}x${currentX}`).children().length;
+      if (divChildren > 0) { 
+        coin++
+        $('#coin').html(coin);
+        $(`#kruskal_y${currentY}x${currentX}`).empty()
+      }
+      $(`#kruskal_y${currentY}x${currentX}`).append('<img src="cat-idle-nobg.gif" style="height:100%; image-rendering: pixelated; padding-top:1px">')           
+    }
+
+</script>
+</html>
