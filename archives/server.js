@@ -1,8 +1,10 @@
 var mysql = require('mysql');
 var http = require('http');
+var https = require('https');
 var url = require('url');
 var fs = require('fs');
-var qs = require('querystring')
+var path = require('path');
+var qs = require('querystring');
 //var db = require('./db.js');
 
 const host = 'localhost'; // The ip of your device hosting server, else localhost
@@ -40,15 +42,7 @@ const requestListener = function (req, res) {
             console.log("loadShop returned" + JSON.stringify(result));
             res.end(JSON.stringify(result)); //Stringify and send response
           });
-        } else if(POST["action"] == "minigame") {
-          console.log("minigamehello")
-          if(POST["minigame"] == "1"){
-            //res.writeHead(302, {'Location': '/Minigames/minigame1.html'}); //status code 302 = redirect
-            console.log("minigamehello2")
 
-
-            res.end('<script>window.location.href="/Minigames/minigame1.html";</script>');
-          }
         }
     });
   } else {
@@ -58,14 +52,16 @@ const requestListener = function (req, res) {
     console.log(filename);
     //fs.readFile(__dirname + "/index.html", (err, contents)=> {
     fs.readFile(filename, (err, contents)=> {
-  
       if(filename == './') {
         res.writeHead(302, {'Location': '/index.html'}); //status code 302 = redirect
         res.end();
       } else if(err) {
         res.writeHead(404, {'Content-Type': 'text/html'});
         res.end(`404 Not Found \n ${err}`);
-      } else {
+      } else if (path.extname(filename) == ".js" || path.extname(filename) == ".mjs") {
+        res.writeHead(200, {"Content-Type": "application/javascript"});  //status code, 200 = ok
+        res.end(contents);
+      } else{
         //res.setHeader("Content-Type", "text/html");
         res.writeHead(200, {"Content-Type": "text/html"});  //status code, 200 = ok
         res.end(contents);

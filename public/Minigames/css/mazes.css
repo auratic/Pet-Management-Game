@@ -80,7 +80,10 @@ user-select: none;
 }
 
 #header-container {
-height:15%;
+height: 15%;
+width: 100%;
+text-align: center;
+align-items: center;
 }
 
 #maze-container {

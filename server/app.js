@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const cookieParser = require("cookie-parser");
+const cookieParser = require("cookie-parser"); 
 const sessions = require('express-session');
 const mysql = require('mysql');
 const path = require('path');
@@ -53,7 +53,7 @@ const game1 = require('./public/game1');
 app.use('/game1', game1.router);
 */
 
-app.use(express.static(path.join(__dirname, '/')));
+app.use(express.static(path.join(__dirname, '../public')));
 app.get('/', (req, res) => {
     //res.sendFile(path.join(__dirname, 'src', 'index.html'));
     res.sendFile(path.join(__dirname, 'index.html'));
@@ -432,3 +432,16 @@ app.post('/updateCoin', (req, res) => {
   }
 
 });
+
+
+/*
+ *
+ * user setting
+ * 
+ */
+
+app.post('/setting' , (req, res) => {
+
+
+  
+})

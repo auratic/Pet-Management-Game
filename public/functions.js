@@ -129,7 +129,7 @@ function loadProfile() {
                 result !== null
             ) {
 
-                $("#coin").html("999");
+                $("#coin").html("0");
 
             } else {
                 
@@ -293,6 +293,10 @@ $('#minigame-2').on('click',function (e) {
 
 $('#minigame-3').on('click',function (e) {
     window.location.href="/Minigames/minigame3.html";    
+});
+
+$('#minigame-4').on('click',function (e) {
+    window.location.href="/Minigames/minigame4.html";    
 });
 /*
  *
@@ -645,6 +649,8 @@ $('#game-container').on('mousemove', (e) =>{
             console.log(cuddle);
             if(cuddle > 5000) {
                 cuddle = 0;
+                userProfile.coin += 10;
+                $('#coin').html(userProfile.coin);
                 $('#heart').css({'display':'block'});
                 setTimeout(() => {
                     $('#heart').css({'display':'none'});
