@@ -1,155 +1,267 @@
-class Example extends Phaser.Scene {
 
-    preload() {
-        this.load.image('pacman', 'path_to_pacman_image.png');
-        this.load.image('pellet', 'path_to_pellet_image.png');
-        this.load.image('wall', 'Assets/stool.png');
-        // Load additional assets like ghosts, background, etc.
+var currentX = 0;
+var currentY = 0;
+var time = 10;
+
+var gameState = 0; // 0 = stop, 1 = start
+var gameMode = ''
+var coin = 0;
+
+
+$(document).ready(function(){
+    
+  $('#retry').on('click', () => {
+    window.location.reload(true);
+  });
+
+  $('#menu').on('click', () => {
+    window.location.replace("/");
+  });
+
+  $('#start').on('click', () => {
+
+    gameMode = $('#gamemode input:radio:checked').val();
+    console.log(gameMode)
+    $('#start-overlay').css({'display':'none'});
+    $('#countdown-overlay').css({'display':'flex'});
+    let count = 2
+
+    if(gameMode == "voice") {
+      $('#voice-instruction').css({'display': 'flex'})
+      getMicAccess();
+    } else {
+      $('#keyboard-instruction').css({'display': 'flex'})
     }
 
-    create() {
-        // Create Pac-Man
-        this.pacman = this.physics.add.sprite(50, 100, 'pacman');
-        this.pacman.setOrigin(0, 0);
+    let countdown = setInterval(() => {
 
-        // Create Pellets
-        this.pellets = this.physics.add.group();
-        for (let i = 0; i < 10; i++) {
-            let x = Phaser.Math.Between(0, 750);
-            let y = Phaser.Math.Between(0, 750);
-            let pellet = this.pellets.create(x, y, 'pellet');
-            pellet.setOrigin(0, 0);
-        }
+      if(count <= 0) {
+        clearInterval(countdown);
+        $('#countdown-overlay').css({'display':'none'});
+        gameState = 1;
 
-        // Create Walls (Maze boundaries)
-        this.walls = this.physics.add.staticGroup(); // Initialize walls as a static group
+        let gameTime = setInterval(() => {
+          $('#point').html(coin);
+          if (time <= 0) {
+            $('#end-overlay').css({'display': 'flex'}); 
+            gameState = 0; 
+          } else {
+            $('#time').html(`${time} seconds`); 
+            time--;
+          }
 
-        // Create Maze using Recursive Backtracking algorithm
-        const maze = this.generateMaze(20, 20); // Adjust the maze dimensions as needed
-        for (let y = 0; y < maze.length; y++) {
-            for (let x = 0; x < maze[y].length; x++) {
-                if (maze[y][x] === 1) {
-                    this.createWall(x * 40, y * 40, 40, 40);
-                }
-            }
-        }
-        // Define keyboard inputs for movement
-        this.cursors = this.input.keyboard.createCursorKeys();
+        }, 1000);
 
-        // Set world bounds for collision
-        this.physics.world.setBounds(0, 0, 800, 600);
-        this.physics.add.collider(this.pacman, this.walls);
+      } else {
+        $('#countdown-overlay > h1').html(count);
+        count--
+      }
+    }, 1000);
+
+  });
+
+    document.getElementById('kruskal').mazeRun(); 
+
+    for (let i = 0; i < mazeSize ; i ++) {
+      for (let j = 0; j < mazeSize ; j ++) {
+        if(i != 0 || j != 0) $(`#kruskal_y${i}x${j}`).append('<img src="coin-nobg.gif" style="height:100%; image-rendering: pixelated; padding-top:1px; object-fit:scale-down">')
+      }
+    }
+    let gridSize = (window.innerHeight > window.innerWidth) ? $('#maze-container').width() :  $('#maze-container').height();
+    $('#kruskal_y0x0').append('<img src="cat-idle-nobg.gif" style="height:100%; image-rendering: pixelated; padding-top:1px">')
+    $('.small .grid .box > div').css({'width': `${gridSize / mazeSize - 20}px`, 'height': `${gridSize / mazeSize - 20}px`})
+
+
+});
+
+function updateMaze(direction) {
+
+  var entry = false;
+  var element = document.getElementById(`kruskal_y${currentY}x${currentX}`);
+
+  if (direction == 'w' || direction == 'W') {
+
+    if(element.classList.contains('n')) {
+      $(`#kruskal_y${currentY}x${currentX}`).empty()
+      currentY -= 1;
+      entry = true;
+    
+    } else {
+      console.log('blocked');
     }
 
-    update() {
-        // Pac-Man movement logic
+  } else if (direction == 'a' || direction == 'A') {
 
-        // Pac-Man collision with walls is handled using collider
+    if(element.classList.contains('w')) {
+      $(`#kruskal_y${currentY}x${currentX}`).empty()
+      currentX -= 1;
+      entry = true;
 
-        // Collision with pellets handled in collectPellet function
-   
-        if (this.cursors.left.isDown) {
-            this.pacman.setVelocityX(-160);
-        } else if (this.cursors.right.isDown) {
-            this.pacman.setVelocityX(160);
-        } else {
-            this.pacman.setVelocityX(0);
-        }
-
-        if (this.cursors.up.isDown) {
-            this.pacman.setVelocityY(-160);
-        } else if (this.cursors.down.isDown) {
-            this.pacman.setVelocityY(160);
-        } else {
-            this.pacman.setVelocityY(0);
-        }
-
-        this.physics.world.wrap(this.pacman, 0);
-        this.physics.add.overlap(this.pacman, this.pellets, this.collectPellet, null, this);
+    } else {
+      console.log('blocked');
     }
 
-    generateMaze(width, height) {
+  } else if (direction == 's' || direction == 'S') {
 
-        //https://shaunlebron.github.io/pacman-mazegen/
-        
-         // Generate the maze using Recursive Backtracking with a solvable path
-         const maze = [];
-         for (let y = 0; y < height; y++) {
-             maze[y] = [];
-             for (let x = 0; x < width; x++) {
-                 maze[y][x] = 1;
-             }
-         }
- 
-         const stack = [];
-         let x = 0;
-         let y = 0;
- 
-         maze[y][x] = 0;
- 
-         do {
-             const neighbors = [];
- 
-             if (x - 2 > 0 && maze[y][x - 2] === 1) {
-                 neighbors.push({ x: x - 2, y });
-             }
-             if (x + 2 < width && maze[y][x + 2] === 1) {
-                 neighbors.push({ x: x + 2, y });
-             }
-             if (y - 2 > 0 && maze[y - 2][x] === 1) {
-                 neighbors.push({ x, y: y - 2 });
-             }
-             if (y + 2 < height && maze[y + 2][x] === 1) {
-                 neighbors.push({ x, y: y + 2 });
-             }
- 
-             if (neighbors.length) {
-                 stack.push({ x, y });
- 
-                 const next = Phaser.Utils.Array.GetRandom(neighbors);
-                 maze[next.y][next.x] = 0;
-                 x = next.x;
-                 y = next.y;
-             } else if (stack.length > 0) {
-                 const last = stack.pop();
-                 x = last.x;
-                 y = last.y;
-             }
-         } while (stack.length > 0);
- 
-         // Ensure entrance and exit are open
-         maze[0][1] = 0;
-         maze[height - 1][width - 2] = 0;
- 
-         return maze;
+    if(element.classList.contains('s')) {
+      $(`#kruskal_y${currentY}x${currentX}`).empty()
+      currentY += 1;
+      entry = true;
+    
+    } else {
+      console.log('blocked');
     }
 
-    createWall(x, y, width, height) {
-        this.walls.create(x, y, 'wall').setOrigin(0, 0).setDisplaySize(width, height).refreshBody();
+  } else if (direction == 'd' || direction == 'D') {
+
+    if(element.classList.contains('e')) {
+      $(`#kruskal_y${currentY}x${currentX}`).empty()
+      currentX += 1;
+      entry = true;
+
+    } else {
+      console.log('blocked');
     }
 
-    collectPellet(pacman, pellet) {
-        pellet.disableBody(true, true);
-        // Implement scoring or other actions when Pac-Man collects a pellet
+  } 
+  if( entry == true ) {
+
+    var divChildren = $(`#kruskal_y${currentY}x${currentX}`).children().length;
+    if (divChildren > 0) { 
+      coin++
+      $('#coin').html(coin);
+      $(`#kruskal_y${currentY}x${currentX}`).empty()
     }
+    $(`#kruskal_y${currentY}x${currentX}`).append('<img src="cat-idle-nobg.gif" style="height:100%; image-rendering: pixelated; padding-top:1px;">')             
+
+  } else {
+    console.log("entry false")
+  }
+
 }
 
+  
 
-const config = {
-    type: Phaser.AUTO,
-    width: 800,
-    height: 600,
-    pixelArt: true,
-    physics: {
-        default: 'arcade',
-        arcade: {
-            debug: false
-        }
+$(document).keypress(function(event){
+
+    if ( gameState == 1 && gameMode == 'keyboard') {
+      console.log(currentX);
+      console.log(currentY);
+      
+      // event.which is deprecated, event.key is the modern approach
+      var keyPressed = event.key; // Get the key that was pressed
+      updateMaze(keyPressed);
+
+      console.log("Key pressed: " + keyPressed);
+    }
+
+});
+  
+
+/*
+ *
+ * Voice Recognition
+ * 
+ */
+
+
+var micCheck = false;
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const SpeechGrammarList = window.SpeechGrammarList || window.webkitSpeechGrammarList;
+const SpeechRecognitionEvent = window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
+
+var recognition = new SpeechRecognition();
+recognition.continuous = true;
+recognition.lang = "en-US";
+recognition.interimResults = false;
+recognition.maxAlternatives = 1;
+
+navigator.getUserMedia =
+navigator.getUserMedia ||
+navigator.webkitGetUserMedia ||
+navigator.mozGetUserMedia ||
+navigator.msGetUserMedia;
+
+function getMicAccess () {
+
+  navigator.getUserMedia(
+    { audio: true },
+    (stream) => {
+      micCheck = true;
+      setInterval(getMicAccess, 1000);
     },
-    scene: Example,
-    parent: 'phaser-container'
+    (err) => {
+      console.log(err);
+      // alert(
+      //     "Please turn on your microphone and refresh\n" +
+      //     "Tips: Click on the mic / video button by your URL"
+      // );
+      alert('Please enable your microphone')
+    }
+  );
+
+}
+
+const mic = document.querySelector("#mic");
+
+recognition.onresult = (event) => {
+  console.log(event);
+  var last = event.results.length - 1;
+  var command = event.results[last][0].transcript;
+  //To remove all possible errors like "." and "," and upper cases
+  command = command.toLowerCase();
+  command = command.split(".").join("");
+  command = command.split(",").join("");
+  command = command.split("?").join("");
+  command = command.split("$").join("");
+  var confidence = event.results[0][0].confidence;
+  var direction;
+
+  console.log(command);
+  $("#cmd-result").html(`${command}`);
+
+  switch (command) {
+    case "left":
+      direction = 'a';
+      break;
+    case "right":
+      direction = 'd';
+      break;
+    case "up":
+      direction = 'w';
+      break;
+    case "down":
+      direction = 's';
+      break;
+  }
+
+  if(
+    command == "left" || 
+    command == "right" || 
+    command == "up" || 
+    command == "down") 
+    { console.log(direction) ; updateMaze(direction); }
+
+  // const color = event.results[0][0].transcript;
+  // diagnostic.textContent = `Result received: ${color}.`;
+  // bg.style.backgroundColor = color;
+  // console.log(`Confidence: ${event.results[0][0].confidence}`);
 };
 
-const game = new Phaser.Game(config);
+recognition.onspeechend = () => {
+  console.log('speech end');
+  recognition.stop();
+};
 
+mic.onmousedown = () => {
+    console.log('recognition starts')
+    $('#mic').css({"opacity": 0.5})
+    recognition.start();
+}
 
+mic.onmouseup = () => {
+    console.log('recognition stops')
+    $('#mic').css({"opacity": 1})
+    recognition.stop();
+}

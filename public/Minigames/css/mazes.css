@@ -80,20 +80,29 @@ user-select: none;
 }
 
 #header-container {
-height: 15%;
-width: 100%;
-text-align: center;
-align-items: center;
+  height: 15%;
+  width: 100%;
+  text-align: center;
+  align-items: center;
 }
 
 #maze-container {
-height:70%;
-width:100%
+  height:70%;
+  width:100%
 }
 
+
 #footer-container {
-height:15%;
+  height: 15%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
+
+#voice-instruction { display:none; flex-direction: column; justify-content: center; align-items: center;}
+#keyboard-instruction { display:none; flex-direction: column; justify-content: center; align-items: center;}
 /*
 .row .maze {
 padding: 0 0 20px 20px;
