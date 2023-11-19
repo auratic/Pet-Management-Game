@@ -4,6 +4,7 @@
  * 
  */
 
+const socket = io('http://localhost:3000'); //Testing purpose
 var items = [
     {
         item_id: 2001,
@@ -116,10 +117,10 @@ function checkLogin() {
     
 }
 
-function loadProfile() {
+function getProfile() {
     $.ajax({
         type: 'post',
-        url: '/profile',
+        url: '/getProfile',
         /*dataType: 'json', */
         success: function (result) {
             
@@ -157,10 +158,10 @@ function loadProfile() {
     });
 }
 
-function loadInv() {
+function getInv() {
     $.ajax({
         type: 'POST',
-        url: '/loadInv',
+        url: '/getInv',
         /*dataType: 'json',*/
         success: function (result) {
             
@@ -200,9 +201,9 @@ function loadInv() {
 window.onload =()=> {
     
     screenDetect();
-    loadShop();
-    loadInv();
-    loadProfile();
+    getShop();
+    getInv();
+    getProfile();
     checkLogin();
     userSetting();
 } 
@@ -340,7 +341,7 @@ $('#loginForm').on('submit',function (e) {
                 $('#logoutNav').css({'display': 'block'});
                 $('#coin').html(`${result.coin}`)
                 $("#inv-msg").css({'display':'none'});
-                loadInv();
+                getInv();
 
                 userProfile = {
                     user_id: result.id,
@@ -359,7 +360,6 @@ $('#loginForm').on('submit',function (e) {
     });
     e.preventDefault();
 });
-
 
 $('#registerForm').on('submit',function (e) {
     
@@ -389,7 +389,6 @@ $('#registerForm').on('submit',function (e) {
     });
     e.preventDefault();
 });
-
 
 $('#logout').on('click',function (e) {
     onLoading();
@@ -466,10 +465,10 @@ function offLoading() {
 
 var shopItems = [];
 
-function loadShop() {
+function getShop() {
     $.ajax({
         type: 'GET',
-        url: '/loadShop',
+        url: '/getShop',
         /*dataType: 'json', */
         success: function (result) {
             // alert(result[0].item_id);
@@ -530,8 +529,8 @@ function buyItem(i) {
                         console.log('bought item')
                         $('#inv-msg').css({'display':'none'});
                         alert(JSON.stringify(result));
-                        loadProfile();
-                        loadInv();
+                        getProfile();
+                        getInv();
                         //loadProfile();
                         offLoading();
                     }

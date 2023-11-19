@@ -72,8 +72,8 @@ module.exports = app => {
         }
     });
 
-    app.post('/profile', (req, res) => {
-        console.log("loadProfile Connected");
+    app.post('/getProfile', (req, res) => {
+        console.log("getProfile Connected");
         if (req.session.user) {
             console.log('Profile loaded')
             console.log(req.session);
@@ -132,9 +132,9 @@ module.exports = app => {
  * 
  */
 
-    app.get('/loadShop', (req, res) => {
+    app.get('/getShop', (req, res) => {
     
-        console.log("loadShop Connected!");
+        console.log("getShop Connected!");
         var sql_get_item = "SELECT * FROM item";
 
         con.query(sql_get_item, function (err, result, fields) {
@@ -154,60 +154,64 @@ module.exports = app => {
             
             let invArray = req.session.user.inv;
             let duplicate = new Promise ((res, rej) => {
-            if(invArray !== null && invArray !== '') {
-                console.log("check duplicate");
-                invArray.forEach(owned => {
-                if(owned == item_id) rej('Already owned this item')
-                });
-                res();
-            } else {
-                res();
-            }
+
+                if(invArray !== null && invArray !== '') {
+                    console.log("check duplicate");
+                    invArray.forEach(owned => {
+                    if(owned == item_id) rej('Already owned this item')
+                    });
+                    res();
+                } else {
+                    res();
+                }
             })
             .then(()=>{
-            updateCoin(req, -cost)
-            .then((result)=> {
-                console.log('updating inventory');
 
-                let newInv;
-                if(invArray !== null && invArray !== '') {
-                newInv = invArray.join(',');
-                newInv += `,${item_id}`;
-                } else {
-                newInv = `${item_id}`;
-                }
-                
-                const updateInv = `UPDATE user_profile
-                                SET inventory = '${newInv}'
-                                WHERE user_id = ${req.session.user.id}`;
-                con.query(updateInv, function (err, result, fields) {
-                //console.log(result);
-                if (err) throw(err);
-                else console.log('Updated DB Inventory');
+                updateCoin(req, -cost)
+                .then((result)=> {
+
+                    console.log('updating inventory');
+                    let newInv;
+
+                    if(invArray !== null && invArray !== '') {
+                        newInv = invArray.join(',');
+                        newInv += `,${item_id}`;
+                    } else {
+                        newInv = `${item_id}`;
+                    }
+                    
+                    const updateInv = `UPDATE user_profile
+                                    SET inventory = '${newInv}'
+                                    WHERE user_id = ${req.session.user.id}`;
+                    con.query(updateInv, function (err, result, fields) {
+                        //console.log(result);
+                        if (err) throw(err);
+                        else console.log('Updated DB Inventory');
+                    });
+                    return(newInv)
+
+                })
+                .then((result)=> {
+                    req.session.user.inv = result.split(',');
+                    req.session.save((err) => {
+                    if (err) {
+                        res.status(500).send('Error updating session');
+                    } else {
+                        console.log('Session update inv successfully')
+                        return
+                    }
+                    });
+                    console.log(req.session.user);
+                })
+                .then((result)=> {
+                    console.log('Successful purchase!'); 
+                    res.send('Successful purchase!');
                 });
-                return(newInv)
-            })
-            .then((result)=> {
-                req.session.user.inv = result.split(',');
-                req.session.save((err) => {
-                if (err) {
-                    res.status(500).send('Error updating session');
-                } else {
-                    console.log('Session update inv successfully')
-                    return
-                }
-                });
-                console.log(req.session.user);
-            })
-            .then((result)=> {
-                console.log('Successful purchase!'); 
-                res.send('Successful purchase!');
-            });
 
             })
             .catch((result)=> {
-            console.log('item owned');
-            res.send(result);
+                console.log('item owned');
+                res.send(result);
             });
             
 
@@ -223,9 +227,9 @@ module.exports = app => {
  * 
  */
 
-    app.post('/loadInv', (req, res) => {
+    app.post('/getInv', (req, res) => {
 
-        console.log("loadInv Connected!");
+        console.log("getInv Connected!");
         
         if (req.session.user) {
 
@@ -299,9 +303,9 @@ module.exports = app => {
 
         let updateDB = new Promise ((res, rej) => {
             con.query(updateCoin, function (err, result, fields) {
-            //console.log(result);
-            if (err) rej(err);
-            else res(console.log('DB update coin successfully'))
+                //console.log(result); 
+                if (err) rej(err);
+                else res(console.log('DB update coin successfully'))
             })
         })
         .then(()=> {
@@ -327,21 +331,17 @@ module.exports = app => {
     app.post('/updateCoin', (req, res) => {
 
         console.log("updateCoin Connected!");
-        let coin = req.body.coin;
+        let coin = parseInt(req.body.coin, 10);
+        console.log(typeof coin)
         
         if (req.session.user) {
             
-            let curCoin = req.session.user.coin;
-            let newCoin = curCoin + coin;
-            req.session.user.coin = newCoin;
-
-            req.session.save((err) => {
-            if (err) {
-                res.status(500).send('Error updating session');
-            } else {
-                res.send('Coin updated successfully');
-            }
-            });
+            return new Promise ((res, rej) => {
+                updateCoin(req, coin)
+            })
+            .then(() => {
+                res.send();
+            })
 
         } else {
 
@@ -351,4 +351,70 @@ module.exports = app => {
 
     });
 
+    app.post('/getLeaderboard', (req, res) => {
+
+        console.log(req.body.game)
+        console.log("getLeaderboard Connected!");
+        let game = req.body.game
+        const getLeaderboard = `SELECT * FROM leaderboard 
+                                INNER JOIN user_profile 
+                                ON leaderboard.user_id = user_profile.user_id
+                                ORDER BY ${game} DESC;`;
+
+        con.query(getLeaderboard, function (err, result, fields) {
+            if (err) throw(err);
+            else res.json(result);
+        });
+
+    });
+
+    app.post('/setLeaderboard', (req, res) => {
+
+        let game = req.body.game
+        let point = req.body.point
+        console.log("setLeaderboard Connected!");
+        
+        if (req.session.user) {
+            let user_id = req.session.user.id
+            //console.log(req.session.user)
+
+            const getLeaderboard = `SELECT * FROM leaderboard 
+                                    WHERE user_id = ${user_id}`;
+
+            con.query(getLeaderboard, function (err, result, fields) {
+                if (err) throw(err);
+                else {
+                    switch(game) {
+                        case "mazegame":
+                            console.log(result)
+                            console.log(result[0].mazegame);
+                            if (point > result[0].mazegame) {
+                                const setLeaderboard = `UPDATE leaderboard 
+                                                        SET mazegame = ${point}
+                                                        WHERE user_id = ${user_id}`;
+                                con.query(setLeaderboard, function (err, result, fields) {
+                                    if (err) throw(err);
+                                    else console.log (`${user_id} gain new high score`);
+                                });
+                            }
+                            break;
+                        case "platformer":
+                            break;
+                        case "tictactoe":
+                            break;
+                        
+                    }
+
+                }
+                
+                res.json(result);
+            });
+
+        } else {
+
+            res.send('User not logged in');
+
+        }
+
+    });
 }

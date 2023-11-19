@@ -43,8 +43,8 @@ $(document).ready(function(){
         let gameTime = setInterval(() => {
           $('#point').html(coin);
           if (time <= 0) {
-            $('#end-overlay').css({'display': 'flex'}); 
-            gameState = 0; 
+            gameOver();
+            clearInterval(gameTime);
           } else {
             $('#time').html(`${time} seconds`); 
             time--;
@@ -140,7 +140,93 @@ function updateMaze(direction) {
 
 }
 
+function gameOver () {
+  $('#end-overlay').css({'display': 'flex'}); 
+  gameState = 0; 
   
+  let getLeaderboard = new Promise ((res, rej) => {
+    $.ajax({
+      url: "/setLeaderboard",
+      method: "POST",  
+      data: {
+          game: "mazegame",
+          point: coin,
+      },
+      cache: false,
+      dataType: 'json',
+      success: function(data){
+  
+        res()
+  
+      },
+      error: function(errMsg) {
+          alert(JSON.stringify(errMsg));
+          res()
+      }
+    });
+  })
+  .then(() => {
+
+    $.ajax({
+      url: "/getLeaderboard",
+      method: "POST",  
+      data: {
+          game: "mazegame",
+      },
+      cache: false,
+      dataType: 'json',
+      success: function(data){
+
+        let counter = 1;
+        console.log(data);
+
+        data.forEach((user) => {
+
+          let html = `
+          <tr>
+            <th scope="row">${counter}</th>
+            <td>${data[counter-1].username}</td>
+            <td>${data[counter-1].mazegame}</td>
+          </tr>`;
+          $('#scoreboard > tbody').append(html);
+
+          if(counter == 5) return;
+          else counter++
+
+        })
+
+      },
+      error: function(errMsg) {
+          alert(JSON.stringify(errMsg));
+          rej(errMsg)
+      }
+    });
+
+  })
+  .catch((result) => {
+    alert(JSON.stringify(result));
+  });
+
+  
+  $.ajax({
+    url: "/updateCoin",
+    method: "POST",  
+    data: {
+        coin: coin,
+    },
+    cache: false,
+    success: function(data){
+
+      alert(`${coin} coins added`);
+
+    },
+    error: function(errMsg) {
+        alert(JSON.stringify(errMsg));
+    }
+  });
+  
+}
+
 
 $(document).keypress(function(event){
 

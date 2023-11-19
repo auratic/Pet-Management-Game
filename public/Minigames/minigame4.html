@@ -106,11 +106,33 @@
 
   <div id="end-overlay" class="container-fluid">
     <h1>Game over !</h1> <br>
-    <h2> You have earned <span id="point">0</span> coins</h2>
+    <h2> You have earned <span id="point">0</span> points (coins)</h2>
 
-    <div id="scoreboard">
-
-    </div>
+    <table class="table table-dark"  id="scoreboard">
+      <thead>
+        <tr>
+          <th scope="col">Placement</th>
+          <th scope="col">Players</th>
+          <th scope="col">Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!--
+        <tr>
+          <th scope="row">1</th>
+          <td>Mark</td>
+        </tr>
+        <tr>
+          <th scope="row">2</th>
+          <td>Jacob</td>
+        </tr>
+        <tr>
+          <th scope="row">3</th>
+          <td>Larry</td>
+        </tr>
+        -->
+      </tbody>
+    </table>
 
     <div class="row">
       <button type="button" id="retry" class="btn btn-outline-primary btn-lg" >Retry !</button>

@@ -53,8 +53,12 @@ user-select: none;
   /* display: flex; */
   flex-direction: column;
   justify-content: center;
+  align-items: center
 }
 #end-overlay > h1 { font-size: 5em }
+#scoreboard {
+  width:50%
+}
 
 #bg-container {
   height: 100%;
