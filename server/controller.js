@@ -110,14 +110,47 @@ module.exports = app => {
                     const insertQuery = `INSERT INTO user_profile (username, email, password, coin)
                                         VALUES ('${username}', '${email}', '${password}', 1000)
                                         `;
-                    con.query(insertQuery, user, (err, result) => {
-                        if (err) {
-                            console.error(err);
-                            res.send(`Registration failed: ${err}`);
-                        } else {
-                            console.log('Registration successful');
-                            res.send('Registration successful');
-                        }
+
+                    return new Promise ((resolve, reject) => {
+                        con.query(insertQuery, user, (err, result) => {
+                            if (err) {
+                                console.error(err);
+                                //res.send(`Registration failed: ${err}`);
+                                reject(`Registration failed: ${err}`)
+                            } else {
+                                console.log('Registration successful');
+                                //res.send('Registration successful');
+                                resolve();
+                            }
+                        });
+
+                    })
+                    .then(() => {
+
+                        const query = 'SELECT user_id FROM user_profile ORDER BY user_id DESC LIMIT 1';
+
+                        return con.query(query, function(error, results, fields) {
+                            if (error) throw new Error(error);
+
+                            console.log('Latest Primary Key:', results[0].user_id);
+                            const leaderboardQuery = `INSERT INTO leaderboard 
+                                                    VALUES (${results[0].user_id}, 0, 0, 0)
+                                                    `;
+                            return con.query(leaderboardQuery, user, (err, result) => {
+                                if (err) {
+                                    console.error(err);
+                                    //res.send(`Registration failed: ${err}`);
+                                    throw new Error(`Leaderboard creation failed: ${err}`)
+                                } else {
+                                    console.log('Leaderboard successful');
+                                    res.send('Registration successful');
+                                }
+                            });
+                        })
+
+                    })
+                    .catch(result => {
+                        res.send(JSON.stringify(result))
                     });
                 }
             });
