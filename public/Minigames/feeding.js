@@ -1,3 +1,5 @@
+(window.innerHeight > window.innerWidth) ? $('#phaser-container').css({'width':'100%'}) : $('#phaser-container').css({'width':'80vh'});
+
 const gamecontainer = document.getElementById('phaser-container');
 var soapX = null;
 var soapY = null;
@@ -25,6 +27,10 @@ var catIdle;
 var catFeed;
 var isMouseButtonDown = false;
 var itemsGroup;
+var area;
+var hunger = 0;
+var isFeed;
+
 class Example extends Phaser.Scene
 {
     preload ()
@@ -41,6 +47,7 @@ class Example extends Phaser.Scene
         this.load.image('stool', 'Assets/stool.png')
         this.load.image('sardine', 'Assets/sardine.png')
         this.load.image('kibble', 'Assets/kibble.png')
+        this.load.image('kibble-box', 'Assets/kibble-package.png')
 
         this.load.spritesheet('feed', 'Assets/kitty-feed-spritesheet.png', { frameWidth: 32, frameHeight: 32, endFrame: 11});
         this.load.spritesheet('idle', 'Assets/kitty-idle-spritesheet.png', { frameWidth: 32, frameHeight: 32, endFrame: 4});
@@ -55,13 +62,30 @@ class Example extends Phaser.Scene
         itemsGroup = this.physics.add.group();
         this.physics.world.enable(itemsGroup); // Enable physics for all items in the group
         
+        var box = this.add.sprite(50, 300, 'kibble-box');
+        box.scaleX = 3;
+        box.scaleY = 3;
+        box.setInteractive({ draggable: true });
+        box.on('dragstart', function (pointer, dragX, dragY) {
+            console.log('Drag start at: ' + dragX + ', ' + dragY);
+            box.rotation += Phaser.Math.DegToRad(45);
+            isMouseButtonDown = true;
+        });
+        box.on('drag', function (pointer, dragX, dragY) { // Update the item position during drag
+            box.x = dragX;
+            box.y = dragY;
+        });
+        box.on('dragend', function (pointer) {
+            console.log('Drag end');
+            box.rotation -= Phaser.Math.DegToRad(45);
+            isMouseButtonDown = false;
+        });
+
         // Enable input for the scene
         this.input.on('pointerdown', function (pointer) {
-            isMouseButtonDown = true;
         });
 
         this.input.on('pointerup', function (pointer) {
-            isMouseButtonDown = false;
         });
 
         // const collider = this.physics.add.collider(cat, stool, null, () =>
@@ -157,31 +181,61 @@ class Example extends Phaser.Scene
         }
 
         // Check if items in the group are moving
-        itemsGroup.children.iterate(function (item) {
-            if (item.body.velocity.y == 0 && item.body.y > foodContainerY1
-                && item.body.x > foodContainerX1 && item.body.x < foodContainerX2) {
-                console.log("full")
-                console.log('Item is moving!');
-                if (itemsGroup.getChildren().length > 0) {
-                    // Iterate through each child and remove them
-                    itemsGroup.getChildren().forEach(function (child) {
-                        setInterval(()=> {
-                            child.destroy();
-                        },2000)
-                    });
-                    catIdle.setVisible(false);
-                    catFeed.setVisible(true);
-                } else {
-                    
-                    catIdle.setVisible(true);
-                    catFeed.setVisible(false);
-                }
-            } else {
-                catIdle.setVisible(true);
-                catFeed.setVisible(false);
-            }
-        });
+        
+        if (itemsGroup.countActive() === 0 || itemsGroup.getChildren().length <= 0) {
+            // Stop animation B and start animation A
+            console.log("empty")
+            catIdle.setVisible(true);
+            catFeed.setVisible(false);
+            clearTimeout(isFeed)
+        } else {
+            isFeed = setTimeout(()=> {
+                return new Promise((res, rej) => { 
+                    if (itemsGroup.countActive() === 0 || itemsGroup.getChildren().length <= 0) { 
+                        rej();
+                    } else { item.destroy(); res(); }
+                })
+                .then(() => { 
+                    if(hunger > 100) {
+                        $("#state").html("Full !!");
+                    } else {
+                        hunger = hunger + 0.2; 
+                        console.log(hunger);
+                        $('#hunger').css({"width":`${hunger}%`})
+                    }
+                });
+            },5000);
+            setTimeout(() => {
+                catIdle.setVisible(false);
+                catFeed.setVisible(true);
+            }, 2000)
+        }
 
+            // itemsGroup.children.iterate(function (item) {
+            // if (item.body.velocity.y == 0 && item.body.y > foodContainerY1
+            //     && item.body.x > foodContainerX1 && item.body.x < foodContainerX2) {
+            //     console.log("full")
+            //     console.log('Item is moving!');
+            //     if (itemsGroup.getChildren().length > 0) {
+            //         // Iterate through each child and remove them
+            //         itemsGroup.getChildren().forEach(function (child) {
+            //             setInterval(()=> {
+            //                 child.destroy();
+            //             },2000)
+            //         });
+            //         catIdle.setVisible(false);
+            //         catFeed.setVisible(true);
+            //     } else {
+                    
+            //         catIdle.setVisible(true);
+            //         catFeed.setVisible(false);
+            //     }
+            // } else {
+            //     catIdle.setVisible(true);
+            //     catFeed.setVisible(false);
+            // }
+            // });
+        
     }
 
 }

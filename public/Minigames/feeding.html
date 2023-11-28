@@ -45,10 +45,18 @@
             style="height:20%; 
                 display: flex;
                 justify-content: center;
-                align-items: center;">
+                align-items: center;
+                flex-direction: column ;">
             <h2>
-                Feeding !
+                Feeding ! Drag the kibble box to refill
             </h2>
+            
+            <h2 id="state">Hungry !</h2>
+            <div class="progress" style="width:50vw;">
+                <div id="hunger" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+                    <!-- <span class="sr-only">0% Complete</span> -->
+                </div>
+            </div>
         </div>
         <div class="container-fluid" 
             id="phaser-container"
@@ -56,11 +64,8 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                height:80vh;
-                width:80vh;'
+                height:80vh;'
             >
-                <!-- <video id="video"></video> -->
-            <!--<div id="phaser-container"></div>-->
         </div>
 
         <div class="modal fade" id="score-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
