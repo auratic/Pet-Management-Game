@@ -42,7 +42,7 @@
             </div>
         </div>
 
-        <div id="game-container" class="container">
+        <div id="game-container">
             <nav id="header-container" class="navbar" style="margin:0">
                 
                 <div class="container-fluid">
@@ -52,7 +52,20 @@
                         <img src="Assets/Images/coin.gif" 
                             style='image-rendering:pixelated;'>
                     </div>
-                    <span>kitty kitty</span>
+                    <div style="border:1px solid #e5007f; border-radius:10px; display: flex; flex-direction: row; align-items: center;">
+                        <a id="pet-status" tabindex="0" class="btn btn-lg" role="button" data-bs-toggle="popover" data-bs-trigger="focus"
+                            style="font-size:1em">
+                                Kitty Kitty
+                        </a>
+                        <a id="change-name" style="font-size:0.5em" class="btn btn-small"data-bs-toggle="tooltip" data-bs-title="Click to edit name" onclick="changeName()">
+                            &#9000;
+                        </a>
+                        <input id="new-name" type="text" style="display:none"></input>
+                        <a id="confirm-name" style="font-size:0.5em; display:none" class="btn btn-small"data-bs-toggle="tooltip" data-bs-title="Confirm" onclick="confirmName()">
+                            &#9745;
+                        </a>
+                    </div>
+                    
                     <button 
                         class="navbar-toggler" type="button"
                         data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation"
@@ -100,7 +113,8 @@
             </nav>
             <div id="model-container" class="container">
                 <div id="textbubble" >
-                    <span>cuddle me! <br> (spam click me)
+                    <span style="font-size: medium;">
+                        cuddle me! <br> (spam click me)
                     </span>
                 </div>
                 
@@ -108,21 +122,47 @@
                 <img id="model" src="Assets/Images/Models/cat-idle.gif" style="image-rendering: pixelated;">
                 <img id="model-head"  style="image-rendering: pixelated; position:absolute"> 
                 <img id="model-torso"  style="image-rendering: pixelated; position:absolute"> 
+                <script>
+                    $("#heart").on("mousedown", (e)=> {
+                        e.preventDefault();
+                    });
+                    $("#model").on("mousedown", (e)=> {
+                        e.preventDefault();
+                    });
+                    $("#model-head").on("mousedown", (e)=> {
+                        e.preventDefault();
+                    });
+                    $("#model-torso").on("mousedown", (e)=> {
+                        e.preventDefault();
+                    });
+
+                </script>
                 <!--<img id="model" src="Assets/Images/Models/dog.png"">-->
                 <!-- https://www.jamiesale-cartoonist.com/wp-content/uploads/dog-12.png -->
             </div>
             <nav id="footer-container" class="navbar">
             <!--<div id="footer-container" class="row" style="margin:0">-->
                 <div class="col-2 text-center">
-                    <button class="button-list btn" data-bs-target="#inv-container" data-bs-toggle="modal"><!--Inventory--></button>
+                    <a data-bs-toggle="tooltip" data-bs-title="Inventory">
+                        <button class="button-list btn" data-bs-target="#inv-container" data-bs-toggle="modal"><!--Inventory--></button>
+                    </a>
                 </div>
                 <div class="col-2 text-center">
-                    <button class="button-shop btn" data-bs-target="#shop-container" data-bs-toggle="modal"><!--Shop--></button>
+                    <a data-bs-toggle="tooltip" data-bs-title="Shop">
+                        <button class="button-shop btn" data-bs-target="#shop-container" data-bs-toggle="modal"><!--Shop--></button>
+                    </a>
                 </div>
                 
-                <div class="col-6"></div>
+                <div class="col-4"></div>
+                <div class="col-2 text-center" id="help">
+                    <a data-bs-toggle="tooltip" data-bs-title="Help">
+                        <button class="button-help btn" ><!--Help--></button>
+                    </a>
+                </div>
                 <div class="col-2 text-center"  id="minigame-open">
-                    <button class="button-game btn" data-bs-target="#minigame-container" data-bs-toggle="modal"><!--Play--></button>
+                    <a data-bs-toggle="tooltip" data-bs-title="Minigames">
+                        <button class="button-game btn" data-bs-target="#minigame-container" data-bs-toggle="modal"><!--Play--></button>
+                    </a>
                 </div>
             <!--</div>-->
             </nav>
@@ -303,10 +343,10 @@
                               <label for="exampleInputPassword1" class="form-label">Password</label>
                               <input type="password" class="form-control" name="password" >
                             </div>
-                            <div class="mb-3 form-check">
+                            <!-- <div class="mb-3 form-check">
                               <input type="checkbox" class="form-check-input" id="exampleCheck1">
                               <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                            </div>
+                            </div> -->
                             <input type="submit"  class="btn btn-primary" value="Login"/></button>
                         </form>
                     </div>
@@ -351,64 +391,6 @@
                 </div>
             </div>
         </div>
-        <!--
-            <button class="btn btn-primary" data-bs-target="#loginModal" data-bs-toggle="modal">Open first modal</button>
-        <nav class="navbar navbar-dark bg-dark fixed-top">
-            <div class="container-fluid">
-              <a class="navbar-brand" href="#">Virtual Pet</a>
-              <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-              </button>
-              <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
-                <div class="offcanvas-header">
-                  <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Virtual Pet</h5>
-                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                  <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                    <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="#">Augmented Reality (AR)</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#">Friends</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Share
-                      </a>
-                      <ul class="dropdown-menu dropdown-menu-dark">
-                        <li><a class="dropdown-item" href="#">Facebook</a></li>
-                        <li><a class="dropdown-item" href="#">Instagram</a></li>
-                        <li>
-                          <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                      </ul>
-                    </li>
-                    
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                          Setting
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-dark">
-                          <li><a class="dropdown-item" href="#">Audio</a></li>
-                          <li><a class="dropdown-item" href="#">Camera Sensitivity Threshold</a></li>
-                          <li>
-                            <hr class="dropdown-divider">
-                          </li>
-                          <li><a class="dropdown-item" href="#">Something else here</a></li>
-                        </ul>
-                      </li>
-                  </ul>
-                  <form class="d-flex mt-3" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-success" type="submit">Search</button>
-                  </form> 
-                </div>
-              </div>
-            </div>
-          </nav>
-        -->
 
         <script src="./functions.js"></script>
     </body>

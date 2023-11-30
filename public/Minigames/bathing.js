@@ -1,3 +1,5 @@
+(window.innerHeight > window.innerWidth) ? $('#phaser-container').css({'width':'100%'}) : $('#phaser-container').css({'width':'80vh'});
+
 const gamecontainer = document.getElementById('phaser-container');
 var soapX = null;
 var soapY = null;

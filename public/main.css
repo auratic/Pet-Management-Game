@@ -136,6 +136,7 @@ html, body {
     /*
     cursor: pointer;
     width: 50%;
+    pointer-events: none;
     */
 }
 
@@ -153,8 +154,16 @@ html, body {
     height: 30%;
     width: 30%;
     background-repeat: no-repeat;
+    text-align: center;
 }
 
+.button-help {
+    background: url("Assets/Images/UI/png/help_red.png") no-repeat;
+    background-size: contain;
+    background-position: center;
+    height:100%;
+    width:100%
+}
 .button-shop {
     background: url("Assets/Images/UI/png/shop_red.png") no-repeat;
     background-size: contain;

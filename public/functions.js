@@ -73,9 +73,36 @@ function screenDetect () {
     }
     */
     //Model adjust
+    const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+    const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    
+    var popover = new bootstrap.Popover(document.getElementById('pet-status'), {
+        container: 'body',
+        html: true,
+        placement: 'bottom',
+        title: "Kitty Kitty",
+        content: `
+            <span>Growth: 0%</span><br>
+            <span>Happiness: 0%</span><br>
+            <span>Clean: 0%</span><br>
+            <span>Hunger: 0%</span><br>
+            <span>Trim: 0%</span><br>
+            <span>Groom: 0%</span>
+            `
+      });
 
     if (window.innerHeight > window.innerWidth) {
+        $("#heart").css({
+            'top': window.innerHeight / 8,
+            'height': '30%'
+        })
         
+        $("#game-container").css({
+            'width': "100%"})
+
         $('#model').css({
             'height':'auto',
             'width': "85%"})
@@ -94,7 +121,15 @@ function screenDetect () {
         });
             
     } else {
-        
+        $('#heart').css({
+            'top': `10`,
+            'height': '30%',
+        });
+
+        $("#game-container").css({
+            'width': "100vh"
+        })
+
         $('#textbubble').css({
             'top': `10`
         });
@@ -111,6 +146,21 @@ function screenDetect () {
             'height':'70%',
             'width': "auto"})
     }
+}
+
+function changeName() {
+    $("#pet-status").css({"display":"none"});
+    $("#change-name").css({"display":"none"});
+    $("#new-name").css({"display":"block"});
+    $("#confirm-name").css({"display":"block"});
+
+}
+
+function confirmName() {
+    $("#pet-status").css({"display":"block"});
+    $("#change-name").css({"display":"block"});
+    $("#new-name").css({"display":"none"});
+    $("#confirm-name").css({"display":"none"});
 }
 
 function checkLogin() {
@@ -247,23 +297,10 @@ BGM.loop= true;
 
 window.onclick = () => {
 
+
     if(!playBGM) {
         BGM.play();
         playBGM = true;
-        /*
-        const BGM = document.getElementById('bgm');
-        if(!BGM) return;
-        const promise = BGM.play();
-        if(promise !== undefined){
-            promise.then(() => {
-                // Autoplay started
-            }).catch(error => {
-                // Autoplay was prevented.
-                BGM.muted = true;
-                BGM.play();
-            });
-        }
-        */
     }
 }
 
@@ -589,12 +626,8 @@ function equipItem(i) {
 //===== Pet interaction : Cuddle =====//
 
 var cuddle = 0;
-var isCuddling; // To check if player is still cuddling
-
-$('#heart').css({
-    'top': `10`,
-    'height': '30%',
-});
+var isCuddling; // To make heart particle disappear using setInterval
+var isCuddle = false; // To check if player is cuddling
 
 var heartParticle = document.createElement('img');
 heartParticle.setAttribute('src', 'Assets/Images/heart-particle-nobg.gif');
@@ -602,62 +635,100 @@ heartParticle.setAttribute('id', 'heart-particle');
 heartParticle.style.position = 'absolute';
 heartParticle.style.height = '15%';
 heartParticle.style.imageRendering = 'pixelated';
+heartParticle.style.pointerEvents = 'none';
 setInterval(() => {
     
-    $('#textbubble').css({
-        'display': `flex`
-    });
-
-    setTimeout(() => {
-
+    if(!isCuddle) {
         $('#textbubble').css({
-            'display': `none`
+            'display': `flex`
         });
+        
+        setTimeout(() => {
 
-    },4000);
-}, 10000);
-
-
-$('#game-container').on('mousemove', (e) =>{
-    var mouseX = e.pageX;
-    var mouseY = e.pageY;
-    console.log('mouse moving')
-
-    $('#model').on('mousedown', () => {
-        if(
-            mouseX > $('#model').offset().left && 
-            mouseX < $('#model').offset().left + $('#model').width() && 
-            mouseY > $('#model').offset().top &&
-            mouseY < $('#model').offset().top + $('#model').height()
-        ) {
-            clearTimeout(isCuddling);
-
-            heartParticle.style.display = 'block';
-            heartParticle.style.top = e.pageY - (heartParticle.clientHeight / 2);
-            heartParticle.style.left = e.pageX - (heartParticle.clientWidth / 2);
-            document.getElementById('game-container').appendChild(heartParticle);
-            
-            isCuddling = setTimeout(() => {
-                $('#heart-particle').css({'display':'none'});
-            },1000);
-            
             $('#textbubble').css({
                 'display': `none`
             });
+    
+        },4000);
+    }
 
-            console.log(cuddle);
-            if(cuddle > 5000) {
-                cuddle = 0;
-                userProfile.coin += 10;
-                $('#coin').html(userProfile.coin);
-                $('#heart').css({'display':'block'});
-                setTimeout(() => {
-                    $('#heart').css({'display':'none'});
-                }, 3000);
-            }
-            cuddle++;
-        } else {
-            console.log('detect1')
-        }
-    })
+}, 10000);
+
+// $('#game-container').on('mousemove', (e) =>{
+//     var mouseX = e.pageX;
+//     var mouseY = e.pageY;
+//     console.log('mouse moving')
+
+//     $('#model').on('mousedown', () => {
+//         if(
+//             mouseX > $('#model').offset().left && 
+//             mouseX < $('#model').offset().left + $('#model').width() && 
+//             mouseY > $('#model').offset().top &&
+//             mouseY < $('#model').offset().top + $('#model').height()
+//         ) {
+//             clearTimeout(isCuddling);
+
+//             heartParticle.style.display = 'block';
+//             heartParticle.style.top = e.pageY - (heartParticle.clientHeight / 2);
+//             heartParticle.style.left = e.pageX - (heartParticle.clientWidth / 2);
+//             document.getElementById('game-container').appendChild(heartParticle);
+            
+//             isCuddling = setTimeout(() => {
+//                 $('#heart-particle').css({'display':'none'});
+//             },1000);
+            
+//             $('#textbubble').css({
+//                 'display': `none`
+//             });
+
+//             console.log(cuddle);
+//             if(cuddle > 5000) {
+//                 cuddle = 0;
+//                 userProfile.coin += 10;
+//                 $('#coin').html(userProfile.coin);
+//                 $('#heart').css({'display':'block'});
+//                 setTimeout(() => {
+//                     $('#heart').css({'display':'none'});
+//                 }, 3000);
+//             }
+//             cuddle++;
+//         } else {
+//             console.log('detect1')
+//         }
+//     })
+// })
+
+$('#model').on('click', (e) => {
+    var mouseX = e.pageX;
+    var mouseY = e.pageY;
+    isCuddle = true;
+
+    clearTimeout(isCuddling);
+
+    heartParticle.style.display = 'block';
+    heartParticle.style.top = e.pageY - (heartParticle.clientHeight / 2);
+    heartParticle.style.left = e.pageX - (heartParticle.clientWidth / 2);
+    document.getElementById('game-container').appendChild(heartParticle);
+    
+    isCuddling = setTimeout(() => {
+        $('#heart-particle').css({'display':'none'});
+        isCuddle = false;
+    },1000);
+    
+    $('#textbubble').css({
+        'display': `none`
+    });
+
+    console.log(cuddle);
+    if(cuddle > 20) {
+        cuddle = 0;
+        userProfile.coin += 10;
+        $('#coin').html(userProfile.coin);
+        $('#heart').css({'display':'block'});
+        setTimeout(() => {
+            $('#heart').css({'display':'none'});
+        }, 3000);
+    }
+    cuddle++;
+
 })
