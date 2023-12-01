@@ -78,21 +78,6 @@ function screenDetect () {
 
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-    
-    var popover = new bootstrap.Popover(document.getElementById('pet-status'), {
-        container: 'body',
-        html: true,
-        placement: 'bottom',
-        title: "Kitty Kitty",
-        content: `
-            <span>Growth: 0%</span><br>
-            <span>Happiness: 0%</span><br>
-            <span>Clean: 0%</span><br>
-            <span>Hunger: 0%</span><br>
-            <span>Trim: 0%</span><br>
-            <span>Groom: 0%</span>
-            `
-      });
 
     if (window.innerHeight > window.innerWidth) {
         $("#heart").css({
@@ -153,14 +138,42 @@ function changeName() {
     $("#change-name").css({"display":"none"});
     $("#new-name").css({"display":"block"});
     $("#confirm-name").css({"display":"block"});
-
 }
 
 function confirmName() {
-    $("#pet-status").css({"display":"block"});
-    $("#change-name").css({"display":"block"});
-    $("#new-name").css({"display":"none"});
-    $("#confirm-name").css({"display":"none"});
+
+    let newName = $("#new-name").val();
+
+    if(!newName || newName == "") {
+        alert("Enter a name !")
+    } else if(newName.length > 50) {
+        alert("Name is too long ! 50 characters max")
+    } else {
+        $.ajax({
+            url: "/setPet",
+            method: "POST",  
+            data: {
+                action: "setName", 
+                newName: newName
+            },
+            cache: false,
+            /* dataType: 'json', */
+            success: function(data){
+            
+                alert(data);
+                $("#pet-status").html(`${newName}`);
+                $("#pet-status").css({"display":"block"});
+                $("#change-name").css({"display":"block"});
+                $("#new-name").css({"display":"none"});
+                $("#confirm-name").css({"display":"none"});
+                getPet();
+        
+            },
+            error: function(errMsg) {
+                alert(JSON.stringify(errMsg));
+            }
+        });
+    }
 }
 
 function checkLogin() {
@@ -248,11 +261,60 @@ function getInv() {
     });
 }
 
+function getPet() {
+    
+    $.ajax({
+        type: 'POST',
+        url: '/getPet',
+        /*dataType: 'json',*/
+        success: function (result) {
+            
+            if (
+                typeof result !== 'object' &&
+                !Array.isArray(result) &&
+                result !== null
+            ) {
+
+                console.log("Cannot get pet");
+
+            } else {
+                // console.log(result);
+                $("#pet-title").css({"display":"none"});
+                $("#pet-status").css({"display":"block"});
+                $("#change-name").css({"display":"block"});
+
+                $("#pet-status").html(`${result.pet_name}`);
+                new bootstrap.Popover(document.getElementById('pet-status'), {
+                    container: 'body',
+                    html: true,
+                    placement: 'bottom',
+                    title: `${result.pet_name}`,
+                    content: `
+                        <span>Growth: ${result.growth}%</span><br>
+                        <span>Happiness: ${result.happiness}%</span><br>
+                        <span>Clean: ${result.clean}%</span><br>
+                        <span>Hunger: ${result.hunger}%</span><br>
+                        <span>Trim: ${result.nail}%</span><br>
+                        <span>Groom: ${result.hair}%</span>
+                        `
+                  });
+
+            }
+        },
+        error: function(errMsg) {
+            console.log('entered error')
+            alert(errMsg);
+
+        }
+    });
+}
+
 window.onload =()=> {
     
     screenDetect();
     getShop();
     getInv();
+    getPet();
     getProfile();
     checkLogin();
     userSetting();
@@ -379,6 +441,7 @@ $('#loginForm').on('submit',function (e) {
                 $('#coin').html(`${result.coin}`)
                 $("#inv-msg").css({'display':'none'});
                 getInv();
+                getPet();
 
                 userProfile = {
                     user_id: result.id,

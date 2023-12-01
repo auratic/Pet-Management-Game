@@ -53,11 +53,14 @@
                             style='image-rendering:pixelated;'>
                     </div>
                     <div style="border:1px solid #e5007f; border-radius:10px; display: flex; flex-direction: row; align-items: center;">
+                        <a id="pet-title" class="btn btn-lg" style="font-size:1em;">
+                            Kitty
+                        </span>
                         <a id="pet-status" tabindex="0" class="btn btn-lg" role="button" data-bs-toggle="popover" data-bs-trigger="focus"
-                            style="font-size:1em">
+                            style="font-size:1em; display:none">
                                 Kitty Kitty
                         </a>
-                        <a id="change-name" style="font-size:0.5em" class="btn btn-small"data-bs-toggle="tooltip" data-bs-title="Click to edit name" onclick="changeName()">
+                        <a id="change-name" style="font-size:0.5em; display:none" class="btn btn-small"data-bs-toggle="tooltip" data-bs-title="Click to edit name" onclick="changeName()">
                             &#9000;
                         </a>
                         <input id="new-name" type="text" style="display:none"></input>

@@ -17,17 +17,23 @@ module.exports = app => {
     router.post('/updateCoin', updateCoin);
     */
    
-/*
- *
- * Login, Logout, Register
- * 
- */
+    /*
+     *
+     * Login, Logout, Register
+     * 
+     */
 
     app.post('/login', (req, res) => {
 
         const { email, password } = req.body;
-        //console.log(req.body)
-        const query = `SELECT * FROM user_profile WHERE email = '${email}' AND  password = '${password}'`;
+        // console.log(req.body)
+        // const query = `SELECT * FROM user_profile WHERE email = '${email}' AND  password = '${password}'`;
+        const query = `SELECT * FROM user_profile 
+                        INNER JOIN leaderboard 
+                        ON user_profile.user_id = leaderboard.user_id 
+                        INNER JOIN pet
+                        ON user_profile.user_id = pet.user_id
+                        WHERE email = '${email}' AND  password = '${password}'`;
         
         con.query(query, [email, password], (err, results) => { //the second attr is for to prevent SQL injection
             if (err) {
@@ -50,7 +56,22 @@ module.exports = app => {
                     id: results[0].user_id,
                     user: results[0].username,
                     coin: results[0].coin,
-                    inv: inv_array
+                    inv: inv_array,
+                    score: {
+                        tictactoe: results[0].tictactoe,
+                        platformer: results[0].platformer,
+                        mazegame: results[0].mazegame
+                    },
+                    pet: {
+                        pet_name: results[0].pet_name,
+                        growth: results[0].growth,
+                        hunger: results[0].hunger,
+                        clean: results[0].clean,
+                        hair: results[0].hair,
+                        happiness: results[0].happiness,
+                        nail: results[0].nail,
+                        pet_type: results[0].pet_type
+                    }
                 }
                 console.log(req.session.user);
                 res.send(req.session.user);
@@ -91,6 +112,8 @@ module.exports = app => {
         console.log(req.body);
         const { username, email, password } = req.body;
 
+        let getUserId;
+
         if(
             username !== null && password !== null && email !== null &&
             username !== '' && password !== '' && email !== '' 
@@ -127,30 +150,77 @@ module.exports = app => {
                     })
                     .then(() => {
 
-                        const query = 'SELECT user_id FROM user_profile ORDER BY user_id DESC LIMIT 1';
+                        // const query = 'SELECT user_id FROM user_profile ORDER BY user_id DESC LIMIT 1';
+                        const query = `SELECT user_id FROM user_profile WHERE username = '${username}'`;
 
-                        return con.query(query, function(error, results, fields) {
-                            if (error) throw new Error(error);
+                        return new Promise ((resolve,reject) => {
+                            con.query(query, (error, results, fields) => {
+                                // if (error) throw new Error(error);
+                                if (error) {
+                                    reject("getUserId failed");
+                                }
+                                else {
+                                    getUserId = results[0].user_id;
+                                    console.log('This user\'s ID is: ', getUserId);
+                                    resolve();
+                                }
+                            })
+                        })
+                        
 
-                            console.log('Latest Primary Key:', results[0].user_id);
-                            const leaderboardQuery = `INSERT INTO leaderboard 
-                                                    VALUES (${results[0].user_id}, 0, 0, 0)
-                                                    `;
-                            return con.query(leaderboardQuery, user, (err, result) => {
+                    })
+                    .then(() => {
+                        
+                        const leaderboardQuery = `INSERT INTO leaderboard 
+                                                VALUES (${getUserId}, 0, 0, 0)
+                                                `;
+                        return new Promise ((resolve, reject) => {
+                            con.query(leaderboardQuery, (err, result) => {
                                 if (err) {
                                     console.error(err);
                                     //res.send(`Registration failed: ${err}`);
-                                    throw new Error(`Leaderboard creation failed: ${err}`)
+                                    // throw new Error(`Leaderboard creation failed: ${err}`)
+                                    reject(`leaderboard failed: ${err}`);
                                 } else {
                                     console.log('Leaderboard successful');
-                                    res.send('Registration successful');
+                                    resolve();
+                                    // res.send('Registration successful');
+                                }
+                            });
+                        });
+                        
+
+                    })
+                    .then(() => {
+
+                        const petInitQuery = `INSERT INTO pet 
+                                                VALUES (${getUserId}, "Kitty", 0, 0, 0, 0, 0, 0, "cat1")
+                                                `;
+                        return new Promise((resolve, reject) => {
+                            con.query(petInitQuery, (err, result) => {
+                                if (err) {
+                                    console.error(err);
+                                    // res.send(`Registration failed: ${err}`);
+                                    // throw new Error(`petInit failed: ${err}`)
+                                    reject(`petInit failed: ${err}`)
+                                } else {
+                                    resolve();
+                                    console.log('PetInit successful');
                                 }
                             });
                         })
+                        
+
+                    })
+                    .then(() => {
+                        
+                        console.log("3 insertion complete");
+                        res.send('Registration successful');
 
                     })
                     .catch(result => {
-                        res.send(JSON.stringify(result))
+                        console.log(result);
+                        res.send(JSON.stringify(result));
                     });
                 }
             });
@@ -159,11 +229,11 @@ module.exports = app => {
         }
     });
 
-/*
- *
- * Shop
- * 
- */
+    /*
+    *
+    * Shop
+    * 
+    */
 
     app.get('/getShop', (req, res) => {
     
@@ -254,11 +324,11 @@ module.exports = app => {
 
     });
 
-/*
- *
- * Load user inventory
- * 
- */
+    /*
+     *
+     * Load user inventory
+     * 
+     */
 
     app.post('/getInv', (req, res) => {
 
@@ -317,11 +387,11 @@ module.exports = app => {
 
     });
 
-/*
- *
- * update coin
- * 
- */
+    /*
+     *
+     * update coin
+     * 
+     */
 
     function updateCoin (req, cost) {
         console.log('updateCoin connected')
@@ -442,12 +512,111 @@ module.exports = app => {
                 
                 res.json(result);
             });
+        } else {
+            res.send('User not logged in');
+        }
+    });
+
+    /*
+     *
+     * Pet
+     * 
+     */
+
+    app.post('/getPet', (req, res) => {
+
+        console.log("getPet Connected");
+
+        if (req.session.user) {
+            console.log('getPet loaded')
+            const pet = req.session.user.pet;
+            res.send(pet);
+        } else {
+            console.log('Cannot get pet')
+            res.send('Cannot get pet');
+        }
+    })
+
+    
+    app.post('/setPet', (req, res) => {
+
+        console.log("setPet Connected");
+        
+        if (req.session.user) {
+            let action = req.body.action;
+            let user_id = req.session.user.id;
+            let query;
+            //console.log(req.session.user)
+            return new Promise ((resolve, reject) => {
+                switch (action) {
+                    case "setName":
+                        let newName = req.body.newName;
+                        query = `UPDATE pet
+                                SET pet_name = '${newName}' 
+                                WHERE user_id = ${user_id}`;
+                        req.session.user.pet.pet_name = newName;
+                        resolve("Set name successful");
+                    break;
+                    case "setGrowth":
+                        resolve();
+                    break;
+                    case "setHappiness":
+                        resolve();
+                    break;
+                    case "setNail":
+                        resolve();
+                    break;
+                    case "setHair":
+                        resolve();
+                    break;
+                }
+
+            })
+            .then((msg) => {
+                
+                return new Promise ((resolve, reject) => {
+                    con.query(query, function (err, result, fields) {
+                        if (err) reject(err);
+                        resolve(msg);
+                    });
+                });
+            })
+            // .then(() => {
+            //     const getPet = `SELECT * FROM pet WHERE user_id = ${user_id}`;
+            //     return new Promise ((resolve, reject) => {
+            //         con.query(getPet, function (err, result, fields) {
+            //             if (err) reject(err);
+                        
+            //             req.session.user.pet = {
+            //                 pet_name: result[0].pet_name,
+            //                 growth: result[0].growth,
+            //                 hunger: result[0].hunger,
+            //                 clean: result[0].clean,
+            //                 hair: result[0].hair,
+            //                 happiness: result[0].happiness,
+            //                 nail: result[0].nail,
+            //                 pet_type: result[0].pet_type
+            //             }
+
+            //             resolve();
+            //         });
+            //     });
+            // })
+            .then((msg) => {
+                console.log(msg)
+                res.send(msg);
+            })
+            .catch((err) => {
+                res.send("Error: " + err);
+            })
+            
+
+            
 
         } else {
 
             res.send('User not logged in');
 
         }
-
     });
 }
