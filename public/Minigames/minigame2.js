@@ -2,8 +2,10 @@
 const kittyStand = "./Assets/kitty-stand-sprite.png"
 const tile = "./Assets/tile.png";
 const house1 = "./Assets/house1.png";
+const background = "./Assets/blue.png";
+const coin = "./Assets/sardine.png";
 
-const canvas = document.querySelector('canvas');
+const canvas = document.querySelector('#canvas-container');
 const c = canvas.getContext('2d');
 
 // $("canvas").css({"width": "1024", "height": "620"});
@@ -17,6 +19,10 @@ const tileY = canvas.height * .8
 const playerSize = canvas.height * .15;
 const playerSpeed = canvas.height * .01;
 var jumpSpeed = canvas.height * .015;
+
+var detectHand = false;
+var keyboard = true;
+var handSign;
 
 
 if(	window.screen.height >= 2560 || window.screen.width >= 2560 ) {
@@ -39,7 +45,7 @@ class Player {
 		this.speed = 10;
 		this.position = {
 			x: 10,
-			y: canvas.height * .65
+			y: canvas.height * .62
 		}
 		this.velocity = {
 			x: 0,
@@ -54,12 +60,6 @@ class Player {
 	}
 
 	draw() {
-		// turn off image aliasing
-		c.msImageSmoothingEnabled = false;
-		c.mozImageSmoothingEnabled = false;
-		c.webkitImageSmoothingEnabled = false;
-		c.imageSmoothingEnabled = false;
-
 		c.drawImage(
 			this.image, 
 			32 * this.frame, 0, 32, 32,
@@ -100,13 +100,6 @@ class Platform {
 	}
 
 	draw() {
-		
-		// turn off image aliasing
-		c.msImageSmoothingEnabled = false;
-		c.mozImageSmoothingEnabled = false;
-		c.webkitImageSmoothingEnabled = false;
-		c.imageSmoothingEnabled = false;
-
 		c.drawImage(
 			this.image, 
 			this.position.x, this.position.y, 
@@ -134,15 +127,49 @@ class Decor {
 
 }
 
+class Coin {
+	constructor ({ x, y, width, height, image}) {
+		this.position = {
+			x,
+			y
+		}
+		this.image = image;
+		this.width = width;
+		this.height = height;
+	}
+
+	draw() {
+		c.drawImage(
+			this.image, 
+			this.position.x, this.position.y, 
+			this.width, this.height)
+	}
+
+}
+
 const player = new Player();
 const platforms = [	
 	new Platform({x: 0, y: tileY, width: tileSize, height: tileSize, image: createImage(tile)}),
-	new Platform({x: 0, y: tileY * .5, width: tileSize * 2, height: tileSize * 2, image: createImage(house1)})
+	new Platform({x: tileSize * 4, y: tileY * .5, width: tileSize * 2, height: tileSize * 2, image: createImage(house1)}),
+	new Platform({x: tileSize * 6, y: tileY * .5, width: tileSize * 2, height: tileSize * 2, image: createImage(house1)}),
+	new Platform({x: tileSize * 12, y: tileY * .5, width: tileSize * 2, height: tileSize * 2, image: createImage(house1)})
  ];
 
 for( let i = 0 ; i < 50 ; i++) { 
 	platforms.push(new Platform({x: tileSize * i, y: tileY, width: tileSize, height: tileSize, image: createImage(tile)}));
 }
+
+const coins = [
+	new Coin ({x: 0, y: tileY * .85, width: tileSize / 2, height: tileSize / 2, image: createImage(coin)}),
+	new Coin ({x: 500, y: tileY * .35, width: tileSize / 2, height: tileSize / 2, image: createImage(coin)}),
+	new Coin ({x: 600, y: tileY * .35, width: tileSize / 2, height: tileSize / 2, image: createImage(coin)}),
+	new Coin ({x: 700, y: tileY * .35, width: tileSize / 2, height: tileSize / 2, image: createImage(coin)}),
+	new Coin ({x: 800, y: tileY * .35, width: tileSize / 2, height: tileSize / 2, image: createImage(coin)}),
+	new Coin ({x: 600, y: tileY * .85, width: tileSize / 2, height: tileSize / 2, image: createImage(coin)}),
+	new Coin ({x: 800, y: tileY * .85, width: tileSize / 2, height: tileSize / 2, image: createImage(coin)}),
+	new Coin ({x: 900, y: tileY * .85, width: tileSize / 2, height: tileSize / 2, image: createImage(coin)}),
+	new Coin ({x: 1000, y: tileY * .85, width: tileSize / 2, height: tileSize / 2, image: createImage(coin)}),
+]
 
 const keys = {
 	right: {
@@ -169,46 +196,165 @@ function animate () {
 
 	requestAnimationFrame(animate);
 	c.clearRect(0,0,canvas.width,canvas.height);
+	
+	// turn off image aliasing
+	c.msImageSmoothingEnabled = false;
+	c.mozImageSmoothingEnabled = false;
+	c.webkitImageSmoothingEnabled = false;
+	c.imageSmoothingEnabled = false;
+
+	/*
+	 *
+	 * Background
+	 *
+	 */
+
+	c.drawImage(
+		createImage(background), 
+		0, 0, 
+		canvas.width,canvas.height)
+
 	platforms.forEach(platform => {
 		platform.draw();
 	});
+	coins.forEach(coin => {
+		coin.draw();
+	});
 	player.update();
 
-	if(keys.right.pressed && player.position.x < 400) {
-		player.velocity.x = playerSpeed;
-	} else if(keys.left.pressed && player.position.x > 10) {
-		player.velocity.x = -playerSpeed;
-	} else {
-		player.velocity.x = 0;
-		if (keys.right.pressed && scrollOffset < 1000) {
+	/*
+	 *
+	 * Keyboard control;
+	 *
+	 */
 
-			scrollOffset++
-			console.log(scrollOffset)
-			platforms.forEach(platform => {
-				platform.position.x -= playerSpeed
-			});
-
-		} else if (keys.left.pressed && scrollOffset > 0) {
-
-			scrollOffset--;
-			console.log(scrollOffset)
-			platforms.forEach(platform => {
-				platform.position.x += playerSpeed
-			});
-
+	if(keyboard) {
+		if(keys.right.pressed && player.position.x < canvas.width * .4) {
+			player.velocity.x = playerSpeed;
+	
+		} else if(keys.left.pressed && player.position.x > canvas.width * .05) {
+			player.velocity.x = -playerSpeed;
+	
+		} else {
+			player.velocity.x = 0;
+			if (keys.right.pressed && scrollOffset < 1000) {
+	
+				scrollOffset++
+				console.log(scrollOffset)
+				platforms.forEach(platform => {
+					platform.position.x -= playerSpeed
+				});
+				coins.forEach(coin => {
+					coin.position.x -= playerSpeed
+				});
+	
+			} else if (keys.left.pressed && scrollOffset > 0) {
+	
+				scrollOffset--;
+				console.log(scrollOffset)
+				platforms.forEach(platform => {
+					platform.position.x += playerSpeed
+				});
+				coins.forEach(coin => {
+					coin.position.x += playerSpeed
+				});
+	
+			}
 		}
 	}
 
-	// Platform collision detection
+	/*
+	 *
+	 * Camera control;
+	 *
+	 */
+
+	if(detectHand) {
+		
+		if(handSign == 'point' && player.position.x < canvas.width * .4) {
+			player.velocity.x = playerSpeed;
+
+		} else if(handSign == 'closed' && player.position.x > canvas.width * .05) {
+			player.velocity.x = -playerSpeed;
+
+		} else if (handSign == 'open' && !isJump) {
+			player.velocity.y = -jumpSpeed; 
+			isJump = true;
+
+		} else if (handSign == 'face' || handSign == '') {
+			player.velocity.x = 0;
+
+		} else {
+			player.velocity.x = 0;
+			if (handSign == 'point' && scrollOffset < 1000) {
+
+				scrollOffset++
+				console.log(scrollOffset)
+				platforms.forEach(platform => {
+					platform.position.x -= playerSpeed
+				});
+				coins.forEach(coin => {
+					coin.position.x -= playerSpeed
+				});
+
+			} else if (handSign == 'closed' && scrollOffset > 0) {
+
+				scrollOffset--;
+				console.log(scrollOffset)
+				platforms.forEach(platform => {
+					platform.position.x += playerSpeed
+				});
+				coins.forEach(coin => {
+					coin.position.x += playerSpeed
+				});
+
+			}
+		}
+	}
+
+	/*
+	 *
+	 * Platform collision detection
+	 *
+	 */
 	platforms.forEach(platform => {
+		//Floor collision
 		if(player.position.y + player.height <= platform.position.y &&
 			player.position.y + player.height + player.velocity.y >= platform.position.y &&
 			player.position.x + player.width >= platform.position.x &&
-			player.position.x <= platform.position.x + platform.width) {
+			player.position.x <= platform.position.x + platform.width
+			) {
 			isJump = false;
 			player.velocity.y = 0;
 		}
+
+		//Building collision
+		// if(player.position.y + player.height >= platform.position.y &&
+		// 	player.position.x + player.width + player.velocity.x > platform.position.x &&
+		// 	player.position.x  + player.velocity.x < platform.position.x + platform.width) {
+		// 		player.velocity.x = 0;
+		// 		console.log("Inside")
+		// 	}
 	});
+
+	/*
+	 *
+	 * Coin collision detection
+	 *
+	 */
+
+	if(coins.length > 0) {
+		coins.forEach((coin, index) => {
+			if(player.position.y < coin.position.y + coin.height &&
+				player.position.y + player.height > coin.position.y &&
+				player.position.x + player.width > coin.position.x &&
+				player.position.x < coin.position.x + coin.width
+				) {
+					coins.splice(index, 1)
+			}
+	
+		});
+	}
 }
 
 animate();
@@ -260,42 +406,76 @@ $(document).keyup(function(e) {
 });
 
 // HANDTRACK.JS
-
-const video = document.getElementById("video");
-
-// Load the handtrack.js model
-const modelParams = {
-    flipHorizontal: true,   // Flip the video horizontally for a better user experience
-    maxNumBoxes: 1,        // Maximum number of boxes to track
-    iouThreshold: 0.5,     // Intersection over Union (IoU) threshold for bounding boxes
-    scoreThreshold: 0.6,   // Confidence score threshold
-};
-
-handTrack.load(modelParams).then(model => {
-// Start the webcam feed
-    handTrack.startVideo(video).then(status => {
-        if (status) {
-        // Run the detection loop
-        runDetection(model);
-        }
-    });
-});
-
-function runDetection(model) {
-    model.detect(video).then(predictions => {
-        if (predictions.length > 0) {
-            // Get the hand's bounding box
-            const hand = predictions[0].bbox;
-            handBox = predictions[0].label;
-            // Draw a red dot at the center of the hand
-            soapX = (hand[0] + hand[2] / 2) * scale;
-            soapY = (hand[1] + hand[3] / 2) * scale;
-            console.log(predictions[0].label);
-            //console.log("without" + (hand[0] + hand[2] / 2))
-            //console.log("scaled" + soapX)
-        }
-
-        // Continue running detection
-        requestAnimationFrame(() => runDetection(model));
-    });
+if(true) {
+	const video = document.getElementById("video");
+	const vcanvas =  document.getElementById("vcanvas");
+	const vctx =  vcanvas.getContext("2d");
+	$("#vcanvas").css({"height": `${canvas.height * .2}`, "width": `${canvas.height * .22}`, "top": `0`});
+	
+	// Load the handtrack.js model
+	const modelParams = {
+		flipHorizontal: true,   // Flip the video horizontally for a better user experience
+		maxNumBoxes: 1,        // Maximum number of boxes to track
+		iouThreshold: 0.5,     // Intersection over Union (IoU) threshold for bounding boxes
+		scoreThreshold: 0.6,   // Confidence score threshold
+	};
+	
+	handTrack.load(modelParams).then(model => {
+	// Start the webcam feed
+		handTrack.startVideo(video).then(status => {
+			if (status) {
+			// Run the detection loop
+			runDetection(model);
+			}
+		});
+	});
+	
+	function runDetection(model) {
+		model.detect(video).then(predictions => {
+			detectHand = false
+			model.renderPredictions(predictions, vcanvas, vctx, video);
+			if (predictions.length > 0) {
+				let label = predictions[0].label
+				detectHand = true
+				
+				if(label == "point") {
+				   handSign = "point";
+		  
+				} else if(label == "closed") {
+				   handSign = "closed";
+		  
+				} else if (label == "open") {
+				   handSign = "open";
+		  
+				}
+			} 
+	
+			// Continue running detection
+			requestAnimationFrame(() => runDetection(model));
+		});
+	}
+	
+	function getCameraAccess() {
+	
+		navigator.getUserMedia (
+			// constraints
+			{ video: true },
+	
+			// successCallback
+			stream => {
+				
+				// video.src = window.URL.createObjectURL(stream);
+				// video.onloadedmetadata = function(e) {
+				// 	// Do something with the video here.
+				// };
+			},
+		 
+			// errorCallback
+			err => {
+				alert("Please enable your camera !");
+			}
+		);
+		 
+	}
+	getCameraAccess();
 }
