@@ -1,3 +1,61 @@
+
+
+let gameState = 0; // 0 = stop, 1 = start
+let gameMode = '';
+
+$(document).ready(function(){
+    
+	$('#retry').on('click', () => {
+	  window.location.reload(true);
+	});
+  
+	$('#menu').on('click', () => {
+	  window.location.replace("/");
+	});
+  
+	$('#start').on('click', () => {
+  
+		gameMode = $('#gamemode input:radio:checked').val();
+		console.log(gameMode)
+		$('#start-overlay').css({'display':'none'});
+		$('#countdown-overlay').css({'display':'flex'});
+		let count = 2
+	
+		if(gameMode == "cam") {
+			$('#cam-instruction').css({'display': 'flex'})
+			initHandtrack();
+		} else {
+			$('#keyboard-instruction').css({'display': 'flex'})
+		}
+	
+		let countdown = setInterval(() => {
+	
+			if(count <= 0) {
+			clearInterval(countdown);
+			$('#countdown-overlay').css({'display':'none'});
+			gameState = 1;
+	
+			//   let gameTime = setInterval(() => {
+			// 	if (time <= 0) {
+			// 	  gameOver();
+			// 	  clearInterval(gameTime);
+			// 	} else {
+			// 	  $('#time').html(`${time} seconds`); 
+			// 	  time--;
+			// 	}
+	
+			//   }, 1000);
+	
+			} else {
+				$('#countdown-overlay > h1').html(count);
+				count--
+			}
+		}, 1000);
+  
+	});
+  
+});
+
 // import kittyStand from "./Assets/kitty-stand-sprite.png";
 const kittyStand = "./Assets/kitty-stand-sprite.png"
 const tile = "./Assets/tile.png";
@@ -20,21 +78,27 @@ const playerSize = canvas.height * .15;
 const playerSpeed = canvas.height * .01;
 var jumpSpeed = canvas.height * .015;
 
-var detectHand = false;
-var keyboard = true;
-var handSign;
+// var detectHand = false;
+// var keyboard = true;
+// var handSign;
 
+var score = 0;
 
 if(	window.screen.height >= 2560 || window.screen.width >= 2560 ) {
 	jumpSpeed = canvas.height * .015;
+	$("body").css({"font-size": "7em"})
 } else if(	window.screen.height >= 1920 || window.screen.width >= 1920 ) {
 	jumpSpeed = canvas.height * .022;
+	$("body").css({"font-size": "3em"})
 } else if(	window.screen.height >= 1280 || window.screen.width >= 1280 ) {
 	jumpSpeed = canvas.height * .023;
+	$("body").css({"font-size": "3em"})
 } else if(	window.screen.height >= 1024 || window.screen.width >= 1024 ) {
 	jumpSpeed = canvas.height * .025;
+	$("body").css({"font-size": "3em"})
 } else {
 	jumpSpeed = canvas.height * .035;
+	$("body").css({"font-size": "2em"})
 }
 
 let fpsCount = 0; // Make the Player spritesheet animation runs slower
@@ -44,7 +108,7 @@ class Player {
 	constructor () {
 		this.speed = 10;
 		this.position = {
-			x: 10,
+			x: canvas.width * .08,
 			y: canvas.height * .62
 		}
 		this.velocity = {
@@ -224,91 +288,40 @@ function animate () {
 
 	/*
 	 *
-	 * Keyboard control;
+	 * Control;
 	 *
 	 */
 
-	if(keyboard) {
-		if(keys.right.pressed && player.position.x < canvas.width * .4) {
-			player.velocity.x = playerSpeed;
-	
-		} else if(keys.left.pressed && player.position.x > canvas.width * .05) {
-			player.velocity.x = -playerSpeed;
-	
-		} else {
-			player.velocity.x = 0;
-			if (keys.right.pressed && scrollOffset < 1000) {
-	
-				scrollOffset++
-				console.log(scrollOffset)
-				platforms.forEach(platform => {
-					platform.position.x -= playerSpeed
-				});
-				coins.forEach(coin => {
-					coin.position.x -= playerSpeed
-				});
-	
-			} else if (keys.left.pressed && scrollOffset > 0) {
-	
-				scrollOffset--;
-				console.log(scrollOffset)
-				platforms.forEach(platform => {
-					platform.position.x += playerSpeed
-				});
-				coins.forEach(coin => {
-					coin.position.x += playerSpeed
-				});
-	
-			}
-		}
-	}
+	if(keys.right.pressed && player.position.x < canvas.width * .4) {
+		player.velocity.x = playerSpeed;
 
-	/*
-	 *
-	 * Camera control;
-	 *
-	 */
+	} else if(keys.left.pressed && player.position.x > canvas.width * .05) {
+		player.velocity.x = -playerSpeed;
 
-	if(detectHand) {
-		
-		if(handSign == 'point' && player.position.x < canvas.width * .4) {
-			player.velocity.x = playerSpeed;
+	} else {
+		player.velocity.x = 0;
+		if (keys.right.pressed && scrollOffset < 1000) {
 
-		} else if(handSign == 'closed' && player.position.x > canvas.width * .05) {
-			player.velocity.x = -playerSpeed;
+			scrollOffset++
+			console.log(scrollOffset)
+			platforms.forEach(platform => {
+				platform.position.x -= playerSpeed
+			});
+			coins.forEach(coin => {
+				coin.position.x -= playerSpeed
+			});
 
-		} else if (handSign == 'open' && !isJump) {
-			player.velocity.y = -jumpSpeed; 
-			isJump = true;
+		} else if (keys.left.pressed && scrollOffset > 0) {
 
-		} else if (handSign == 'face' || handSign == '') {
-			player.velocity.x = 0;
+			scrollOffset--;
+			console.log(scrollOffset)
+			platforms.forEach(platform => {
+				platform.position.x += playerSpeed
+			});
+			coins.forEach(coin => {
+				coin.position.x += playerSpeed
+			});
 
-		} else {
-			player.velocity.x = 0;
-			if (handSign == 'point' && scrollOffset < 1000) {
-
-				scrollOffset++
-				console.log(scrollOffset)
-				platforms.forEach(platform => {
-					platform.position.x -= playerSpeed
-				});
-				coins.forEach(coin => {
-					coin.position.x -= playerSpeed
-				});
-
-			} else if (handSign == 'closed' && scrollOffset > 0) {
-
-				scrollOffset--;
-				console.log(scrollOffset)
-				platforms.forEach(platform => {
-					platform.position.x += playerSpeed
-				});
-				coins.forEach(coin => {
-					coin.position.x += playerSpeed
-				});
-
-			}
 		}
 	}
 
@@ -350,7 +363,9 @@ function animate () {
 				player.position.x + player.width > coin.position.x &&
 				player.position.x < coin.position.x + coin.width
 				) {
-					coins.splice(index, 1)
+					coins.splice(index, 1);
+					score++;
+					$("#score").html(`Score: ${score}`)
 			}
 	
 		});
@@ -362,26 +377,26 @@ animate();
 
 $(document).keydown(function(e) {
 	
-    // Log the key code in the console
-    console.log("Key pressed: " + e.keyCode);
-
-	switch (e.keyCode) {
-		case 87:
-			if (!isJump) { player.velocity.y = -jumpSpeed; isJump = true; }
-			break;
-		case 65:
-			keys.left.pressed = true;
-			// player.velocity.x = -10;
-			break;
-		// case 83:
-		// 	player.velocity.y = 20;
-		// 	break;
-		case 68:
-			keys.right.pressed = true;
-			// player.velocity.x = 10;
-			break;
+	if(gameMode == "keyboard") {
+		// Log the key code in the console
+		console.log("Key pressed: " + e.keyCode);
+		switch (e.keyCode) {
+			case 87:
+				if (!isJump) { player.velocity.y = -jumpSpeed; isJump = true; }
+				break;
+			case 65:
+				keys.left.pressed = true;
+				// player.velocity.x = -10;
+				break;
+			// case 83:
+			// 	player.velocity.y = 20;
+			// 	break;
+			case 68:
+				keys.right.pressed = true;
+				// player.velocity.x = 10;
+				break;
+		}
 	}
-		
 });
 
 $(document).keyup(function(e) {
@@ -394,9 +409,9 @@ $(document).keyup(function(e) {
 			keys.left.pressed = false;
 			// player.velocity.x = 0;
 			break;
-		case 83:
-			// player.velocity.y = 20;
-			break;
+		// case 83:
+		// 	// player.velocity.y = 20;
+		// 	break;
 		case 68:
 			keys.right.pressed = false;
 			// player.velocity.x = 0;
@@ -405,12 +420,18 @@ $(document).keyup(function(e) {
 	
 });
 
-// HANDTRACK.JS
-if(true) {
+/*
+ *
+ * HANDTRACK.JS
+ * 
+ */
+
+function initHandtrack() {
 	const video = document.getElementById("video");
 	const vcanvas =  document.getElementById("vcanvas");
 	const vctx =  vcanvas.getContext("2d");
 	$("#vcanvas").css({"height": `${canvas.height * .2}`, "width": `${canvas.height * .22}`, "top": `0`});
+	$("#score").css({"top": `0`, "right": '5'});
 	
 	// Load the handtrack.js model
 	const modelParams = {
@@ -432,21 +453,28 @@ if(true) {
 	
 	function runDetection(model) {
 		model.detect(video).then(predictions => {
-			detectHand = false
+			// detectHand = false
+			keys.left.pressed = false;
+			keys.right.pressed = false;
 			model.renderPredictions(predictions, vcanvas, vctx, video);
 			if (predictions.length > 0) {
 				let label = predictions[0].label
-				detectHand = true
 				
-				if(label == "point") {
-				   handSign = "point";
-		  
-				} else if(label == "closed") {
-				   handSign = "closed";
-		  
-				} else if (label == "open") {
-				   handSign = "open";
-		  
+				if(label !== "face") {
+					detectHand = true
+					
+					if(label == "point") {
+						// handSign = "point";
+					   keys.right.pressed = true;
+
+					} else if(label == "closed") {
+						// handSign = "closed";
+					   keys.left.pressed = true;
+			  
+					} else if (label == "open") {
+						// handSign = "open";
+					   if (!isJump) { player.velocity.y = -jumpSpeed; isJump = true; }
+					}
 				}
 			} 
 	

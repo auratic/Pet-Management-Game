@@ -30,6 +30,9 @@ requestAnimationFrame has a number of advantages.
 Perhaps the most important one is that it pauses when the user navigates to another browser tab, 
 hence not wasting their precious processing power and battery life.
 
+Resizing canvas without blurring
+https://stackoverflow.com/questions/18547042/resizing-a-canvas-image-without-blurring-it
+
 ********************************************************************************
 
 (JQuery) Serializing form values

@@ -1,0 +1,48 @@
+#start-overlay { 
+    z-index: 9999; 
+    height: 100vh; 
+    position: absolute; 
+    background-color: rgba(255, 255, 255, 0.9); 
+    text-align: center; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  #start-overlay > h1 { font-size: 5em }
+#countdown-overlay { 
+    display: none;  
+    height: 100vh; 
+    position: absolute; 
+    z-index: 9999; 
+    background-color: rgba(255, 255, 255, 0.9); 
+    text-align: center; 
+    /* display: flex; */
+    flex-direction: column;
+    justify-content: center;
+  }
+  #start-overlay > h1 { font-size: 5em }
+#end-overlay { 
+    display: none;  
+    height: 100vh; 
+    position: absolute; 
+    z-index: 9999; 
+    background-color: rgba(255, 255, 255, 0.9); 
+    text-align: center; 
+    /* display: flex; */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center
+  }
+  #end-overlay > h1 { font-size: 5em }
+#scoreboard {
+    width:50%
+}
+  
+#bg-container {
+    height: 100%;
+    width: 100%;
+    z-index:0;
+    background-image: url("../../Assets/Images/UI/png/BG.png");
+    filter: brightness(80%) hue-rotate(300deg) blur(6px);;
+    position: absolute;
+}

@@ -398,6 +398,13 @@ $('#minigame-3').on('click',function (e) {
 $('#minigame-4').on('click',function (e) {
     window.location.href="/Minigames/minigame4.html";    
 });
+
+$(document).on('keydown', function (e) {
+    if (e.key === "Escape") {
+      // Close all open modals
+      $('.modal').modal('hide');
+    }
+  });
 /*
  *
  * Account
