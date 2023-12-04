@@ -25,10 +25,6 @@
         <!-- HandtrackJS -->
         <script src="https://cdn.jsdelivr.net/npm/handtrackjs@latest/dist/handtrack.min.js"></script>
 
-        
-        <!-- ThreeJS 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.157.0/three.min.js" integrity="sha512-nogdM20cZX4FjsqU5H5ecK3vw8LjYN1AcUUWi7asLUVP3eJK5wldywvqFMW8CLd5/xoiJaIL3eXG82SlOWZkTA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        -->
         <style>
             @font-face {
                 font-family: MachineGunk;
@@ -47,10 +43,29 @@
                 background-color: blanchedalmond;
                 /*flex-direction: column;*/
             }
+            canvas {
+                width:100vmin;
+                height:100vmin
+            }
+            #game-container {
+                width:100vmin;
+                height:100vmin
+            }
+            #header-container {
+                height:15%
+            }
+            #body-container {
+                height:100%
+            }
+            #footer-container {
+                height:15%
+            }
         </style>
     </head>
     <body>
-        <canvas id="canvas-container"></canvas>
+        <div id="game-container">
+                <canvas id="canvas-container"></canvas>
+        </div>
         <script type="module" src="./minigame2.js"></script>
     </body>
 </html>
