@@ -31,6 +31,8 @@ var area;
 var hunger = 0;
 var isFeed;
 
+var gameState = 1;
+
 class Example extends Phaser.Scene
 {
     preload ()
@@ -198,6 +200,7 @@ class Example extends Phaser.Scene
                 .then(() => { 
                     if(hunger > 100) {
                         $("#state").html("Full !!");
+                        gameOver();
                     } else {
                         hunger = hunger + 0.2; 
                         console.log(hunger);
@@ -258,6 +261,38 @@ const config = {
 };
 
 const game = new Phaser.Game(config);
+
+
+function gameOver() {
+	if(gameState == 1) {
+
+		// $('#end-overlay').css({'display': 'flex'}); 
+		gameState = 0; 
+	  
+		return new Promise ((res, rej) => {
+		  $.ajax({
+			url: "/setPet",
+			method: "POST",  
+			data: {
+				action: "hunger",
+			},
+			cache: false,
+			success: function(data){
+                alert("setpet: " + data)
+			    res()
+		
+			},
+			error: function(errMsg) {
+				alert(JSON.stringify(errMsg));
+				res()
+			}
+		  });
+		})
+		.catch((result) => {
+		  alert(JSON.stringify(result));
+		});
+	}
+}
 
 /*
  * HANDTRACK.JS ***************************************************************************************
