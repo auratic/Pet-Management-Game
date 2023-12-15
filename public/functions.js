@@ -79,57 +79,74 @@ function screenDetect () {
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
-    if (window.innerHeight > window.innerWidth) {
-        $("#heart").css({
-            'top': window.innerHeight / 8,
-            'height': '30%'
-        })
-        
-        $("#game-container").css({
-            'width': "100%"})
-
-        $('#model').css({
-            'height':'auto',
-            'width': "85%"})
-
-        $('#model-head').css({
-            'height':'auto',
-            'width': "70%"})
-            
-        $('#model-torso').css({
-            'height':'auto',
-            'width': "70%"})
-
-
-        $('#textbubble').css({
-            'top': `${ ($('#model-container').height() - $('#model').height()) / 2 }`
-        });
-            
+    if(	window.screen.height >= 4096 || window.screen.width >= 4096 ) {
+        (window.innerHeight > window.innerWidth) ? $("a").css({"font-size": "2em"}) : $("a").css({"font-size": "1em"});
+        $("h1").css({"font-size": "7em"});
+        $("h2").css({"font-size": "2em"});
+        $(".menu-item").css({ "font-size": "3em", "width": "5em", "height": "5em"});
+        $(".modal-body").css({ "font-size": "4em"});
+    }
+    if(	window.screen.height >= 2560 || window.screen.width >= 2560 ) {
+        (window.innerHeight > window.innerWidth) ? $("a").css({"font-size": "2em"}) : $("a").css({"font-size": "1em"});
+        $("h1").css({"font-size": "7em"});
+        $("h2").css({"font-size": "2em"});
+        $(".menu-item").css({ "font-size": "3em", "width": "5em", "height": "5em"});
+        $(".modal-body").css({ "font-size": "4.5em"});
+        // $(".menu-open #item1").css({ "transform": "translate(-8em, -3em) rotate(45deg)" });
+        // $(".menu-open #item2").css({ "transform": "translate(-4.5em, -7em) rotate(45deg)" });
+        // $(".menu-open #item3").css({ "transform": "translate(0, -9em) rotate(45deg)" });
+        // $(".menu-open #item4").css({ "transform": "translate(4.5em, -7em) rotate(45deg)" });
+        // $(".menu-open #item5").css({ "transform": "translate(8em, -3em) rotate(45deg)" });
+    } else if(	window.screen.height >= 1920 || window.screen.width >= 1920 ) {
+        $("a").css({"font-size": "1em"})
+        $("h1").css({"font-size": "2em"})
+        $("h2").css({"font-size": "1em"})
+        $(".menu-item").css({ "font-size": "2em", "width": "4em", "height": "4em"});
+        $(".modal-body").css({ "font-size": "2em"});
+    } else if(	window.screen.height >= 1280 || window.screen.width >= 1280 ) {
+        $("a").css({"font-size": "1em"})
+        $("h1").css({"font-size": "2em"})
+        $("h2").css({"font-size": "1em"})
+    } else if(	window.screen.height >= 1024 || window.screen.width >= 1024 ) {
+        $("a").css({"font-size": "1em"})
+        $("h1").css({"font-size": "2em"})
+        $("h2").css({"font-size": "1em"})
     } else {
-        $('#heart').css({
-            'top': `10`,
-            'height': '30%',
-        });
+        $("a").css({"font-size": "2em"})
+        $("h1").css({"font-size": "2em"})
+        $("h2").css({"font-size": "2em"})
+    }
 
-        $("#game-container").css({
-            'width': "100vh"
-        })
+    if (window.innerHeight > window.innerWidth) {
+        $("#heart").css({ 'top': window.innerHeight / 8, 'height': '30%' })
+        
+        $("#game-container").css({ 'width': "100%" })
 
-        $('#textbubble').css({
-            'top': `10`
-        });
-    
-        $('#model').css({
-            'height':'85%',
-            'width': "auto"})
+        $('#model').css({ 'height':'100vw', 'width': "100vw"})
 
-        $('#model-head').css({
-            'height':'70%',
-            'width': "auto"})
+        $('#model-head').css({ 'height':'auto', 'width': "100%"})
             
-        $('#model-torso').css({
-            'height':'70%',
-            'width': "auto"})
+        $('#model-torso').css({ 'height':'auto', 'width': "100%"})
+
+        $('#textbubble').css({ 'top': `${ ($('#model-container').height() - $('#model').height()) / 2 }` });
+            
+        $('.offcanvas').css({ 'width': '100%' });
+
+    } else {
+        $('#heart').css({ 'top': `10`, 'height': '30%', });
+
+        $("#game-container").css({ 'width': "100vh" })
+
+        $('#textbubble').css({ 'top': `10` });
+    
+        $('#model').css({ 'height':'85%', 'width': "auto"})
+
+        $('#model-head').css({ 'height':'70%', 'width': "auto"})
+            
+        $('#model-torso').css({ 'height':'70%', 'width': "auto"})
+
+        $('.offcanvas').css({ 'width': '30%' });
+    
     }
 }
 
@@ -320,6 +337,133 @@ window.onload =()=> {
     userSetting();
 } 
 
+/*
+ *
+ * Tutorial
+ * 
+ */
+
+var tutorialCounter = 0;
+function tutorial() {
+
+    let coin = document.getElementById("coin").getBoundingClientRect();
+    let petTitle = document.getElementById("pet-title").getBoundingClientRect();
+    let navBar = document.getElementById("navbarToggler").getBoundingClientRect();
+    let inv = document.getElementById("inv-button").getBoundingClientRect();
+    let shop = document.getElementById("shop-button").getBoundingClientRect();
+    let help = document.getElementById("help-button").getBoundingClientRect();
+    let minigame = document.getElementById("minigame-open").getBoundingClientRect();
+    let pet = document.getElementById("model").getBoundingClientRect();
+    let footer = document.getElementById("footer-container").getBoundingClientRect();
+
+    let footerPos
+    let fontSize
+
+    $("#tutorialtips").removeAttr('style');
+
+        if(	window.screen.height >= 2560 || window.screen.width >= 2560 ) {
+            fontSize = "7em";
+        } else if(	window.screen.height >= 1920 || window.screen.width >= 1920 ) {
+            fontSize = "2em"
+        } else if(	window.screen.height >= 1280 || window.screen.width >= 1280 ) {
+            fontSize = "2em"
+        } else if(	window.screen.height >= 1024 || window.screen.width >= 1024 ) {
+            fontSize = "2em"
+        } else {
+            fontSize = "1.2em"
+        }
+    $("#tutorialtips").css({
+        "position": "absolute",
+        "border": "1px solid black",
+        "border-radius": "10px",
+        "padding": "10px",
+        "font-size": fontSize
+    });
+    switch (tutorialCounter) {
+        case 0:
+            $("#tutorialtips").css({
+                "top":`${coin.top}`,
+                "left":`${coin.left}`,
+            });
+            $("#tutorialtips").html("This is your coins");
+            tutorialCounter++;
+        break;
+        case 1:
+            $("#tutorialtips").css({
+                "top":`${petTitle.top}`,
+                "left":`${petTitle.left}`,
+                "margin-right": "30%"
+            });
+            $("#tutorialtips").html(`This is your pet's name, 
+                                you can <span style="color:green">change name</span> and view <span style="color:green">pet's status</span> here after login`);
+            tutorialCounter++;
+        break;
+        case 2:
+            $("#tutorialtips").css({
+                "top":`${navBar.top}`,
+                "right":`${(window.innerHeight > window.innerWidth) ? 0 : ""}`,
+                "left":`${(window.innerHeight > window.innerWidth) ? "" : navBar.left}`,
+            });
+            $("#tutorialtips").html(`Login & Setting here`);
+            tutorialCounter++;
+        break;
+        case 3:
+            $("#tutorialtips").css({
+                "top":`${footer.top - (inv.width*2)}`,
+                "left":`${inv.left}`,
+            });
+            $("#tutorialtips").html(`Inventory !`);
+            tutorialCounter++;
+        break;
+        case 4:
+            $("#tutorialtips").css({
+                "top":`${footer.top - shop.height}`,
+                "left":`${shop.left}`,
+            });
+            $("#tutorialtips").html(`Shop !`);
+            tutorialCounter++;
+        break;
+        case 5:
+            $("#tutorialtips").css({
+                "top":`${footer.top - help.height}`,
+                "left":`${help.left}`,
+            });
+            $("#tutorialtips").html(`Help button !`);
+            tutorialCounter++;
+        break;
+        case 6:
+            $("#tutorialtips").css({
+                "top":`${footer.top - minigame.height}`,
+                "right":`${(window.innerHeight > window.innerWidth) ? 0 : ""}`,
+                "left":`${(window.innerHeight > window.innerWidth) ? "" : minigame.left}`,
+            });
+            $("#tutorialtips").html(`Minigame here!`);
+            tutorialCounter++;
+        break;
+        case 7:
+            $("#tutorialtips").css({
+                "top":`${pet.top}`,
+                "left":`${pet.left}`,
+            });
+            $("#tutorialtips").html(`Click to interact with pet!`);
+            tutorialCounter ++;
+        break;
+        case 8:
+            $("#tutorialtips").css({
+                "top":`${pet.top}`,
+                "left":`${pet.left}`,
+            });
+            $("#tutorialtips").html(`Press ESC to exit tutorial !`);
+            tutorialCounter ++;
+        break;
+        default:
+            $('.modal').modal('hide');
+            tutorialCounter = 0;
+    }
+}
+
+$("#tutorialModal .modal-content").on("click", tutorial)
+
 // Setting
 
 function userSetting() {
@@ -403,6 +547,7 @@ $(document).on('keydown', function (e) {
     if (e.key === "Escape") {
       // Close all open modals
       $('.modal').modal('hide');
+      tutorialCounter = 0;
     }
   });
 /*
@@ -767,8 +912,14 @@ setInterval(() => {
 //         }
 //     })
 // })
-
+$('#model-head').on('click', (e) => {
+    toggleMenu();
+});
+$('#model-torso').on('click', (e) => {
+    toggleMenu();
+});
 $('#model').on('click', (e) => {
+    toggleMenu();
     var mouseX = e.pageX;
     var mouseY = e.pageY;
     isCuddle = true;
@@ -802,3 +953,67 @@ $('#model').on('click', (e) => {
     cuddle++;
 
 })
+$('#menu-overlay').on("click", toggleMenu);
+$('#item1').on("click", (e) => {
+    e.stopPropagation();
+    //window.location.href="/Minigames/feeding.html";    
+});
+$('#item2').on("click", (e) => {
+    e.stopPropagation();
+    console.log("bathing")
+});
+$('#item3').on("click", (e) => {
+    e.stopPropagation();
+    console.log("bathing")
+});
+$('#item4').on("click", (e) => {
+    e.stopPropagation();
+    console.log("bathing")
+});
+$('#item5').on("click", (e) => {
+    e.stopPropagation();
+    console.log("bathing")
+});
+$('#itemHelp').on("click", (e) => {
+    e.stopPropagation();
+    console.log("Show modal");    
+});
+
+function toggleMenu() {
+    var overlay = document.getElementById('menu-overlay');
+
+    overlay.style.opacity = (overlay.style.opacity === "1") ? "0" : "1";
+    overlay.style.pointerEvents = (overlay.style.pointerEvents === "visible") ? "none" : "visible";
+    overlay.classList.toggle('menu-open');
+}
+
+function feeding() {
+    console.log("hola");
+    let coin = -200;
+    if(userProfile.coin < 200) {
+        alert("Not enough coin")
+    } else {
+        console.log("Enough money");
+        return new Promise ((resolve, reject) => {
+            $.ajax({
+                url: "/updateCoin",
+                method: "POST",  
+                data: {
+                    coin: coin,
+                },
+                cache: false,
+                success: function(data){
+                    // alert(data);
+                    resolve();
+                },
+                error: function(errMsg) {
+                    alert(JSON.stringify(errMsg));
+                }
+            });
+        }).then(()=>{
+            console.log("redirecting")
+            window.location.href="./Minigames/feeding.html";
+        })
+        
+    }
+}
