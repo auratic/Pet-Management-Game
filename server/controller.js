@@ -404,31 +404,33 @@ module.exports = app => {
                             SET coin = ${newCoin}
                             WHERE user_id = ${req.session.user.id}`;
 
-        let updateDB = new Promise ((res, rej) => {
+        return new Promise ((resolve, reject) => {
             con.query(updateCoin, function (err, result, fields) {
                 //console.log(result); 
-                if (err) rej(err);
-                else res(console.log('DB update coin successfully'))
+                if (err) reject(err);
+                else resolve(console.log('DB update coin successfully'))
             })
         })
         .then(()=> {
-            req.session.save((err) => {
-            if (err) {
-                res.status(500).send('Error updating session');
-            } else {
-                console.log('Session update coin successfully')
-                return
-            }
+            return new Promise ((resolve, reject) => {
+                req.session.save((err) => {
+                    if (err) {
+                        res.status(500).send('Error updating session');
+                    } else {
+                        resolve(console.log('Session update coin successfully'));
+                    }
+                });
             });
+            
         })
-        .then(()=> {
-            console.log(newCoin)      
-            return(newCoin); 
-        })
+        // .then(()=> {
+        //     console.log(newCoin)      
+        //     return(newCoin); 
+        // })
         .catch((err)=> {
             throw(err);
         });
-        return(updateDB);        
+        // return(updateDB);        
     }
 
     app.post('/updateCoin', (req, res) => {
@@ -439,11 +441,12 @@ module.exports = app => {
         
         if (req.session.user) {
             
-            return new Promise ((res, rej) => {
+            return new Promise ((resolve, reject) => {
                 updateCoin(req, coin)
+                resolve();
             })
             .then(() => {
-                res.send();
+                res.send("Success update coin");
             })
 
         } else {
