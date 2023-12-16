@@ -293,6 +293,7 @@ function getPet() {
             ) {
 
                 console.log("Cannot get pet");
+                $("#petStatus").append(`<span>Log in to interact with your pet<span>`);
 
             } else {
                 // console.log(result);
@@ -301,20 +302,28 @@ function getPet() {
                 $("#change-name").css({"display":"block"});
 
                 $("#pet-status").html(`${result.pet_name}`);
-                new bootstrap.Popover(document.getElementById('pet-status'), {
-                    container: 'body',
-                    html: true,
-                    placement: 'bottom',
-                    title: `${result.pet_name}`,
-                    content: `
-                        <span>Growth: ${result.growth}%</span><br>
-                        <span>Happiness: ${result.happiness}%</span><br>
-                        <span>Clean: ${result.clean}%</span><br>
-                        <span>Hunger: ${result.hunger}%</span><br>
-                        <span>Trim: ${result.nail}%</span><br>
-                        <span>Groom: ${result.hair}%</span>
-                        `
-                  });
+                $("#petStatus").append(`
+                    <span>Growth: ${result.growth}%</span><br>
+                    <span>Happiness: ${result.happiness}%</span><br>
+                    <span>Clean: ${result.clean}%</span><br>
+                    <span>Hunger: ${result.hunger}%</span><br>
+                    <span>Trim: ${result.nail}%</span><br>
+                    <span>Groom: ${result.hair}%</span>
+                `);
+                // new bootstrap.Popover(document.getElementById('pet-status'), {
+                //     container: 'body',
+                //     html: true,
+                //     placement: 'bottom',
+                //     title: `${result.pet_name}`,
+                //     content: `
+                //         <span>Growth: ${result.growth}%</span><br>
+                //         <span>Happiness: ${result.happiness}%</span><br>
+                //         <span>Clean: ${result.clean}%</span><br>
+                //         <span>Hunger: ${result.hunger}%</span><br>
+                //         <span>Trim: ${result.nail}%</span><br>
+                //         <span>Groom: ${result.hair}%</span>
+                //         `
+                //   });
 
             }
         },
@@ -502,7 +511,6 @@ BGM.volume= 0.8;
 BGM.loop= true;
 
 window.onclick = () => {
-
 
     if(!playBGM) {
         BGM.play();
@@ -851,23 +859,79 @@ heartParticle.style.position = 'absolute';
 heartParticle.style.height = '15%';
 heartParticle.style.imageRendering = 'pixelated';
 heartParticle.style.pointerEvents = 'none';
-setInterval(() => {
-    
+
+$("#cuddle").on("click", () => {
+    isCuddle = true;
+    let overlay = document.getElementById('menu-overlay');
+
+    overlay.style.opacity = (overlay.style.opacity === "1") ? "0" : "1";
+    overlay.style.pointerEvents = (overlay.style.pointerEvents === "visible") ? "none" : "visible";
+    overlay.classList.toggle('menu-open');
+    $('.modal').modal('hide');
+
+});
+
+function toggleMenu(e) {
     if(!isCuddle) {
-        $('#textbubble').css({
-            'display': `flex`
-        });
-        
-        setTimeout(() => {
-
-            $('#textbubble').css({
-                'display': `none`
-            });
+        let overlay = document.getElementById('menu-overlay');
     
-        },4000);
+        overlay.style.opacity = (overlay.style.opacity === "1") ? "0" : "1";
+        overlay.style.pointerEvents = (overlay.style.pointerEvents === "visible") ? "none" : "visible";
+        overlay.classList.toggle('menu-open');
+    } else {
+        
+        var mouseX = e.pageX;
+        var mouseY = e.pageY;
+        // isCuddle = true;
+    
+        clearTimeout(isCuddling);
+    
+        heartParticle.style.display = 'block';
+        heartParticle.style.top = e.pageY - (heartParticle.clientHeight / 2);
+        heartParticle.style.left = e.pageX - (heartParticle.clientWidth / 2);
+        document.getElementById('game-container').appendChild(heartParticle);
+        
+        isCuddling = setTimeout(() => {
+            $('#heart-particle').css({'display':'none'});
+            isCuddle = false;
+        },1000);
+        
+        // $('#textbubble').css({
+        //     'display': `none`
+        // });
+    
+        console.log(cuddle);
+        if(cuddle > 20) {
+            isCuddle = false;
+            cuddle = 0;
+            userProfile.coin += 10;
+            $('#coin').html(userProfile.coin);
+            $('#heart').css({'display':'block'});
+            setTimeout(() => {
+                $('#heart').css({'display':'none'});
+            }, 3000);
+        }
+        cuddle++;
+        
     }
+}
+// setInterval(() => {
+    
+//     if(!isCuddle) {
+//         $('#textbubble').css({
+//             'display': `flex`
+//         });
+        
+//         setTimeout(() => {
 
-}, 10000);
+//             $('#textbubble').css({
+//                 'display': `none`
+//             });
+    
+//         },4000);
+//     }
+
+// }, 10000);
 
 // $('#game-container').on('mousemove', (e) =>{
 //     var mouseX = e.pageX;
@@ -913,45 +977,13 @@ setInterval(() => {
 //     })
 // })
 $('#model-head').on('click', (e) => {
-    toggleMenu();
+    toggleMenu(e);
 });
 $('#model-torso').on('click', (e) => {
-    toggleMenu();
+    toggleMenu(e);
 });
 $('#model').on('click', (e) => {
-    toggleMenu();
-    var mouseX = e.pageX;
-    var mouseY = e.pageY;
-    isCuddle = true;
-
-    clearTimeout(isCuddling);
-
-    heartParticle.style.display = 'block';
-    heartParticle.style.top = e.pageY - (heartParticle.clientHeight / 2);
-    heartParticle.style.left = e.pageX - (heartParticle.clientWidth / 2);
-    document.getElementById('game-container').appendChild(heartParticle);
-    
-    isCuddling = setTimeout(() => {
-        $('#heart-particle').css({'display':'none'});
-        isCuddle = false;
-    },1000);
-    
-    $('#textbubble').css({
-        'display': `none`
-    });
-
-    console.log(cuddle);
-    if(cuddle > 20) {
-        cuddle = 0;
-        userProfile.coin += 10;
-        $('#coin').html(userProfile.coin);
-        $('#heart').css({'display':'block'});
-        setTimeout(() => {
-            $('#heart').css({'display':'none'});
-        }, 3000);
-    }
-    cuddle++;
-
+    toggleMenu(e);
 })
 $('#menu-overlay').on("click", toggleMenu);
 $('#item1').on("click", (e) => {
@@ -979,13 +1011,6 @@ $('#itemHelp').on("click", (e) => {
     console.log("Show modal");    
 });
 
-function toggleMenu() {
-    var overlay = document.getElementById('menu-overlay');
-
-    overlay.style.opacity = (overlay.style.opacity === "1") ? "0" : "1";
-    overlay.style.pointerEvents = (overlay.style.pointerEvents === "visible") ? "none" : "visible";
-    overlay.classList.toggle('menu-open');
-}
 
 function feeding() {
     console.log("hola");

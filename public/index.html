@@ -56,8 +56,11 @@
                         <a id="pet-title" class="btn btn-lg" style="font-size:1em;">
                             Kitty
                         </a>
-                        <a id="pet-status" tabindex="0" class="btn btn-lg" role="button" data-bs-toggle="popover" data-bs-trigger="focus"
+                        <!-- <a id="pet-status" tabindex="0" class="btn btn-lg" role="button" data-bs-toggle="popover" data-bs-trigger="focus"
                             style="font-size:1em; display:none">
+                                Kitty Kitty
+                        </a> -->
+                        <a id="pet-status" tabindex="0" class="btn btn-lg" role="button" style="font-size:1em; display:none">
                                 Kitty Kitty
                         </a>
                         <a id="change-name" style="font-size:0.5em; display:none" class="btn btn-small"data-bs-toggle="tooltip" data-bs-title="Click to edit name" onclick="changeName()">
@@ -142,14 +145,18 @@
                 </script>
                 <div id="menu-overlay">
                     <!-- <div class="menu-item" id="itemHelp" >Help</div> -->
-                    <button id="item0" type="button" class="btn btn-info p-5 rounded-circle btn-lg menu-item">Growth</button>
-                    <button id="item1" type="button" class="btn btn-info p-5 rounded-circle btn-lg menu-item"
+                    <button id="item0" type="button" class="btn btn-info rounded-circle btn-lg menu-item"
+                        data-bs-target="#petStatusModal" data-bs-toggle="modal">Help</button>
+                    <button id="item1" type="button" class="btn btn-info rounded-circle btn-lg menu-item"
                         data-bs-target="#feedingModal" data-bs-toggle="modal">Feed</button>
-                    <button id="item2" type="button" class="btn btn-info p-5 rounded-circle btn-lg menu-item"
+                    <button id="item2" type="button" class="btn btn-info rounded-circle btn-lg menu-item"
                         data-bs-target="#bathingModal" data-bs-toggle="modal">Bath</button>
-                    <button id="item3" type="button" class="btn btn-info p-5 rounded-circle btn-lg menu-item">Cuddle</button>
-                    <button id="item4" type="button" class="btn btn-info p-5 rounded-circle btn-lg menu-item">Trim</button>
-                    <button id="item5" type="button" class="btn btn-info p-5 rounded-circle btn-lg menu-item">Play</button>
+                    <button id="item3" type="button" class="btn btn-info rounded-circle btn-lg menu-item"
+                        data-bs-target="#cuddleModal" data-bs-toggle="modal">Cuddle</button>
+                    <button id="item4" type="button" class="btn btn-info rounded-circle btn-lg menu-item"
+                        data-bs-target="#trimModal" data-bs-toggle="modal">Trim</button>
+                    <button id="item5" type="button" class="btn btn-info rounded-circle btn-lg menu-item"
+                        data-bs-target="#minigame-container" data-bs-toggle="modal">Play</button>
                     <!-- <div class="menu-item" id="item0">Growth</div>
                     <div class="menu-item" id="item1" data-bs-target="#feedingModal" data-bs-toggle="modal">Feed</div>
                     <div class="menu-item" id="item2">Bath</div>
@@ -161,24 +168,24 @@
             <nav id="footer-container" class="navbar">
             <!--<div id="footer-container" class="row" style="margin:0">-->
                 <div class="col-2 text-center" id="inv-button">
-                    <button class="button-list btn" data-bs-target="#inv-container" data-bs-toggle="modal"><!--Inventory--></button>
+                    <button class="button-list btn" data-bs-target="#inv-container" data-bs-toggle="modal">Bag<!--Inventory--></button>
                     <!-- <a data-bs-toggle="tooltip" data-bs-title="Inventory">
                     </a> -->
                 </div>
                 <div class="col-2 text-center" id="shop-button">
-                    <button class="button-shop btn" data-bs-target="#shop-container" data-bs-toggle="modal"><!--Shop--></button>
+                    <button class="button-shop btn" data-bs-target="#shop-container" data-bs-toggle="modal">Shop<!--Shop--></button>
                     <!-- <a data-bs-toggle="tooltip" data-bs-title="Shop">
                     </a> -->
                 </div>
                 
                 <div class="col-4"></div>
                 <div class="col-2 text-center" id="help-button" onclick="tutorial()">
-                    <button class="button-help btn" data-bs-target="#tutorialModal" data-bs-toggle="modal" ><!--Help--></button>
+                    <button class="button-help btn" data-bs-target="#tutorialModal" data-bs-toggle="modal" >Help<!--Help--></button>
                     <!-- <a data-bs-toggle="tooltip" data-bs-title="Help">
                     </a> -->
                 </div>
                 <div class="col-2 text-center tutorial"  id="minigame-open">
-                    <button class="button-game btn" data-bs-target="#minigame-container" data-bs-toggle="modal"><!--Play--></button>
+                    <button class="button-game btn" data-bs-target="#minigame-container" data-bs-toggle="modal">Play<!--Play--></button>
                     <span class="tooltiptext">Tooltip text</span>
                     <!-- <a data-bs-toggle="tooltip" data-bs-title="Minigames">
                     </a> -->
@@ -483,91 +490,74 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                  <button type="button" class="btn btn-primary" onclick="feeding();">Bath</button>
+                  <button type="button" class="btn btn-primary" onclick="feeding();">Bath !</button>
                 </div>
               </div>
             </div>
         </div>
-        <div id="feedingModal" class="modal fade" tabindex="-1" aria-labelledby="feedingModalLabel" aria-hidden="true">
+        <div id="cuddleModal" class="modal fade" tabindex="-1" aria-labelledby="cuddleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h1 class="modal-title fs-5" id="feedingModalLabel">Feeding</h1>
+                  <h1 class="modal-title fs-5" id="cuddleModalLabel">Cuddle</h1>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <span id="hungerStatus">Mimi's current hunger is 0%</span><br>
-                    <span>Hunger meter -------------------</span><br>
+                    <span id="hungerStatus">Mimi's current happiness 0%</span><br>
+                    <span>Spam click your pet ! </span><br>
                     <hr>
                     <div class="effectStatus" style="border: solid green 5px; padding:5px">
                         <span>
                         Effect:<br>
-                          Hunger +100% <br>
-                          Happiness +50% <br>
-                          Happiness above 50%, Growth +15% <br>
-                          Happiness above 80%, Growth +20%
+                          Happiness +10% <br>
+                          Coin +10 ! <br>
                         </span>
                     </div>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                  <button type="button" class="btn btn-primary" onclick="feeding();">Feed (-200 coin)</button>
+                  <button type="button" class="btn btn-primary" id="cuddle">Cuddle !</button>
                 </div>
               </div>
             </div>
         </div>
-        <div id="feedingModal" class="modal fade" tabindex="-1" aria-labelledby="feedingModalLabel" aria-hidden="true">
+        <div id="trimModal" class="modal fade" tabindex="-1" aria-labelledby="trimModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h1 class="modal-title fs-5" id="feedingModalLabel">Feeding</h1>
+                  <h1 class="modal-title" id="trimModalLabel">Trimming</h1>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <span id="hungerStatus">Mimi's current hunger is 0%</span><br>
+                    <span id="trimStatus">Mimi's current nail is <span style="color: green">0%</span></span><br>
                     <span>Hunger meter -------------------</span><br>
                     <hr>
                     <div class="effectStatus" style="border: solid green 5px; padding:5px">
                         <span>
                         Effect:<br>
-                          Hunger +100% <br>
+                          Nail +100% <br>
                           Happiness +50% <br>
-                          Happiness above 50%, Growth +15% <br>
-                          Happiness above 80%, Growth +20%
                         </span>
                     </div>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                  <button type="button" class="btn btn-primary" onclick="feeding();">Feed (-200 coin)</button>
+                  <button type="button" class="btn btn-primary" onclick="trimming();">Trim !</button>
                 </div>
               </div>
             </div>
         </div>
-        <div id="feedingModal" class="modal fade" tabindex="-1" aria-labelledby="feedingModalLabel" aria-hidden="true">
+        <div id="petStatusModal" class="modal fade modal-xl" tabindex="-1" aria-labelledby="petStatusModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h1 class="modal-title fs-5" id="feedingModalLabel">Feeding</h1>
+                  <h1 class="modal-title" id="petStatusModalLabel">Help</h1>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <span id="hungerStatus">Mimi's current hunger is 0%</span><br>
-                    <span>Hunger meter -------------------</span><br>
-                    <hr>
-                    <div class="effectStatus" style="border: solid green 5px; padding:5px">
-                        <span>
-                        Effect:<br>
-                          Hunger +100% <br>
-                          Happiness +50% <br>
-                          Happiness above 50%, Growth +15% <br>
-                          Happiness above 80%, Growth +20%
-                        </span>
-                    </div>
+                <div id="petStatus" class="modal-body">
+                    <!--pet status -->
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                  <button type="button" class="btn btn-primary" onclick="feeding();">Feed (-200 coin)</button>
                 </div>
               </div>
             </div>

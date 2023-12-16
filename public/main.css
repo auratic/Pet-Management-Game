@@ -171,14 +171,16 @@ html, body {
     background-size: contain;
     background-position: center;
     height:100%;
-    width:100%
+    width:100%;
+    color:#450000b5;
 }
 .button-shop {
     background: url("Assets/Images/UI/png/shop_red.png") no-repeat;
     background-size: contain;
     background-position: center;
     height:100%;
-    width:100%
+    width:100%;
+    color:#450000b5;
 }
 
 .button-list {
@@ -186,7 +188,8 @@ html, body {
     background-size: contain;
     background-position: center;
     height:100%;
-    width:100%
+    width:100%;
+    color:#450000b5;
 }
 
 .button-setting {
@@ -211,7 +214,8 @@ html, body {
     background-size: contain;
     background-position: center;
     height:100%;
-    width:100%
+    width:100%;
+    color:#450000b5;
 }
 
 
@@ -297,56 +301,101 @@ html, body {
 .modal-xl {
     --bs-modal-width: 1440px;
 }
-@media only screen and (max-width: 1920px)  {
-    .menu-open #item1 { transform: translate(-240px, -120px) rotate(45deg); }
-    .menu-open #item2 { transform: translate(-130px, -200px) rotate(45deg); }
-    .menu-open #item3 { transform: translate(0px, -230px) rotate(45deg); }
-    .menu-open #item4 { transform: translate(150px, -200px) rotate(45deg); }
+
+
+/* Styles for screens with a width or height of 1024 pixels or more */
+
+
+@media only screen and (min-width: 1024px)  {
+    .menu-open #item1 { transform: translate(-240px, -120px) rotate(-45deg); }
+    .menu-open #item2 { transform: translate(-130px, -200px) rotate(-20deg); }
+    .menu-open #item3 { transform: translate(0px, -230px) rotate(0); }
+    .menu-open #item4 { transform: translate(150px, -200px) rotate(20deg); }
     .menu-open #item5 { transform: translate(270px, -120px) rotate(45deg); }
+    .button-game, .button-list, .button-help, .button-shop  { font-size: 1em }
 }
+@media only screen and (min-height: 1024px)  {
+    .menu-open #item1 { transform: translate(-240px, -120px) rotate(-45deg); }
+    .menu-open #item2 { transform: translate(-130px, -200px) rotate(-20deg); }
+    .menu-open #item3 { transform: translate(0px, -230px) rotate(0); }
+    .menu-open #item4 { transform: translate(150px, -200px) rotate(20deg); }
+    .menu-open #item5 { transform: translate(270px, -120px) rotate(45deg); }
+    .button-game, .button-list, .button-help, .button-shop  { font-size: 1em }
+}
+
+
+/* Styles for screens with a width or height of 1280 pixels or more */
+
+
+@media only screen and (min-width: 1280px)  {
+    .menu-open #item1 { transform: translate(-240px, -120px) rotate(-45deg); }
+    .menu-open #item2 { transform: translate(-130px, -200px) rotate(-20deg); }
+    .menu-open #item3 { transform: translate(0px, -230px) rotate(0); }
+    .menu-open #item4 { transform: translate(150px, -200px) rotate(20deg); }
+    .menu-open #item5 { transform: translate(270px, -120px) rotate(45deg); }
+    .button-game, .button-list, .button-help, .button-shop  { font-size: 2em }
+}
+@media only screen and (min-height: 1280px)  {
+    .menu-open #item1 { transform: translate(-240px, -120px) rotate(-45deg); }
+    .menu-open #item2 { transform: translate(-130px, -200px) rotate(-20deg); }
+    .menu-open #item3 { transform: translate(0px, -230px) rotate(0); }
+    .menu-open #item4 { transform: translate(150px, -200px) rotate(20deg); }
+    .menu-open #item5 { transform: translate(270px, -120px) rotate(45deg); }
+    .button-game, .button-list, .button-help, .button-shop  { font-size: 2em }
+}
+
 
 /* Styles for screens with a width or height of 1920 pixels or more */
+
+
 @media only screen and (min-width: 1920px)  {
-    .menu-open #item1 { transform: translate(-240px, -120px) rotate(45deg); }
-    .menu-open #item2 { transform: translate(-130px, -200px) rotate(45deg); }
-    .menu-open #item3 { transform: translate(0px, -230px) rotate(45deg); }
-    .menu-open #item4 { transform: translate(150px, -200px) rotate(45deg); }
+    .menu-open #item1 { transform: translate(-240px, -120px) rotate(-45deg); }
+    .menu-open #item2 { transform: translate(-130px, -200px) rotate(-20deg); }
+    .menu-open #item3 { transform: translate(0px, -230px) rotate(0); }
+    .menu-open #item4 { transform: translate(150px, -200px) rotate(20deg); }
     .menu-open #item5 { transform: translate(270px, -120px) rotate(45deg); }
     .modal-body input { font-size: 1em; }
     .modal-footer button { font-size: 3em; }
     .modal-footer span { font-size: 3em; }
+    .button-game, .button-list, .button-help, .button-shop  { font-size: 2.5em }
 }
 @media only screen and (min-height: 1920px)  {
-    .menu-open #item1 { transform: translate(-240px, -120px) rotate(45deg); }
-    .menu-open #item2 { transform: translate(-130px, -200px) rotate(45deg); }
-    .menu-open #item3 { transform: translate(0px, -230px) rotate(45deg); }
-    .menu-open #item4 { transform: translate(150px, -200px) rotate(45deg); }
+    .menu-open #item1 { transform: translate(-240px, -120px) rotate(-45deg); }
+    .menu-open #item2 { transform: translate(-130px, -200px) rotate(-20deg); }
+    .menu-open #item3 { transform: translate(0px, -230px) rotate(0); }
+    .menu-open #item4 { transform: translate(150px, -200px) rotate(20deg); }
     .menu-open #item5 { transform: translate(270px, -120px) rotate(45deg); }
     .modal-body input { font-size: 1em; }
     .modal-footer button { font-size: 3em; }
     .modal-footer span { font-size: 3em; }
+    .button-game, .button-list, .button-help, .button-shop  { font-size: 3em }
 }
 
+
 /* Styles for screens with a width or height of 2560 pixels or more */
+
+
 @media only screen and (min-width: 2560px)  {
-    .menu-open #item1 { transform: translate(-8em, -3em) rotate(45deg); }
-    .menu-open #item2 { transform: translate(-4.5em, -7em) rotate(45deg); }
-    .menu-open #item3 { transform: translate(0, -9em) rotate(45deg); }
-    .menu-open #item4 { transform: translate(4.5em, -7em) rotate(45deg); }
+    .menu-open #item1 { transform: translate(-8em, -3em) rotate(-45deg); }
+    .menu-open #item2 { transform: translate(-4.5em, -7em) rotate(-20deg); }
+    .menu-open #item3 { transform: translate(0, -9em) rotate(0); }
+    .menu-open #item4 { transform: translate(4.5em, -7em) rotate(20deg); }
     .menu-open #item5 { transform: translate(8em, -3em) rotate(45deg); }
     .modal-body button { font-size: 4em; }
     .modal-body input { font-size: 1em; }
     .modal-footer button { font-size: 4em; }
     .modal-footer span { font-size: 4em; }
+    .button-game, .button-list, .button-help, .button-shop  { font-size: 4em }
 }
 @media only screen and (min-height: 2560px)  {
-    .menu-open #item1 { transform: translate(-8em, -3em) rotate(45deg); }
-    .menu-open #item2 { transform: translate(-4.5em, -7em) rotate(45deg); }
-    .menu-open #item3 { transform: translate(0, -9em) rotate(45deg); }
-    .menu-open #item4 { transform: translate(4.5em, -7em) rotate(45deg); }
+    .menu-open #item1 { transform: translate(-8em, -3em) rotate(-45deg); }
+    .menu-open #item2 { transform: translate(-4.5em, -7em) rotate(-20deg); }
+    .menu-open #item3 { transform: translate(0, -9em) rotate(0); }
+    .menu-open #item4 { transform: translate(4.5em, -7em) rotate(20deg); }
     .menu-open #item5 { transform: translate(8em, -3em) rotate(45deg); }
     .modal-body button { font-size: 4em; }
     .modal-body input { font-size: 1em; }
     .modal-footer button { font-size: 4em; }
     .modal-footer span { font-size: 4em; }
+    .button-game, .button-list, .button-help, .button-shop  { font-size: 5em }
 }
