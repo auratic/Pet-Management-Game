@@ -92,11 +92,6 @@ function screenDetect () {
         $("h2").css({"font-size": "2em"});
         $(".menu-item").css({ "font-size": "3em", "width": "5em", "height": "5em"});
         $(".modal-body").css({ "font-size": "4.5em"});
-        // $(".menu-open #item1").css({ "transform": "translate(-8em, -3em) rotate(45deg)" });
-        // $(".menu-open #item2").css({ "transform": "translate(-4.5em, -7em) rotate(45deg)" });
-        // $(".menu-open #item3").css({ "transform": "translate(0, -9em) rotate(45deg)" });
-        // $(".menu-open #item4").css({ "transform": "translate(4.5em, -7em) rotate(45deg)" });
-        // $(".menu-open #item5").css({ "transform": "translate(8em, -3em) rotate(45deg)" });
     } else if(	window.screen.height >= 1920 || window.screen.width >= 1920 ) {
         $("a").css({"font-size": "1em"})
         $("h1").css({"font-size": "2em"})
@@ -107,14 +102,21 @@ function screenDetect () {
         $("a").css({"font-size": "1em"})
         $("h1").css({"font-size": "2em"})
         $("h2").css({"font-size": "1em"})
+        $(".menu-item").css({ "font-size": "2em", "width": "4em", "height": "4em"});
+        $(".modal-body").css({ "font-size": "2em"});
     } else if(	window.screen.height >= 1024 || window.screen.width >= 1024 ) {
         $("a").css({"font-size": "1em"})
         $("h1").css({"font-size": "2em"})
-        $("h2").css({"font-size": "1em"})
+        $("h2").css({"font-size": "1em"})        
+        $(".menu-item").css({ "font-size": "2.5em", "width": "3em", "height": "3em"});
     } else {
-        $("a").css({"font-size": "2em"})
-        $("h1").css({"font-size": "2em"})
-        $("h2").css({"font-size": "2em"})
+        $("a").css({"font-size": "2em"});
+        $("h1").css({"font-size": "2em"});
+        $("h2").css({"font-size": "2em"});  
+        // (window.innerHeight > window.innerWidth) ? $("a").css({"font-size": "2em"}) : $("a").css({"font-size": "1em"});
+        // (window.innerHeight > window.innerWidth) ? $(".menu-item").css({"left": "40%"}) : $(".menu-item").css({"left": "45%"});
+        $(".menu-item").css({ "font-size": "1.8em", "width": "3em", "height": "3em"});
+        $(".modal-body").css({ "font-size": "2em"});
     }
 
     if (window.innerHeight > window.innerWidth) {
@@ -151,7 +153,7 @@ function screenDetect () {
 }
 
 function changeName() {
-    $("#pet-status").css({"display":"none"});
+    $("#pet-name").css({"display":"none"});
     $("#change-name").css({"display":"none"});
     $("#new-name").css({"display":"block"});
     $("#confirm-name").css({"display":"block"});
@@ -220,6 +222,7 @@ function getProfile() {
                 $('#loginNav').css({'display': 'none'});
                 $('#logoutNav').css({'display': 'block'});
                 $('#coin').html(`${result.coin}`);
+                $("#petInstruction").css({ "display": "none"});
                 
                 userProfile = {
                     user_id: result.id,
@@ -293,23 +296,117 @@ function getPet() {
             ) {
 
                 console.log("Cannot get pet");
-                $("#petStatus").append(`<span>Log in to interact with your pet<span>`);
+                $("#petStatus").empty();
+                $("#petStatus").append(`
+                    <span><span style="color:green">Log in</span> to interact with your pet !<span><br>
+                    <hr >
+                    <span>Click the button at top right of your screen<span>`);
+
+                    $('.menu-item:not(#item0, #item5)').prop('disabled', true);
+                    $('.menu-item:not(#item0, #item5)').css({ "background": `url("Assets/Images/UI/png/lock_gray.png") no-repeat` });
+
 
             } else {
                 // console.log(result);
                 $("#pet-title").css({"display":"none"});
-                $("#pet-status").css({"display":"block"});
+                $("#pet-name").css({"display":"block"});
                 $("#change-name").css({"display":"block"});
 
-                $("#pet-status").html(`${result.pet_name}`);
+                $(".pet-name").html(`${result.pet_name}`);
+                $('.menu-item').prop('disabled', false);
+                $('.menu-item').css({ "background": `url("Assets/Images/UI/png/empty_red.png") no-repeat` });
+                $("#petStatus").empty();
+                // $("#petStatus").append(`
+                //     <span>Growth: ${result.growth}%</span><br>
+                //     <span>Happiness: ${result.happiness}%</span><br>
+                //     <span>Clean: ${result.clean}%</span><br>
+                //     <span>Hunger: ${result.hunger}%</span><br>
+                //     <span>Trim: ${result.nail}%</span><br>
+                //     <span>Groom: ${result.hair}%</span>
+                // `);
                 $("#petStatus").append(`
-                    <span>Growth: ${result.growth}%</span><br>
-                    <span>Happiness: ${result.happiness}%</span><br>
-                    <span>Clean: ${result.clean}%</span><br>
-                    <span>Hunger: ${result.hunger}%</span><br>
-                    <span>Trim: ${result.nail}%</span><br>
-                    <span>Groom: ${result.hair}%</span>
+                        <div class="accordion" id="accordionExample">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#growthCollapse" aria-expanded="false" aria-controls="growthCollapse">
+                                    Growth: ${result.growth}%
+                                </button>
+                            </h2>
+                            <div id="growthCollapse" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <span style="color:green">Feeding</span> increases growth, <br>
+                                    Pet grows faster if <span style="color:green">happiness is high</span>, <br>
+                                    happiness more than 50%, pet grows by 15% every feed, <br>
+                                    happiness more than 80%, pet grows by 20% every feed, <br>
+                                    otherwise pets will just grow by 10% every feed
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#happinessCollapse" aria-expanded="false" aria-controls="happinessCollapse">
+                                    Happiness: ${result.happiness}%
+                                </button>
+                            </h2>
+                            <div id="happinessCollapse" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                <div class="accordion-body"> 
+                                    <span style="color:green">Happiness</span> can affect growth <br>
+                                    Player can increase happiness by bathing, feeding, cuddling, trimming and playing with pet<br>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cleanCollapse" aria-expanded="false" aria-controls="cleanCollapse">
+                                    Cleanliness: ${result.clean}%
+                                </button>
+                            </h2>
+                            <div id="cleanCollapse" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <span style="color:green">Bathing</span> increases cleanliness to 100% <br>
+                                    Also increases happiness by 50%<br>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hungerCollapse" aria-expanded="false" aria-controls="hungerCollapse">
+                                    Hunger: ${result.hunger}%
+                                </button>
+                            </h2>
+                            <div id="hungerCollapse" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <span style="color:green">Feeding</span> increases hunger to 100% <br>
+                                    Also increase happiness by 50% and growth <br>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#nailCollapse" aria-expanded="false" aria-controls="nailCollapse">
+                                    Nail: ${result.nail}%
+                                </button>
+                            </h2>
+                            <div id="nailCollapse" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    Nail is long ! <br>
+                                    <span style="color:green">Trimming</span> increases nail to 100% <br>
+                                    Also increase happiness by 50% <br>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+
                 `);
+                $("#petStatus").children().css({ "color": "gray" });
+                $("#hungerStatus :eq(1)").html(`${result.hunger}%`);
+                $("#cleanStatus :eq(1)").html(`${result.clean}%`);
+                $("#cuddleStatus :eq(1)").html(`${result.happiness}%`);
+                $("#trimStatus :eq(1)").html(`${result.nail}%`);
                 // new bootstrap.Popover(document.getElementById('pet-status'), {
                 //     container: 'body',
                 //     html: true,
@@ -520,13 +617,6 @@ window.onclick = () => {
 
     
 window.onresize = screenDetect;
-
-document.getElementById("model").onclick = () => {
-    //pet audio
-    //display gif
-    console.log("hi");
-}
-
 
 /*
  *
@@ -872,6 +962,7 @@ $("#cuddle").on("click", () => {
 });
 
 function toggleMenu(e) {
+    $("#petInstruction").css({ "display": "none"});
     if(!isCuddle) {
         let overlay = document.getElementById('menu-overlay');
     
@@ -1015,7 +1106,9 @@ $('#itemHelp').on("click", (e) => {
 function feeding() {
     console.log("hola");
     let coin = -200;
-    if(userProfile.coin < 200) {
+    if (userProfile.coin.user_id == null) {
+        alert("Not logged in")
+    } else if (userProfile.coin < 200) {
         alert("Not enough coin")
     } else {
         console.log("Enough money");

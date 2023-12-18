@@ -60,9 +60,9 @@
                             style="font-size:1em; display:none">
                                 Kitty Kitty
                         </a> -->
-                        <a id="pet-status" tabindex="0" class="btn btn-lg" role="button" style="font-size:1em; display:none">
+                        <span class="pet-name" id="pet-name" style="font-size:1em; display:none">
                                 Kitty Kitty
-                        </a>
+                        </span>
                         <a id="change-name" style="font-size:0.5em; display:none" class="btn btn-small"data-bs-toggle="tooltip" data-bs-title="Click to edit name" onclick="changeName()">
                             &#9000;
                         </a>
@@ -123,7 +123,7 @@
                         cuddle me! <br> (spam click me)
                     </span>
                 </div>
-                
+                <span id="petInstruction">Click me !</span>
                 <img id="heart" src="Assets/Images/bubble(heart).png" style="image-rendering: pixelated; position:absolute; display:none">
                 <img id="model" src="Assets/Images/Models/cat-idle.gif" style="image-rendering: pixelated;" >
                 <img id="model-head"  style="image-rendering: pixelated; position:absolute"> 
@@ -186,7 +186,7 @@
                 </div>
                 <div class="col-2 text-center tutorial"  id="minigame-open">
                     <button class="button-game btn" data-bs-target="#minigame-container" data-bs-toggle="modal">Play<!--Play--></button>
-                    <span class="tooltiptext">Tooltip text</span>
+                    <!-- <span class="tooltiptext">Tooltip text</span> -->
                     <!-- <a data-bs-toggle="tooltip" data-bs-title="Minigames">
                     </a> -->
                 </div>
@@ -349,7 +349,7 @@
             </div>
         </div>
 
-        <div id="loginModal" class="modal fade modal-xl" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+        <div id="loginModal" class="modal fade modal-l" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -363,7 +363,7 @@
                             <div class="mb-3">
                               <label for="exampleInputEmail1" class="form-label">Email address</label>
                               <input type="email" class="form-control" aria-describedby="emailHelp" name="email" >
-                              <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                              <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
                             </div>
                             <div class="mb-3">
                               <label for="exampleInputPassword1" class="form-label">Password</label>
@@ -385,7 +385,7 @@
             </div>
         </div>
           
-        <div id="registerModal" class="modal fade modal-xl" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+        <div id="registerModal" class="modal fade modal-l" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -442,19 +442,19 @@
 
 
         <div id="feedingModal" class="modal fade modal-xl" tabindex="-1" aria-labelledby="feedingModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
               <div class="modal-content">
                 <div class="modal-header">
                   <h1 class="modal-title" id="feedingModalLabel">Feeding</h1>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <span id="hungerStatus">Mimi's current hunger is 0%</span><br>
+                    <span id="hungerStatus"><span class="pet-name">Mimi</span>'s current hunger is <span style="color: green">0</span></span><br>
                     <span>Hunger meter -------------------</span><br>
                     <hr>
                     <div class="effectStatus" >
                         <span>
-                        Effect:<br>
+                        After feeding:<br>
                           Hunger +100% <br>
                           Happiness +50% <br>
                           Happiness above 50%, Growth +15% <br>
@@ -469,20 +469,20 @@
               </div>
             </div>
         </div>
-        <div id="bathingModal" class="modal fade" tabindex="-1" aria-labelledby="bathingModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+        <div id="bathingModal" class="modal fade modal-xl" tabindex="-1" aria-labelledby="bathingModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
               <div class="modal-content">
                 <div class="modal-header">
                   <h1 class="modal-title" id="bathingModalLabel">Bathing</h1>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <span id="cleanStatus">Mimi's current clean is 0%</span><br>
+                    <span id="cleanStatus"><span class="pet-name">Mimi</span>'s current clean is <span style="color: green">0%</span></span><br>
                     <span>Clean meter -------------------</span><br>
                     <hr>
                     <div class="effectStatus" >
                         <span>
-                        Effect:<br>
+                        After bathing:<br>
                           Clean +100% <br>
                           Happiness +50% <br>
                         </span>
@@ -495,20 +495,20 @@
               </div>
             </div>
         </div>
-        <div id="cuddleModal" class="modal fade" tabindex="-1" aria-labelledby="cuddleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+        <div id="cuddleModal" class="modal fade modal-xl" tabindex="-1" aria-labelledby="cuddleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h1 class="modal-title fs-5" id="cuddleModalLabel">Cuddle</h1>
+                  <h1 class="modal-title" id="cuddleModalLabel">Cuddle</h1>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <span id="hungerStatus">Mimi's current happiness 0%</span><br>
+                    <span id="cuddleStatus"><span class="pet-name">Mimi</span>'s current happiness <span style="color: green">0%</span></span><br>
                     <span>Spam click your pet ! </span><br>
                     <hr>
                     <div class="effectStatus" style="border: solid green 5px; padding:5px">
                         <span>
-                        Effect:<br>
+                        After cuddling:<br>
                           Happiness +10% <br>
                           Coin +10 ! <br>
                         </span>
@@ -521,20 +521,20 @@
               </div>
             </div>
         </div>
-        <div id="trimModal" class="modal fade" tabindex="-1" aria-labelledby="trimModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+        <div id="trimModal" class="modal fade modal-xl" tabindex="-1" aria-labelledby="trimModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
               <div class="modal-content">
                 <div class="modal-header">
                   <h1 class="modal-title" id="trimModalLabel">Trimming</h1>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <span id="trimStatus">Mimi's current nail is <span style="color: green">0%</span></span><br>
+                    <span id="trimStatus"><span class="pet-name">Mimi</span>'s current nail is <span style="color: green">0%</span></span><br>
                     <span>Hunger meter -------------------</span><br>
                     <hr>
                     <div class="effectStatus" style="border: solid green 5px; padding:5px">
                         <span>
-                        Effect:<br>
+                        After trimming:<br>
                           Nail +100% <br>
                           Happiness +50% <br>
                         </span>
@@ -548,7 +548,7 @@
             </div>
         </div>
         <div id="petStatusModal" class="modal fade modal-xl" tabindex="-1" aria-labelledby="petStatusModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
               <div class="modal-content">
                 <div class="modal-header">
                   <h1 class="modal-title" id="petStatusModalLabel">Help</h1>
@@ -557,8 +557,7 @@
                 <div id="petStatus" class="modal-body">
                     <!--pet status -->
                 </div>
-                <div class="modal-footer">
-                </div>
+                
               </div>
             </div>
         </div>
