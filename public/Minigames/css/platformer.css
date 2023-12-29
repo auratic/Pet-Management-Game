@@ -46,3 +46,7 @@
     filter: brightness(80%) hue-rotate(300deg) blur(6px);;
     position: absolute;
 }
+
+.tutorialImage {
+  max-height:3em
+}
