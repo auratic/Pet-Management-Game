@@ -45,12 +45,18 @@
             style="height:20%; 
                 display: flex;
                 justify-content: center;
-                align-items: center;">
+                align-items: center;
+                flex-direction: column ;">
             <h2>
-                Bathing !
-                Enable your camera and 
-                use your hand to control the soap
+                Bathing ! Drag the soap and rub the cat !
             </h2>
+
+            <h2 id="state">Dirty !</h2>
+            <div class="progress" style="width:50vw;">
+                <div id="hunger" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+                    <!-- <span class="sr-only">0% Complete</span> -->
+                </div>
+            </div>
         </div>
         <div class="container-fluid" 
             id="phaser-container"
@@ -60,7 +66,7 @@
                 align-items: center;
                 height:80%;'
             >
-                <video id="video"></video>
+                <!-- <video id="video"></video> -->
             <!--<div id="phaser-container"></div>-->
         </div>
 
@@ -85,7 +91,6 @@
             </div>
         </div>
 
-        <script type="module" src="./bathing.js
-        "></script>
+        <script type="module" src="./bathing.js"></script>
     </body>
 </html>

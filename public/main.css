@@ -166,6 +166,14 @@ html, body {
     text-align: center;
 }
 
+.button-user {
+    background: url("Assets/Images/UI/png/user_red.png") no-repeat;
+    background-size: contain;
+    background-position: center;
+    height:100%;
+    width:100%;
+    color:#450000b5;
+}
 .button-help {
     background: url("Assets/Images/UI/png/help_red.png") no-repeat;
     background-size: contain;

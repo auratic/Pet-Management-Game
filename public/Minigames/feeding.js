@@ -254,7 +254,7 @@ const config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 500 },
-            debug:true
+            debug: false
         }
     },
     parent: 'phaser-container'
@@ -278,7 +278,8 @@ function gameOver() {
 			},
 			cache: false,
 			success: function(data){
-                alert("setpet: " + data)
+                // alert("setpet: " + data)
+                alert("Well fed !")
 			    res()
 		
 			},
@@ -288,6 +289,11 @@ function gameOver() {
 			}
 		  });
 		})
+        .then(()=> {
+            setTimeout(() => {
+                window.location.href = "../index.html"
+            }, 2000);
+        })
 		.catch((result) => {
 		  alert(JSON.stringify(result));
 		});

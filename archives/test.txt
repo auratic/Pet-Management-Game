@@ -42,6 +42,11 @@ https://stackoverflow.com/questions/442404/retrieve-the-position-x-y-of-an-html-
 Prevent parent from firing when press a child
 https://stackoverflow.com/questions/1369035/how-do-i-prevent-a-parents-onclick-event-from-firing-when-a-child-anchor-is-cli
 
+Nullish Coalescing Operator (??)
+https://stackoverflow.com/questions/71238309/what-is-double-question-mark-equal
+let a = b ?? "Not found"; // Assign b, assign "Not found" if b is null
+a ??= b; // If a is null, assign b
+
 ********************************************************************************
 
 (JQuery) Serializing form values

@@ -43,46 +43,51 @@
         </div>
 
         <div id="game-container">
-            <nav id="header-container" class="navbar" style="margin:0">
+            <nav id="header-container" class="navbar">
                 
-                <div class="container-fluid">
-                    <!--<a class="navbar-brand" href="#">Virtual Pet</a>-->
-                    <div style="display: flex; align-items: center;">
-                        <span id="coin">N/A</span>
-                        <img src="Assets/Images/coin.gif" 
-                            style='image-rendering:pixelated;'>
-                    </div>
-                    <div style="border:1px solid #e5007f; border-radius:10px; display: flex; flex-direction: row; align-items: center;">
-                        <a id="pet-title" class="btn btn-lg" style="font-size:1em;">
-                            Kitty
-                        </a>
-                        <!-- <a id="pet-status" tabindex="0" class="btn btn-lg" role="button" data-bs-toggle="popover" data-bs-trigger="focus"
-                            style="font-size:1em; display:none">
-                                Kitty Kitty
-                        </a> -->
-                        <span class="pet-name" id="pet-name" style="font-size:1em; display:none">
-                                Kitty Kitty
-                        </span>
-                        <a id="change-name" style="font-size:0.5em; display:none" class="btn btn-small"data-bs-toggle="tooltip" data-bs-title="Click to edit name" onclick="changeName()">
-                            &#9000;
-                        </a>
-                        <input id="new-name" type="text" style="display:none"></input>
-                        <a id="confirm-name" style="font-size:0.5em; display:none" class="btn btn-small"data-bs-toggle="tooltip" data-bs-title="Confirm" onclick="confirmName()">
-                            &#9745;
-                        </a>
-                    </div>
-                    
+                <!--<a class="navbar-brand" href="#">Virtual Pet</a>-->
+                <div class="col-1" style="display: flex; align-items: center;">
+                    <span id="coin">N/A</span>
+                    <img src="Assets/Images/coin.gif" 
+                        style='image-rendering:pixelated;'>
+                </div>
+                <div class="col-8" style="border:1px solid #e5007f; border-radius:10px; display: flex; flex-direction: row; align-items: center; justify-content: center;">
+                    <a id="pet-title" class="btn btn-lg" style="font-size:1em;">
+                        Kitty
+                    </a>
+                    <!-- <a id="pet-status" tabindex="0" class="btn btn-lg" role="button" data-bs-toggle="popover" data-bs-trigger="focus"
+                        style="font-size:1em; display:none">
+                            Kitty Kitty
+                    </a> -->
+                    <span class="pet-name" id="pet-name" style="font-size:1em; display:none">
+                            Kitty Kitty
+                    </span>
+                    <a id="change-name" style="font-size:0.5em; display:none" class="btn btn-small"data-bs-toggle="tooltip" data-bs-title="Click to edit name" onclick="changeName()">
+                        &#9000;
+                    </a>
+                    <input id="new-name" type="text" style="display:none"></input>
+                    <a id="confirm-name" style="font-size:0.5em; display:none" class="btn btn-small"data-bs-toggle="tooltip" data-bs-title="Confirm" onclick="confirmName()">
+                        &#9745;
+                    </a>
+                </div>
+                <!--
+                <div class="col-2 text-center" id="">
+                    <button class="button-user btn" data-bs-target="#userModal" data-bs-toggle="modal">User</button>
+                </div>-->
+                <div class="col-1" id="">
                     <button 
-                        id="navbarToggler" class="navbar-toggler" type="button"
+                        id="navbarToggler" class="navbar-toggler button-user" type="button" style="border: 0"
                         data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation"
                     >
-                        <span class="navbar-toggler-icon"></span>
+                        user
+                        <!-- <span class="navbar-toggler-icon"></span> -->
                     </button>
                     <div class="offcanvas offcanvas-end " tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
                         <div class="offcanvas-header">
-                            <h2 class="offcanvas-title" id="username">User: N/A</h2>
+                            <h2 class="offcanvas-title" id="username">User: Not logged in</h2>
                             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                         </div>
+                        <hr>
                         <div class="offcanvas-body">
                             <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
 
@@ -99,12 +104,17 @@
                                         <li><a class="dropdown-item" href="#">Something else here</a></li>
                                     </ul>
                                 </li>
-                                    
-                                
+                                <li class="nav-item">
+                                        <a class="nav-link">Volume 
+                                            <span id="vol-val">(50)</span>
+                                            <input type="range" min="1" max="10" step="0.1" id="volume" style="width: 50%">
+                                        </a>
+                                </li>
+                                <!--
                                 <li class="nav-item" id="settingNav">
                                     <a class="nav-link" href="#" data-bs-target="#settingModal" data-bs-toggle="modal">Setting</a>
                                 </li>
-                                
+                                -->
                                 <li class="nav-item" id="loginNav">
                                     <a class="nav-link" href="#" data-bs-target="#loginModal" data-bs-toggle="modal">Login</a>
                                 </li>
@@ -126,8 +136,11 @@
                 <span id="petInstruction">Click me !</span>
                 <img id="heart" src="Assets/Images/bubble(heart).png" style="image-rendering: pixelated; position:absolute; display:none">
                 <img id="model" src="Assets/Images/Models/cat-idle.gif" style="image-rendering: pixelated;" >
+                <img id="model-dirt1" src="Assets/Images/Models/dirt-1.png"  style="image-rendering: pixelated; position:absolute; display: none"> 
+                <img id="model-dirt2" src="Assets/Images/Models/dirt-2.png"  style="image-rendering: pixelated; position:absolute; display: none"> 
                 <img id="model-head"  style="image-rendering: pixelated; position:absolute"> 
                 <img id="model-torso"  style="image-rendering: pixelated; position:absolute"> 
+                
                 <script>
                     $("#heart").on("mousedown", (e)=> {
                         e.preventDefault();
@@ -178,12 +191,12 @@
                     </a> -->
                 </div>
                 
-                <div class="col-4"></div>
+                <div class="col-6"></div>
+                <!--
                 <div class="col-2 text-center" id="help-button" onclick="tutorial()">
-                    <button class="button-help btn" data-bs-target="#tutorialModal" data-bs-toggle="modal" >Help<!--Help--></button>
-                    <!-- <a data-bs-toggle="tooltip" data-bs-title="Help">
-                    </a> -->
+                    <button class="button-help btn" data-bs-target="#tutorialModal" data-bs-toggle="modal" >Help</button>
                 </div>
+                -->
                 <div class="col-2 text-center tutorial"  id="minigame-open">
                     <button class="button-game btn" data-bs-target="#minigame-container" data-bs-toggle="modal">Play<!--Play--></button>
                     <!-- <span class="tooltiptext">Tooltip text</span> -->
@@ -349,7 +362,7 @@
             </div>
         </div>
 
-        <div id="loginModal" class="modal fade modal-l" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+        <div id="loginModal" class="modal fade modal-xl" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -385,7 +398,7 @@
             </div>
         </div>
           
-        <div id="registerModal" class="modal fade modal-l" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+        <div id="registerModal" class="modal fade modal-xl" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -490,7 +503,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                  <button type="button" class="btn btn-primary" onclick="feeding();">Bath !</button>
+                  <button type="button" class="btn btn-primary" onclick="bathing();">Bath !</button>
                 </div>
               </div>
             </div>

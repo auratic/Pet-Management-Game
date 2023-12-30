@@ -82,14 +82,14 @@ function screenDetect () {
     if(	window.screen.height >= 4096 || window.screen.width >= 4096 ) {
         (window.innerHeight > window.innerWidth) ? $("a").css({"font-size": "2em"}) : $("a").css({"font-size": "1em"});
         $("h1").css({"font-size": "7em"});
-        $("h2").css({"font-size": "2em"});
+        $("h2").css({"font-size": "1em"});
         $(".menu-item").css({ "font-size": "3em", "width": "5em", "height": "5em"});
         $(".modal-body").css({ "font-size": "4em"});
     }
     if(	window.screen.height >= 2560 || window.screen.width >= 2560 ) {
         (window.innerHeight > window.innerWidth) ? $("a").css({"font-size": "2em"}) : $("a").css({"font-size": "1em"});
         $("h1").css({"font-size": "7em"});
-        $("h2").css({"font-size": "2em"});
+        $("h2").css({"font-size": "1em"});
         $(".menu-item").css({ "font-size": "3em", "width": "5em", "height": "5em"});
         $(".modal-body").css({ "font-size": "4.5em"});
     } else if(	window.screen.height >= 1920 || window.screen.width >= 1920 ) {
@@ -130,6 +130,9 @@ function screenDetect () {
             
         $('#model-torso').css({ 'height':'auto', 'width': "100%"})
 
+        $('#model-dirt1').css({ 'height':'auto', 'width': "100%"})
+        $('#model-dirt2').css({ 'height':'auto', 'width': "100%"})
+
         $('#textbubble').css({ 'top': `${ ($('#model-container').height() - $('#model').height()) / 2 }` });
             
         $('.offcanvas').css({ 'width': '100%' });
@@ -146,6 +149,9 @@ function screenDetect () {
         $('#model-head').css({ 'height':'70%', 'width': "auto"})
             
         $('#model-torso').css({ 'height':'70%', 'width': "auto"})
+
+        $('#model-dirt1').css({ 'height':'70%', 'width': "auto"})
+        $('#model-dirt2').css({ 'height':'70%', 'width': "auto"})
 
         $('.offcanvas').css({ 'width': '30%' });
     
@@ -407,6 +413,13 @@ function getPet() {
                 $("#cleanStatus :eq(1)").html(`${result.clean}%`);
                 $("#cuddleStatus :eq(1)").html(`${result.happiness}%`);
                 $("#trimStatus :eq(1)").html(`${result.nail}%`);
+
+
+                if(result.clean < 30) {
+                    $("#model-dirt1").css({"display":"block"});
+                } else if (result.clean < 60) {
+                    $("#model-dirt2").css({"display":"block"});
+                }
                 // new bootstrap.Popover(document.getElementById('pet-status'), {
                 //     container: 'body',
                 //     html: true,
@@ -607,7 +620,11 @@ var BGM = new Audio('Assets/Audio/Lobby-Time.mp3');
 BGM.volume= 0.8;
 BGM.loop= true;
 
+var click = new Audio('Assets/Audio/click-sound.mp3');
+click.volume= 0.8;
+
 window.onclick = () => {
+    click.play();
 
     if(!playBGM) {
         BGM.play();
@@ -684,7 +701,7 @@ $('#loginForm').on('submit',function (e) {
                 offLoading();
                 alert(`Login successful! Welcome back! ${result.user}`);
 
-                $('#username').html(`${result.user}`);
+                $('#username').html(`User: ${result.user}`);
                 $("#loginModal").modal("hide");
                 $('#loginNav').css({'display': 'none'});
                 $('#logoutNav').css({'display': 'block'});
@@ -1066,7 +1083,13 @@ function toggleMenu(e) {
 //             console.log('detect1')
 //         }
 //     })
-// })
+// }
+$('#model-dirt1').on('click', (e) => {
+    toggleMenu(e);
+});
+$('#model-dirt2').on('click', (e) => {
+    toggleMenu(e);
+});
 $('#model-head').on('click', (e) => {
     toggleMenu(e);
 });
@@ -1102,13 +1125,15 @@ $('#itemHelp').on("click", (e) => {
     console.log("Show modal");    
 });
 
+function bathing() {
+    console.log("redirecting")
+    window.location.href="./Minigames/bathing.html";
+}
 
 function feeding() {
     console.log("hola");
     let coin = -200;
-    if (userProfile.coin.user_id == null) {
-        alert("Not logged in")
-    } else if (userProfile.coin < 200) {
+    if (userProfile.coin < 200) {
         alert("Not enough coin")
     } else {
         console.log("Enough money");
@@ -1128,10 +1153,14 @@ function feeding() {
                     alert(JSON.stringify(errMsg));
                 }
             });
-        }).then(()=>{
+        })
+        .then(()=>{
             console.log("redirecting")
             window.location.href="./Minigames/feeding.html";
         })
+        .catch((err) => {
+            alert(err);
+        });
         
     }
 }
