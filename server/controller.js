@@ -256,16 +256,16 @@ module.exports = app => {
         if (req.session.user) {
             
             let invArray = req.session.user.inv;
-            let duplicate = new Promise ((res, rej) => {
+            let duplicate = new Promise ((resolve, rej) => {
 
                 if(invArray !== null && invArray !== '') {
                     console.log("check duplicate");
                     invArray.forEach(owned => {
-                    if(owned == item_id) rej('Already owned this item')
+                        if(owned == item_id) rej('Already owned this item')
                     });
-                    res();
+                    resolve();
                 } else {
-                    res();
+                    resolve();
                 }
             })
             .then(()=>{
@@ -581,6 +581,21 @@ module.exports = app => {
                     });
                 })
                 .then((msg) => {
+                    // Update session
+                    return new Promise ((resolve, reject) => {
+                        req.session.user.pet.pet_name = newName;
+                        
+                        req.session.save((err) => {
+                            if (err) {
+                                reject('Error updating session');
+                            } else {
+                                console.log('Session update pet successfully')
+                                resolve(msg);
+                            }
+                        });
+                    });
+                })
+                .then((msg) => {
                     console.log(msg)
                     res.send(msg);
                 })
@@ -588,7 +603,7 @@ module.exports = app => {
                     res.send("Error: " + err);
                 })
             } else {
-                res.send(setPetStatus(user_id, action));
+                res.send(setPetStatus(user_id, action, req));
             }
             
         } else {
@@ -603,7 +618,7 @@ module.exports = app => {
     //            happiness > 80, growth +30)
 
     // When fed, clean, trimmed, respectively become 100, and happiness +50 at the same time
-    function setPetStatus (user_id, action) {
+    function setPetStatus (user_id, action, req) {
         console.log("entered setpetstatus")
         let query;
         let happiness;
@@ -619,7 +634,7 @@ module.exports = app => {
             });
         })
         .then(() => {
-            
+            console.log("new happiness: " + happiness)
             return new Promise ((resolve, reject) => {
                 let setHappiness = `UPDATE pet
                                     SET happiness = ${happiness}
@@ -667,6 +682,38 @@ module.exports = app => {
                 });
             });
         })
+        .then(() => {
+            // Update session
+
+            return new Promise ((resolve, reject) => {
+
+                con.query(`SELECT * FROM pet WHERE user_id = ${user_id}`, function (err, result, fields) {
+                    if (err) reject(err);
+                    
+                    req.session.user.pet = {
+                        pet_name: result[0].pet_name,
+                        growth: result[0].growth,
+                        hunger: result[0].hunger,
+                        clean: result[0].clean,
+                        hair: result[0].hair,
+                        happiness: result[0].happiness,
+                        nail: result[0].nail,
+                    }
+
+                    req.session.save((err) => {
+                        if (err) {
+                            res.status(500).send('Error updating session');
+                        } else {
+                            console.log('Session update pet successfully')
+                        }
+                    });
+                    
+                    console.log("Success set session");
+                    resolve("Success set " + action);
+                });
+
+            })
+        })
         .catch((msg)=> {
             return msg;
         })
@@ -684,8 +731,8 @@ module.exports = app => {
                 growth = result[0].growth;
 
                 if(happiness < 50) growth += 10;
-                else if (happiness > 50 && happiness < 80) growth += 20;
-                else if (happiness > 80) growth += 30;
+                else if (happiness >= 50 && happiness < 80) growth += 20;
+                else if (happiness >= 80) growth += 30;
 
                 if(growth > 100) growth = 100;
                 console.log("new growth : " + growth);
