@@ -1,30 +1,61 @@
 (window.innerHeight > window.innerWidth) ? $('#phaser-container').css({'width':'100%'}) : $('#phaser-container').css({'width':'80vh'});
 
 const gamecontainer = document.getElementById('phaser-container');
-var soapX = null;
-var soapY = null;
-
-var handBox = null;
-var scale = gamecontainer.clientWidth / gamecontainer.clientHeight;
-var washCount = 0;
 
 var isMouseButtonDown = false;
 var soap;
+var soapScale;
 var cat;
+var catScale;
+var stoolScale;
 var clean = 0;
 var love;
 var particles;
 
 var gameState = 1;
-// $('#video').css({
-//     'opacity':'25%',
-//     'height': gamecontainer.clientHeight,
-//     'width': gamecontainer.clientWidth,
-//     'position': 'absolute',
-//     '-webkit-transform': 'scaleX(-1)',
-//     'transform': 'scaleX(-1)'
-// });
 
+function screenDetect () {
+
+    if(	window.screen.height >= 4096 || window.screen.width >= 4096 ) {
+        (window.innerHeight > window.innerWidth) ? catScale = 35 : catScale = 25;
+        (window.innerHeight > window.innerWidth) ? stoolScale = 30 : stoolScale = 18;
+        soapScale = 1
+        $("h2").css({"font-size": "6em"});
+    } else if(	window.screen.height >= 2560 || window.screen.width >= 2560 ) {
+        (window.innerHeight > window.innerWidth) ? catScale = 35 : catScale = 18;
+        (window.innerHeight > window.innerWidth) ? stoolScale = 20 : stoolScale = 12;
+        soapScale = 0.8
+        $("h2").css({"font-size": "4em"});
+        
+    } else if(	window.screen.height >= 1920 || window.screen.width >= 1920 ) {
+
+        (window.innerHeight > window.innerWidth) ? catScale = 25 : catScale = 13;
+        (window.innerHeight > window.innerWidth) ? stoolScale = 16 : stoolScale = 8;
+        soapScale = 0.5
+        $("h2").css({"font-size": "4em"});
+
+    } else if(	window.screen.height >= 1280 || window.screen.width >= 1280 ) {
+        
+        (window.innerHeight > window.innerWidth) ? catScale = 15 : catScale = 8;
+        (window.innerHeight > window.innerWidth) ? stoolScale = 8 : stoolScale = 5;
+        soapScale = 0.3
+        $("h2").css({"font-size": "2em"});
+
+    } else if(	window.screen.height >= 1024 || window.screen.width >= 1024 ) {
+        (window.innerHeight > window.innerWidth) ? catScale = 15 : catScale = 10;
+        (window.innerHeight > window.innerWidth) ? stoolScale = 8 : stoolScale = 5;
+        soapScale = 0.3
+        $("h2").css({"font-size": "2em"});
+
+    } else {
+        (window.innerHeight > window.innerWidth) ? catScale = 8 : catScale = 5;
+        (window.innerHeight > window.innerWidth) ? stoolScale = 7 : stoolScale = 4;
+        soapScale = 0.3
+        $("h2").css({"font-size": "1.8em"});
+
+    }
+}
+screenDetect()
 
 class Example extends Phaser.Scene
 {
@@ -54,18 +85,18 @@ class Example extends Phaser.Scene
 
         const stool = this.physics.add.image(gamecontainer.clientWidth / 2, gamecontainer.clientHeight,'stool');
         stool.setCollideWorldBounds(true);
-        stool.scaleX = 8;
-        stool.scaleY = 8;
+        stool.scaleX = stoolScale;
+        stool.scaleY = stoolScale;
 
         //const bathroom = this.add.image(window.innerWidth / 2,window.innerHeight / 2,'bathroom');
         cat = this.physics.add.image(gamecontainer.clientWidth / 2, gamecontainer.clientHeight /2 ,'cat');
         cat.setCollideWorldBounds(true);
-        cat.scaleX = 8;
-        cat.scaleY = 8;
+        cat.scaleX = catScale;
+        cat.scaleY = catScale;
         
         soap = this.add.image(gamecontainer.clientWidth / 2, gamecontainer.clientHeight / 2,'soap');
-        soap.scaleX = 0.5;
-        soap.scaleY = 0.5;
+        soap.scaleX = soapScale;
+        soap.scaleY = soapScale;
 
         particles = this.add.particles(0, 0, 'bubble', {
             follow: soap,
@@ -100,26 +131,6 @@ class Example extends Phaser.Scene
         love.scaleX = 5;
         love.scaleY = 5;
         love.setVisible(false);
-
-        // this.time.addEvent({
-        //     delay: 100,  // 1000ms (1 second)
-        //     loop: true,   // Set to true for the timer to repeat
-        //     callback: () => {
-        //         if(handBox !== "face" && handBox !== null ) {
-        //             soap.x = soapX;
-        //             soap.y = soapY;
-        //             washCount++;
-        //             console.log(washCount);
-        //             if(washCount == 150) {
-        //                 love.setVisible(true);
-                        
-        //                 $('#score-modal').modal('show');
-        //             }
-                    
-        //         }
-        //     },
-        //     callbackScope: this,
-        // });
 
         const collider = this.physics.add.collider(cat, stool, null, () =>
         {

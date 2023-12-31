@@ -1,12 +1,6 @@
 (window.innerHeight > window.innerWidth) ? $('#phaser-container').css({'width':'100%'}) : $('#phaser-container').css({'width':'80vh'});
 
 const gamecontainer = document.getElementById('phaser-container');
-var soapX = null;
-var soapY = null;
-
-var handBox = null;
-var scale = gamecontainer.clientWidth / gamecontainer.clientHeight;
-var washCount = 0;
 
 var foodContainerSizeX = gamecontainer.clientWidth * 0.2
 var foodContainerSizeY = gamecontainer.clientHeight * 0.1
@@ -15,14 +9,6 @@ var foodContainerX2 = (gamecontainer.clientWidth / 2) - (foodContainerSizeX / 2)
 var foodContainerY1 = gamecontainer.clientHeight - (gamecontainer.clientHeight * 0.1)
 var foodContainerY2 = gamecontainer.clientHeight
 
-// $('#video').css({
-//     'opacity':'25%',
-//     'height': gamecontainer.clientHeight,
-//     'width': gamecontainer.clientWidth,
-//     'position': 'absolute',
-//     '-webkit-transform': 'scaleX(-1)',
-//     'transform': 'scaleX(-1)'
-// });
 var catIdle;
 var catFeed;
 var isMouseButtonDown = false;
@@ -32,6 +18,52 @@ var hunger = 0;
 var isFeed;
 
 var gameState = 1;
+
+var catScale
+var boxScale
+var kibScale
+
+
+function screenDetect () {
+
+    if(	window.screen.height >= 4096 || window.screen.width >= 4096 ) {
+        (window.innerHeight > window.innerWidth) ? catScale = 35 : catScale = 25;
+        (window.innerHeight > window.innerWidth) ? boxScale = 10 : boxScale = 10;
+        kibScale = 2
+        $("h2").css({"font-size": "8em"});
+    } else if(	window.screen.height >= 2560 || window.screen.width >= 2560 ) {
+        (window.innerHeight > window.innerWidth) ? catScale = 35 : catScale = 18;
+        (window.innerHeight > window.innerWidth) ? boxScale = 8 : boxScale = 8;
+        kibScale = 1.5
+        $("h2").css({"font-size": "4em"});
+        
+    } else if(	window.screen.height >= 1920 || window.screen.width >= 1920 ) {
+        (window.innerHeight > window.innerWidth) ? catScale = 25 : catScale = 13;
+        (window.innerHeight > window.innerWidth) ? boxScale = 6 : boxScale = 6;
+        kibScale = 1
+        $("h2").css({"font-size": "4em"});
+
+    } else if(	window.screen.height >= 1280 || window.screen.width >= 1280 ) {
+        (window.innerHeight > window.innerWidth) ? catScale = 15 : catScale = 8;
+        (window.innerHeight > window.innerWidth) ? boxScale = 5 : boxScale = 3;
+        kibScale = 0.5
+        $("h2").css({"font-size": "2em"});
+
+    } else if(	window.screen.height >= 1024 || window.screen.width >= 1024 ) {
+        (window.innerHeight > window.innerWidth) ? catScale = 15 : catScale = 10;
+        (window.innerHeight > window.innerWidth) ? boxScale = 3 : boxScale = 3;
+        kibScale = 0.5
+        $("h2").css({"font-size": "2em"});
+
+    } else {
+        (window.innerHeight > window.innerWidth) ? catScale = 8 : catScale = 5;
+        (window.innerHeight > window.innerWidth) ? boxScale = 3 : boxScale = 3;
+        kibScale = 0.5
+        $("h2").css({"font-size": "1.8em"});
+
+    }
+}
+screenDetect()
 
 class Example extends Phaser.Scene
 {
@@ -64,9 +96,9 @@ class Example extends Phaser.Scene
         itemsGroup = this.physics.add.group();
         this.physics.world.enable(itemsGroup); // Enable physics for all items in the group
         
-        var box = this.add.sprite(50, 300, 'kibble-box');
-        box.scaleX = 3;
-        box.scaleY = 3;
+        var box = this.add.sprite(100, 300, 'kibble-box');
+        box.scaleX = boxScale;
+        box.scaleY = boxScale;
         box.setInteractive({ draggable: true });
         box.on('dragstart', function (pointer, dragX, dragY) {
             console.log('Drag start at: ' + dragX + ', ' + dragY);
@@ -135,7 +167,7 @@ class Example extends Phaser.Scene
         });
 
         var catPosX = gamecontainer.clientWidth / 2;
-        var catPosY = gamecontainer.clientHeight - 32*5; // 32 bits size multiply by 4 (8/2)
+        var catPosY = gamecontainer.clientHeight - 32*(catScale/2); // 32 bits size multiply by 4 (8/2)
         const feed = {
             key: 'feedAnimation',
             frames: this.anims.generateFrameNumbers('feed', { start: 0, end: 10}),
@@ -145,8 +177,8 @@ class Example extends Phaser.Scene
 
         this.anims.create(feed);
         catFeed = this.add.sprite(catPosX, catPosY, 'feed').play('feedAnimation');
-        catFeed.scaleX = 10;
-        catFeed.scaleY = 10;
+        catFeed.scaleX = catScale;
+        catFeed.scaleY = catScale;
         catFeed.setVisible(false);
 
         const idle = {
@@ -158,16 +190,16 @@ class Example extends Phaser.Scene
 
         this.anims.create(idle);
         catIdle = this.add.sprite(catPosX, catPosY, 'idle').play('idleAnimation');
-        catIdle.scaleX = 10;
-        catIdle.scaleY = 10;
+        catIdle.scaleX = catScale;
+        catIdle.scaleY = catScale;
     }
 
     update() {
         var item
         if (isMouseButtonDown) {
             item = itemsGroup.create(this.input.x, this.input.y, 'kibble');
-            item.scaleX = 0.5;
-            item.scaleY = 0.5;
+            item.scaleX = kibScale;
+            item.scaleY = kibScale;
             item.setBounce(0);
             item.setFriction(0.2); // Adjust the friction value
             item.body.setAllowGravity(true);
