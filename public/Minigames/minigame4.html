@@ -4,6 +4,7 @@
   https://stackoverflow.com/questions/38502/whats-a-good-algorithm-to-generate-a-maze-->
   <title>Maze Game</title>
   <link rel="stylesheet" type="text/css" href="css/mazes.css" />
+  <link rel="icon"  type="image/png"  href="./Assets/kibble.png">
   
   <!--jQuery, Popper.js, Bootstrap.js-->
   <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>        
@@ -81,18 +82,28 @@
       </script>
       <div class="row" style="margin-top:1em">
           <div id="keyboard-tutorial">
-            <h2>Tutorial: </h2>
-            <h4>Use WASD to control your character through maze</h4>
+            <h4>Tutorial: </h4>
+            <hr>
+            <h4>Control your pet through maze <br>
+              <span style="color:red">W</span>: Up  <br>
+              <span style="color:red">A</span>: Left  <br>
+              <span style="color:red">S</span>: Down  <br>
+              <span style="color:red">D</span>: Right  <br>
+            </h4>
           </div>
           <div id="voice-tutorial" style="display:none">
-            <h2>Tutorial: </h2>
-            <h4>Control your character by saying 'up', 'down', 'left', 'right' while pressing 
-              <img src="Assets/Microphone.png" style="image-rendering: pixelated; border: 1px black solid">
-              button </h4>
-            <h4>You will need to enable microphone access</h4>
+            <h4>Tutorial: </h4>
+            <hr>
+            <h4>
+              X2 coins.  <br>
+              Control your character by saying <br>
+              <span style="color:red">'up', 'down', 'left', 'right'</span>  <br>
+              <!-- while pressing <img src="Assets/Microphone.png" style="image-rendering: pixelated; border: 1px black solid"> button  -->
+            </h4>
+            <hr>
+            <h4>You will need to <span style="color:red">enable microphone access</span></h4>
           </div>
       </div>
-  
   
       <div class="row">
         <button type="button" id='start' class="btn btn-outline-primary btn-lg">Enter the maze !</button>
@@ -122,14 +133,6 @@
           <th scope="row">1</th>
           <td>Mark</td>
         </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>Jacob</td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td>Larry</td>
-        </tr>
         -->
       </tbody>
     </table>
@@ -144,11 +147,28 @@
   </div>
 
 
-  <div id='game-container' class="container">
+  <div id='game-container'>
     <div id="header-container" class="row">
-      <div class="col-4"><h1 style="font-size: 2em;">Escape the maze!</h1></div>
-      <div class="col-4"><h1 style="font-size: 2em;" id="time">10 seconds</h1></div>
-      <div class="col-4"><h1 style="font-size: 2em;" id="coin">0</h1></div>
+      <div class="col-8" id="tut-display">
+        <h3>
+          Press W,A,S,D to move
+        </h3>
+      </div>
+      <div class="col-8" id="result-display" style="display:none">
+        <h3>Result: <br>
+          <span id="cmd-result"></span>
+        </h3>
+      </div>
+      <div class="col-2">
+        <h3>Time: <br>
+          <span id="time">10</span>
+        </h3>
+      </div>
+      <div class="col-2">
+        <h3>Coin: <br>
+          <span id="coin">0</span>
+        </h3>
+      </div>
     </div>
     
     <div id="maze-container">
@@ -158,7 +178,7 @@
       </script>
     </div>
 
-    <div id="footer-container">
+    <!-- <div id="footer-container">
       <div id="voice-instruction">
         <p>Click and hold the mic to speak !</p>
         <div id="mic"><img src="Assets/Microphone.png" style="image-rendering: pixelated; border: 1px black solid"></div>
@@ -167,7 +187,7 @@
       <div id="keyboard-instruction">
         <p>Press W A S D to control your kitty !</p>
       </div>
-    </div>
+    </div> -->
   </div>
 
 </body>
