@@ -624,7 +624,8 @@ function gameOver () {
 		
 			},
 			error: function(errMsg) {
-				alert(JSON.stringify(errMsg));
+				// alert(JSON.stringify(errMsg));
+				console.error(JSON.stringify(errMsg))
 				res()
 			}
 		  });
@@ -659,14 +660,16 @@ function gameOver () {
 	  
 			},
 			error: function(errMsg) {
-				alert(JSON.stringify(errMsg));
+				// alert(JSON.stringify(errMsg));
+				console.error(JSON.stringify(errMsg))
 				rej(errMsg)
 			}
 		  });
 	  
 		})
 		.catch((result) => {
-		  alert(JSON.stringify(result));
+				// alert(JSON.stringify(result));
+				console.error(JSON.stringify(result))
 		});
 	  
 		
@@ -679,11 +682,13 @@ function gameOver () {
 		  cache: false,
 		  success: function(data){
 	  
-			alert(`${score} coins added`);
+			// alert(`${score} coins added`);
+			console.log(`${score} coins added`)
 	  
 		  },
 		  error: function(errMsg) {
-			  alert(JSON.stringify(errMsg));
+			// alert(JSON.stringify(errMsg));
+			console.error(JSON.stringify(errMsg))
 		  }
 		});
 	}
