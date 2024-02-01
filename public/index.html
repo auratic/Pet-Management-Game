@@ -91,7 +91,7 @@
                         <hr>
                         <div class="offcanvas-body">
                             <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-
+                                <!--
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         Share
@@ -105,6 +105,7 @@
                                         <li><a class="dropdown-item" href="#">Something else here</a></li>
                                     </ul>
                                 </li>
+                                -->
                                 <li class="nav-item">
                                         <a class="nav-link">Volume 
                                             <span id="vol-val">(50)</span>
@@ -168,7 +169,7 @@
                     <button id="item3" type="button" class="btn btn-info rounded-circle btn-lg menu-item"
                         data-bs-target="#cuddleModal" data-bs-toggle="modal">Cuddle</button>
                     <button id="item4" type="button" class="btn btn-info rounded-circle btn-lg menu-item"
-                        data-bs-target="#trimModal" data-bs-toggle="modal">Trim</button>
+                        data-bs-target="#trimModal" data-bs-toggle="modal">Coming soon!</button>
                     <button id="item5" type="button" class="btn btn-info rounded-circle btn-lg menu-item"
                         data-bs-target="#minigame-container" data-bs-toggle="modal">Play</button>
                     <!-- <div class="menu-item" id="item0">Growth</div>
@@ -304,13 +305,13 @@
                                     <img class="shop-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Mario_Series_Logo.svg/2560px-Mario_Series_Logo.svg.png">
                                 </div> -->
                                 <div class="col-sm-2" id="minigame-2">Platformer
-                                    <img class="shop-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Mario_Series_Logo.svg/2560px-Mario_Series_Logo.svg.png">
+                                    <img class="shop-image" src="./Assets/Images/UI/MinigameLogo/platformerLogo.png">
                                 </div>
                                 <!-- <div class="col-sm-2" id="minigame-3">Bathing
                                     <img class="shop-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Mario_Series_Logo.svg/2560px-Mario_Series_Logo.svg.png">
                                 </div> -->
                                 <div class="col-sm-2" id="minigame-4">Maze game
-                                    <img class="shop-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Mario_Series_Logo.svg/2560px-Mario_Series_Logo.svg.png">
+                                    <img class="shop-image" src="./Assets/Images/UI/MinigameLogo/mazeLogo(0).png">
                                 </div>
                             </div>
                             <!--
@@ -463,16 +464,13 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <span id="hungerStatus"><span class="pet-name">Mimi</span>'s current hunger is <span style="color: green">0</span></span><br>
+                    <span id="growthStatus"><span class="pet-name">Mimi</span>'s current growth is <span style="color: green">0</span></span><br>
                     
                     <hr>
                     <div class="effectStatus" >
                         <span>
-                        After feeding:<br>
-                          Hunger +100% <br>
-                          Happiness +50% <br>
-                          Happiness above 50%, Growth +15% <br>
-                          Happiness above 80%, Growth +20%
+                        Feeding can increase <span style="color: green">growth</span> !<br>
+                        Increase is higher if <span style="color: green">happiness</span> is high !<br>
                         </span>
                     </div>
                 </div>
@@ -542,19 +540,19 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <span id="trimStatus"><span class="pet-name">Mimi</span>'s current nail is <span style="color: green">0%</span></span><br>
+                    <span id="trimStatus"><span class="pet-name">Mimi</span>'s current happiness is <span style="color: green">0%</span></span><br>
                     <hr>
                     <div class="effectStatus" style="border: solid green 5px; padding:5px">
                         <span>
                         After trimming:<br>
-                          Nail +100% <br>
                           Happiness +50% <br>
+                          <span style="color: red">Under development</span>
                         </span>
                     </div>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                  <button type="button" class="btn btn-primary" onclick="trimming();">Trim !</button>
+                  <button type="button" class="btn btn-primary" onclick="trimming();" disabled>Trim !</button>
                 </div>
               </div>
             </div>

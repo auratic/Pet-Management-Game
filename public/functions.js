@@ -321,6 +321,11 @@ function getPet() {
                 $(".pet-name").html(`${result.pet_name}`);
                 $('.menu-item').prop('disabled', false);
                 $('.menu-item').css({ "background": `url("Assets/Images/UI/png/empty_red.png") no-repeat` });
+                $('#item4').prop('disabled', true);
+                $('#item4').css({ "background": `url("Assets/Images/UI/png/lock_gray.png") no-repeat` });
+
+                if(result.growth >= 80) $("#model").attr('src','Assets/Images/Models/cat-adult.gif')
+
                 $("#petStatus").empty();
                 // $("#petStatus").append(`
                 //     <span>Growth: ${result.growth}%</span><br>
@@ -371,12 +376,12 @@ function getPet() {
                             </h2>
                             <div id="cleanCollapse" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
+                                    Your pet will look dirty when cleanliness below 60<br>
                                     <span style="color:green">Bathing</span> increases cleanliness to 100% <br>
-                                    Also increases happiness by 50%<br>
                                 </div>
                             </div>
                         </div>
-
+                        <!--
                         <div class="accordion-item">
                             <h2 class="accordion-header">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#hungerCollapse" aria-expanded="false" aria-controls="hungerCollapse">
@@ -405,14 +410,15 @@ function getPet() {
                                 </div>
                             </div>
                         </div>
+                        -->
                         </div>
 
                 `);
                 $("#petStatus").children().css({ "color": "gray" });
-                $("#hungerStatus :eq(1)").html(`${result.hunger}%`);
+                $("#growthStatus :eq(1)").html(`${result.growth}%`);
                 $("#cleanStatus :eq(1)").html(`${result.clean}%`);
                 $("#cuddleStatus :eq(1)").html(`${result.happiness}%`);
-                $("#trimStatus :eq(1)").html(`${result.nail}%`);
+                $("#trimStatus :eq(1)").html(`${result.happiness}%`);
 
 
                 if(result.clean < 30) {
@@ -970,6 +976,7 @@ heartParticle.style.pointerEvents = 'none';
 $("#cuddle").on("click", () => {
     isCuddle = true;
     let overlay = document.getElementById('menu-overlay');
+    $("#petInstruction").css({ "display": "flex"});
 
     overlay.style.opacity = (overlay.style.opacity === "1") ? "0" : "1";
     overlay.style.pointerEvents = (overlay.style.pointerEvents === "visible") ? "none" : "visible";
@@ -1009,15 +1016,40 @@ function toggleMenu(e) {
         // });
     
         console.log(cuddle);
-        if(cuddle > 20) {
+        if(cuddle >= 20) {
             isCuddle = false;
             cuddle = 0;
-            userProfile.coin += 10;
-            $('#coin').html(userProfile.coin);
-            $('#heart').css({'display':'block'});
-            setTimeout(() => {
-                $('#heart').css({'display':'none'});
-            }, 3000);
+
+            return new Promise ((resolve, reject) => {
+                $.ajax({
+                    url: "/setPet",
+                    method: "POST",  
+                    data: {
+                        action: "cuddle",
+                    },
+                    cache: false,
+                    success: function(data){
+                        alert("success cuddle");
+                        
+                        userProfile.coin += 10;
+                        $('#coin').html(userProfile.coin);
+                        $('#heart').css({'display':'block'});
+                    
+                        setTimeout(() => {
+                            $('#heart').css({'display':'none'});
+                        }, 3000);
+
+                        resolve();
+                    },
+                    error: function(errMsg) {
+                        alert(JSON.stringify(errMsg));
+                    }
+                });
+            })
+            .then(() => {
+                getPet();
+            })
+           
         }
         cuddle++;
         
