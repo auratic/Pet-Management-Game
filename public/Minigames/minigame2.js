@@ -128,6 +128,7 @@ const tileY = canvas.height * .8
 const playerSize = canvas.height * .15;
 const playerSpeed = canvas.height * .01;
 var jumpSpeed = canvas.height * .015;
+// var playerGravity = canvas.height * .0004;
 
 // var detectHand = false;
 // var keyboard = true;
@@ -173,6 +174,7 @@ class Player {
 		this.width = playerSize;
 		this.height = playerSize;
 		this.gravity = 0.5;
+		// this.gravity = playerGravity;
 
 		this.image = createImage(kittyStand);
 		this.frame = 0;
@@ -523,7 +525,8 @@ function initHandtrack() {
 		flipHorizontal: true,   // Flip the video horizontally for a better user experience
 		maxNumBoxes: 1,        // Maximum number of boxes to track
 		iouThreshold: 0.5,     // Intersection over Union (IoU) threshold for bounding boxes
-		scoreThreshold: 0.4,   // Confidence score threshold
+		//scoreThreshold: 0.4,   // Confidence score threshold
+		scoreThreshold: 0.6,
 	};
 	
 	handTrack.load(modelParams).then(model => {

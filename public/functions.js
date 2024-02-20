@@ -33,6 +33,7 @@ var items = [
     }
 ];
 
+var petObject = null;
 
 /*
  *
@@ -313,6 +314,15 @@ function getPet() {
 
 
             } else {
+                petObject = {
+                    name: result.pet_name,
+                    growth: result.growth,
+                    happiness: result.happiness,
+                    clean: result.clean
+                }
+                
+                if(petObject != null && petObject.growth >= 80) items[1].src = "tshirt1-adult.png";
+                
                 // console.log(result);
                 $("#pet-title").css({"display":"none"});
                 $("#pet-name").css({"display":"block"});
@@ -346,6 +356,7 @@ function getPet() {
                             <div id="growthCollapse" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
                                     <span style="color:green">Feeding</span> increases growth, <br>
+                                    Growth affects pet's looks<br>
                                     Pet grows faster if <span style="color:green">happiness is high</span>, <br>
                                     happiness more than 50%, pet grows by 15% every feed, <br>
                                     happiness more than 80%, pet grows by 20% every feed, <br>
@@ -591,6 +602,7 @@ $("#tutorialModal .modal-content").on("click", tutorial)
 
 // Setting
 
+/*
 function userSetting() {
 
     let init = false;
@@ -620,6 +632,7 @@ function userSetting() {
 
     });
 }
+*/
 
 var playBGM = false;
 var BGM = new Audio('Assets/Audio/Lobby-Time.mp3');
@@ -849,6 +862,7 @@ function getShop() {
 
             //List shop items
             //https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_node_appendchild
+
             var listItem =  "<div class='row'>";
             var counter = 0;
             result.forEach(item => {

@@ -14,6 +14,35 @@ var particles;
 
 var gameState = 1;
 
+function getCat() {
+    console.log("enter get cat");
+    let petAssets = "";
+
+    return new Promise ((res, rej) => {
+
+        $.ajax({
+            type: 'POST',
+            url: '/getPet',
+            /*dataType: 'json',*/
+            success: function (result) {
+                console.log("Success")
+                if (
+                    typeof result !== 'object' &&
+                    !Array.isArray(result) &&
+                    result !== null
+                ) {
+                    petAssets = "Assets/cat-idle-floor.gif"
+                    console.log(petAssets)
+                    res (petAssets);
+                } else {
+                    petAssets = (result.growth >= 80) ? 'Assets/cat-adult-floor.gif': 'Assets/cat-idle-floor.gif';
+                    res (petAssets);
+                }
+            }
+        });
+    });
+}
+
 function screenDetect () {
 
     if(	window.screen.height >= 4096 || window.screen.width >= 4096 ) {
@@ -146,7 +175,7 @@ class Example extends Phaser.Scene
                 soap.y > cat.y - cat.height * 4 &&
                 soap.y < cat.y + cat.height * 4) {
                 
-                if ( clean > 1000) {
+                if ( clean > 300) {
                     $("#state").html("Clean !!");
                     gameOver();
                     love.setVisible(true);

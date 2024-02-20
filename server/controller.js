@@ -544,14 +544,42 @@ module.exports = app => {
 
         if (req.session.user) {
             console.log('getPet loaded')
-            const pet = req.session.user.pet;
-            res.send(pet);
+            
+            return new Promise ((resolve, reject) => {
+
+                con.query(`SELECT * FROM pet WHERE user_id = ${req.session.user.id}`, function (err, result, fields) {
+                    if (err) reject(err);
+                    req.session.user.pet = {
+                        pet_name: result[0].pet_name,
+                        growth: result[0].growth,
+                        hunger: result[0].hunger,
+                        clean: result[0].clean,
+                        hair: result[0].hair,
+                        happiness: result[0].happiness,
+                        nail: result[0].nail,
+                    }
+
+                    req.session.save((err) => {
+                        if (err) {
+                            res.status(500).send('Error updating session');
+                        } else {
+                            console.log('Session update pet successfully')
+                        }
+                    });
+                    console.log("Success set session");
+                    resolve();
+                });
+            })
+            .then(() => {
+                const pet = req.session.user.pet;
+                res.send(pet);
+            })
+            
         } else {
             console.log('Cannot get pet')
             res.send('Cannot get pet');
         }
     })
-
     
     app.post('/setPet', (req, res) => {
 
@@ -561,10 +589,12 @@ module.exports = app => {
             let action = req.body.action;
             let user_id = req.session.user.id;
             let query;
+            
+            let newName;
             //console.log(req.session.user)
             if(action == "setName") {
                 return new Promise ((resolve, reject) => {
-                    let newName = req.body.newName;
+                    newName = req.body.newName;
                     query = `UPDATE pet
                             SET pet_name = '${newName}' 
                             WHERE user_id = ${user_id}`;
@@ -629,7 +659,9 @@ module.exports = app => {
                 if (err) reject(err);
                 happiness = result[0].happiness;
 
-                (happiness + 50 > 100) ? happiness = 100 : happiness += 50;
+                (action == "cuddle") ? happiness += 10 : happiness += 50;
+                if (happiness > 100) happiness = 100; 
+
                 resolve();
             });
         })
@@ -655,6 +687,11 @@ module.exports = app => {
                             SET hunger = 100
                             WHERE user_id = ${user_id}`;
                     setGrowth(user_id, happiness);
+                break;
+                case "cuddle":
+                    query = `UPDATE user_profile
+                        SET coin = coin + 10
+                        WHERE user_id = ${user_id}`;
                 break;
                 case "clean":
                     query = `UPDATE pet
@@ -689,7 +726,7 @@ module.exports = app => {
 
                 con.query(`SELECT * FROM pet WHERE user_id = ${user_id}`, function (err, result, fields) {
                     if (err) reject(err);
-                    
+                    if(action == "cuddle") req.session.user.coin += 10;
                     req.session.user.pet = {
                         pet_name: result[0].pet_name,
                         growth: result[0].growth,
